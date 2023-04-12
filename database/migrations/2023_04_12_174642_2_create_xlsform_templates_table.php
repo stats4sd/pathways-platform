@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        Schema::create('xlsform_templates', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('xlsfile');
+            $table->text('description')->nullable();
+            $table->foreignId('xlsform_subject_id')->constrained('xlsform_subjects');
+            $table->text('selected_fields')->nullable()->comment('User seleced ODK variables.');
+            $table->text('media')->nullable()->comment('links to stored files that should be added as media attachments to the ODK form whenever a version of this template is deployed');
+            $table->json('csv_lookups')->nullable()->comment('information to enable mysql tables or views to be converted to csv files and added as additional media attachments to the ODK form');
+            $table->string('available')->nullable()->comment('Available to all users? If false, the form is only available to testers or admins.');
+            $table->foreignId('owner_id')->nullable();
+            $table->string('owner_type')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('xlsform_templates');
+    }
+};

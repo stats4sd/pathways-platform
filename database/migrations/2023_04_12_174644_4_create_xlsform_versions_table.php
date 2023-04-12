@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
+        /**
+         * Table to store all ODK raw submissions that get pulled from ODK Central
+         */
+        Schema::create('xlsform_versions', function (Blueprint $table) {
+            $table->id('id');
+            $table->foreignId('xlsform_id')->constrained('xlsforms');
+            $table->string('xlsfile');
+            $table->string('version');
+            $table->string('odk_version');
+            $table->json('schema')->nullable();
+            $table->boolean('active')->default(0);
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('xlsform_versions');
+    }
+};
