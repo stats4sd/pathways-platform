@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "78e296fd67fc50410a63697fe63cdc07",
+    "content-hash": "4d8136f4259aafb27fc694cb5a29ce62",
     "packages": [
         {
             "name": "backpack/crud",
@@ -5033,6 +5033,80 @@
             "time": "2023-03-21T16:35:43+00:00"
         },
         {
+            "name": "stats4sd/laravel-team-management",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stats4sd/laravel-team-management.git",
+                "reference": "9798914fba394aeb2629539ede46139880a43f9b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stats4sd/laravel-team-management/zipball/9798914fba394aeb2629539ede46139880a43f9b",
+                "reference": "9798914fba394aeb2629539ede46139880a43f9b",
+                "shasum": ""
+            },
+            "require": {
+                "backpack/crud": "^5.3",
+                "backpack/permissionmanager": "^6.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.13.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^6.0",
+                "nunomaduro/larastan": "^2.0.1",
+                "orchestra/testbench": "^7.0",
+                "pestphp/pest": "^1.21",
+                "pestphp/pest-plugin-laravel": "^1.1",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Stats4sd\\TeamManagement\\TeamManagementServiceProvider"
+                    ],
+                    "aliases": {
+                        "TeamManagement": "Stats4sd\\TeamManagement\\Facades\\TeamManagement"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stats4sd\\TeamManagement\\": "src",
+                    "Stats4sd\\TeamManagement\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dave Mills",
+                    "email": "d.e.mills@stats4sd.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This is my package laravel-team-management",
+            "homepage": "https://github.com/stats4sd/laravel-team-management",
+            "keywords": [
+                "laravel",
+                "laravel-team-management",
+                "stats4sd"
+            ],
+            "support": {
+                "issues": "https://github.com/stats4sd/laravel-team-management/issues",
+                "source": "https://github.com/stats4sd/laravel-team-management/tree/main"
+            },
+            "time": "2023-03-16T15:23:27+00:00"
+        },
+        {
             "name": "symfony/console",
             "version": "v6.2.8",
             "source": {
@@ -9921,7 +9995,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "stats4sd/laravel-odk-link": 20,
-        "stats4sd/laravel-file-util": 20
+        "stats4sd/laravel-file-util": 20,
+        "stats4sd/laravel-team-management": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
