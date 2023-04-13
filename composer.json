@@ -12,11 +12,12 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
-        "stats4sd/laravel-odk-link": "dev-dev",
         "stats4sd/laravel-file-util": "dev-main",
+        "stats4sd/laravel-odk-link": "dev-dev",
         "stats4sd/laravel-team-management": "dev-main"
     },
     "require-dev": {
+        "backpack/generators": "^3.3",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
