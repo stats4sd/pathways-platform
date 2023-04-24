@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\TeamCrudController;
+use Stats4sd\TeamManagement\Http\Controllers\TeamMemberController;
 
 // --------------------------
 // Custom Backpack Routes
