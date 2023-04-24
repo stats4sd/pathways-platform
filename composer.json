@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.8",
         "stats4sd/laravel-file-util": "dev-main",
         "stats4sd/laravel-odk-link": "dev-dev",
+        "stats4sd/laravel-sql-views": "*",
         "stats4sd/laravel-team-management": "dev-main"
     },
     "require-dev": {
