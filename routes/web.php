@@ -39,3 +39,5 @@ Route::get(config('backpack.base.route_prefix') . '/login', function () {
 // });
 
 require __DIR__.'/auth.php';
+
+Route::post('admin/submissions/process', [SubmissionController::class, 'process'])->name('submission.process');
