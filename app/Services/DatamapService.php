@@ -6,6 +6,7 @@ use App\Models\Farm;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\FarmRequest;
+use Stats4sd\OdkLink\Models\Xlsform;
 use Stats4sd\OdkLink\Models\Submission;
 use Illuminate\Foundation\Http\FormRequest;
 use Stats4sd\OdkLink\Services\OdkLinkService;
@@ -34,11 +35,18 @@ class DatamapService
             $submission->save();
 
             // Update the csvs with new data by deploying draft and publishing live
-            $form = $submission->xlsformVersion->xlsform;
 
-            $service = new OdkLinkService(config('odk-link.odk.base_endpoint'));
-            $service->createDraftForm($form);
-            $service->publishForm($form);
+            $forms = Xlsform::get();
+
+            foreach($forms as $form) {
+
+                $service = new OdkLinkService(config('odk-link.odk.base_endpoint'));
+                $service->createDraftForm($form);
+
+                if($form->is_active) {
+                    $service->publishForm($form);
+                }
+            }
 
             return true;
 
