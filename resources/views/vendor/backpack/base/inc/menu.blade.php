@@ -28,7 +28,7 @@
         @include(backpack_view('inc.topbar_right_content'))
 
         <li class="nav-item pr-4">
-            <a class="nav-link" href="{{ route('backpack.account.info') }}">My Account</a>
+            <a class="nav-link" href="{{ route('backpack.account.info') }}">Mon compte</a>
         </li>
 
         <!-- Logout button - tailored to use Laravel Breeze -->

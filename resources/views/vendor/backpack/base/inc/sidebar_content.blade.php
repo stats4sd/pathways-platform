@@ -1,8 +1,15 @@
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url("farm") }}"><i class="las la-list nav-icon"></i> Farms</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("crop") }}"><i class="las la-leaf nav-icon"></i>Cultures</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("farm") }}"><i class="las la-seedling nav-icon"></i>UPAs</a></li>
 
+<li class="mt-3 nav-item"><a class="nav-link" href="{{ backpack_url("planting") }}"><i class="las la-poll-h nav-icon"></i>Semis</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("planting_detail") }}"><i class="las la-poll nav-icon"></i>Semis - Culture</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("post_planting") }}"><i class="las la-poll-h nav-icon"></i>Post-Semis</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("post_planting_detail") }}"><i class="las la-poll nav-icon"></i>Post-Semis - Culture</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("harvest") }}"><i class="las la-poll-h nav-icon"></i>Récolte</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("harvest_detail") }}"><i class="las la-poll nav-icon"></i>Récolte - Culture</a></li>
 
 <li class="mt-3 mb-1 nav-item nav-dropdown">
-    <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-wpforms"></i> Data Collection</a>
+    <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-wpforms"></i>Collecte de<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Données</a>
     <ul class="nav-dropdown-items">
         <li class="nav-item ml-2"><a class="nav-link" href="{{ backpack_url("xlsform-subject") }}"><i class="la la-tags nav-icon"></i> Form Subjects</a></li>
         <li class="nav-item ml-2"><a class="nav-link" href="{{ backpack_url("xlsform-template") }}"><i class="la la-wpforms nav-icon"></i> Form Templates</a></li>
@@ -14,9 +21,9 @@
 
 
 <li class="mt-3 mb-1 nav-item nav-dropdown">
-    <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-user-cog"></i> User<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Management</a>
+    <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-user-cog"></i>Gestion des<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Utilisateurs</a>
     <ul class="nav-dropdown-items">
-        <li class="nav-item ml-2"><a class="nav-link" href="{{ backpack_url('user') }}"><i class="nav-icon la la-user"></i> <span>Users</span></a></li>
-        <li class='nav-item ml-2'><a class='nav-link' href='{{ backpack_url('invite') }}'><i class='nav-icon las la-user-plus'></i> Invites</a></li>
+        <li class="nav-item ml-2"><a class="nav-link" href="{{ backpack_url('user') }}"><i class="nav-icon la la-user"></i> <span>Utilisateurs</span></a></li>
+        <li class='nav-item ml-2'><a class='nav-link' href='{{ backpack_url('invite') }}'><i class='nav-icon las la-user-plus'></i> Invitations</a></li>
     </ul>
 </li>

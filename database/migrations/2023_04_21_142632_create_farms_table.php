@@ -19,10 +19,10 @@ return new class extends Migration
             $table->text('chef_travaux')->nullable();
             $table->text('neo_alphabete')->nullable();
             $table->text('activite_primaire')->nullable();
-            $table->text('activitie_primaire_other')->nullable();
             $table->text('activite_secondaire')->nullable();
-            $table->text('activitie_secondaire_other')->nullable();
-            $table->text('cereales_favoris_upa')->nullable();
+            $table->text('cereales_favoris_1')->nullable();
+            $table->text('cereales_favoris_2')->nullable();
+            $table->text('cereales_favoris_3')->nullable();
             $table->integer('superficie_possede_upa')->nullable();
             $table->integer('superficie_cultive_upa')->nullable();
             $table->timestamps();

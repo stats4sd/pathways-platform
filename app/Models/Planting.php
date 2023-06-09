@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Farm extends Model
+class Planting extends Model
 {
     use CrudTrait;
     use HasFactory;
 
-    protected $table = 'farms';
+    protected $table = 'plantings';
     protected $guarded = [];
 
     /*
@@ -21,19 +22,14 @@ class Farm extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function plantings(): HasMany
+    public function farm(): BelongsTo
     {
-        return $this->hasMany(Planting::class);
+        return $this->belongsTo(Farm::class);
     }
-
-    public function postPlantings(): HasMany
+    
+    public function plantingDetails(): HasMany
     {
-        return $this->hasMany(PostPlanting::class);
-    }
-
-    public function harvests(): HasMany
-    {
-        return $this->hasMany(Harvest::class);
+        return $this->hasMany(PlantingDetail::class);
     }
 
 }
