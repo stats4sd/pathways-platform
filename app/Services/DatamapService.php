@@ -42,13 +42,13 @@ class DatamapService
 
             if(isset($data['activite_secondaire_autre_1'])) {
 
-                $data['activite_secondaire'] = str_replace('autre1', $data['activite_secondaire_autre_1'], $data['activite_secondaire_select']);
+                $data['activite_secondaire'] = str_replace('autre1', $data['activite_secondaire_autre_1'], $data['activite_secondaire']);
                 
             }
 
             if(isset($data['activite_secondaire_autre_2'])) {
 
-                $data['activite_secondaire'] = str_replace('autre2', $data['activite_secondaire_autre_2'], $data['activite_secondaire_select']);
+                $data['activite_secondaire'] = str_replace('autre2', $data['activite_secondaire_autre_2'], $data['activite_secondaire']);
                 
             }
 
