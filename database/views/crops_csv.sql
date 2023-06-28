@@ -1,6 +1,8 @@
 select
     id,
-    name_fr,
-    name_bm,
-    image
-from crops;
+    label_fr,
+    label_bm,
+    nom_fichier_image,
+    type
+from crops
+where type!='autre';

@@ -14,27 +14,37 @@ return new class extends Migration
         Schema::create('plantings_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('planting_id')->constrained('plantings');
-            $table->foreignId('crop_id')->constrained('crops');
+            $table->string('crop_id')->constrained('crops');
+
             $table->decimal('superficie_ha');
-            $table->foreignId('culture_prev')->constrained('crops');
+            $table->string('culture_prev')->constrained('crops');
+
             $table->integer('quantite_fumure_organique');
             $table->integer('cout_transport');
+
             $table->integer('quantite_chaux_agricole');
             $table->integer('cout_chaux_agricole');
+
             $table->integer('quantite_pnt_png');
             $table->integer('cout_pnt_png');
+
             $table->decimal('superficie_labouree');
             $table->integer('cout_superficie_labouree');
+
             $table->date('date_semence');
             $table->integer('quantite_semence');
             $table->integer('cout_semence_achetee');
+
             $table->integer('quantite_herbicide_prelevee');
             $table->integer('cout_herbicide_prelevee');
+
             $table->integer('cout');
+
             $table->text('observation_audio')->nullable();
             $table->text('observation_videos')->nullable();
             $table->text('observation_texte')->nullable();
             $table->text('observation_image')->nullable();
+            
             $table->timestamps();
         });
     }

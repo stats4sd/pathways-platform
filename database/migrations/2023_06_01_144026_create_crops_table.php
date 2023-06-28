@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('crops', function (Blueprint $table) {
-            $table->id();
-            $table->string('nom_fr');
-            $table->string('nom_bm');
+            $table->string('id')->primary();
+            $table->string('label_fr');
+            $table->string('label_bm');
             $table->string('nom_fichier_image')->nullable();
             $table->string('type')->nullable();
             $table->timestamps();
