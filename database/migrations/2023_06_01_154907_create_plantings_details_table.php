@@ -16,29 +16,29 @@ return new class extends Migration
             $table->foreignId('planting_id')->constrained('plantings');
             $table->string('crop_id')->constrained('crops');
 
-            $table->decimal('superficie_ha');
-            $table->string('culture_prev')->constrained('crops');
+            $table->decimal('superficie_ha')->nullable();;
+            $table->string('culture_prev')->constrained('crops')->nullable();;
 
-            $table->integer('quantite_fumure_organique');
-            $table->integer('cout_transport');
+            $table->integer('quantite_fumure_organique')->nullable();;
+            $table->integer('cout_transport')->nullable();;
 
-            $table->integer('quantite_chaux_agricole');
-            $table->integer('cout_chaux_agricole');
+            $table->integer('quantite_chaux_agricole')->nullable();;
+            $table->integer('cout_chaux_agricole')->nullable();;
 
-            $table->integer('quantite_pnt_png');
-            $table->integer('cout_pnt_png');
+            $table->integer('quantite_pnt_png')->nullable();;
+            $table->integer('cout_pnt_png')->nullable();;
 
-            $table->decimal('superficie_labouree');
-            $table->integer('cout_superficie_labouree');
+            $table->decimal('superficie_labouree')->nullable();;
+            $table->integer('cout_superficie_labouree')->nullable();;
 
-            $table->date('date_semence');
-            $table->integer('quantite_semence');
-            $table->integer('cout_semence_achetee');
+            $table->date('date_semence')->nullable();;
+            $table->integer('quantite_semence')->nullable();;
+            $table->integer('cout_semence_achetee')->nullable();;
 
-            $table->integer('quantite_herbicide_prelevee');
-            $table->integer('cout_herbicide_prelevee');
+            $table->integer('quantite_herbicide_prelevee')->nullable();;
+            $table->integer('cout_herbicide_prelevee')->nullable();;
 
-            $table->integer('cout');
+            $table->integer('cout')->nullable();;
 
             $table->text('observation_audio')->nullable();
             $table->text('observation_videos')->nullable();

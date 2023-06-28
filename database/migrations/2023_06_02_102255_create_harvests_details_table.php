@@ -16,16 +16,16 @@ return new class extends Migration
             $table->foreignId('harvest_id')->constrained('harvests');
             $table->string('crop_id')->constrained('crops');
 
-            $table->decimal('superficie_recolte_prestation');
-            $table->integer('cout_total_prestation_recolte');
+            $table->decimal('superficie_recolte_prestation')->nullable();
+            $table->integer('cout_total_prestation_recolte')->nullable();
 
-            $table->decimal('production');
-            $table->integer('cout_total_battage');
+            $table->decimal('production')->nullable();
+            $table->integer('cout_total_battage')->nullable();
 
-            $table->integer('production_residu_culture');
-            $table->integer('nombre_botte');
+            $table->integer('production_residu_culture')->nullable();
+            $table->integer('nombre_botte')->nullable();
 
-            $table->integer('cout');
+            $table->integer('cout')->nullable();
 
             $table->text('observation_audio')->nullable();
             $table->text('observation_videos')->nullable();
