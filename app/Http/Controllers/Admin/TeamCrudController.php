@@ -91,6 +91,6 @@ class TeamCrudController extends CrudController
     protected function show($id)
     {
         $team = Team::findorFail($id);
-        return view('team-management::teams.show', ['team' => $team]);
+        return view('teams-show', ['team' => $team]);
     }
 }
