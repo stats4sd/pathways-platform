@@ -14,6 +14,7 @@ class Crop extends Model
 
     protected $table = 'crops';
     protected $guarded = [];
+    protected $keyType = 'string';
 
     /*
     |--------------------------------------------------------------------------
