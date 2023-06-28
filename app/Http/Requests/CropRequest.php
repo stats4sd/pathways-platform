@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FarmRequest extends FormRequest
+class CropRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,19 +25,12 @@ class FarmRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'nullable|integer',
-            'code' => 'nullable',
-            'year' => 'nullable',
-            'chef_upa' => 'nullable',
-            'chef_travaux' => 'nullable',
-            'neo_alphabete' => 'nullable',
-            'activite_primaire' => 'nullable',
-            'activite_secondaire' => 'nullable',
-            'cereales_favoris_1' => 'nullable',
-            'cereales_favoris_2' => 'nullable',
-            'cereales_favoris_3' => 'nullable',
-            'superficie_possede_upa' => 'nullable',
-            'superficie_cultive_upa' => 'nullable'
+            'id' => 'nullable',
+            'name' => 'nullable',
+            'label_fr' => 'nullable',
+            'label_bm' => 'nullable',
+            'nom_fichier_image' => 'nullable',
+            'type' => 'nullable'
         ];
     }
 

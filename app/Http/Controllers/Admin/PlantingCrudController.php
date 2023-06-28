@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\FarmRequest;
-use App\Models\Farm;
+use App\Http\Requests\PlantingRequest;
+use App\Models\Planting;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class FarmCrudController
+ * Class PlantingCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class FarmCrudController extends CrudController
+class PlantingCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
@@ -25,9 +25,9 @@ class FarmCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Farm::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/farm');
-        CRUD::setEntityNameStrings('UPA', 'UPAs');
+        CRUD::setModel(\App\Models\Planting::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/planting');
+        CRUD::setEntityNameStrings('semis', 'semis');
     }
 
     /**
@@ -39,7 +39,10 @@ class FarmCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        CRUD::setFromDb();
+        CRUD::column('id')->label('ID');
+        CRUD::column('farm_id')->label('UPA');
+        CRUD::column('year');
+        CRUD::column('cout_total');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:

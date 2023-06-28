@@ -7,13 +7,14 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Farm extends Model
+class Crop extends Model
 {
     use CrudTrait;
     use HasFactory;
 
-    protected $table = 'farms';
+    protected $table = 'crops';
     protected $guarded = [];
+    protected $keyType = 'string';
 
     /*
     |--------------------------------------------------------------------------
@@ -21,19 +22,19 @@ class Farm extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function plantings(): HasMany
+    public function plantingDetails(): HasMany
     {
-        return $this->hasMany(Planting::class);
+        return $this->hasMany(PlantingDetail::class);
     }
 
-    public function postPlantings(): HasMany
+    public function postPlantingDetails(): HasMany
     {
-        return $this->hasMany(PostPlanting::class);
+        return $this->hasMany(PostPlantingDetail::class);
     }
 
-    public function harvests(): HasMany
+    public function harvestDetails(): HasMany
     {
-        return $this->hasMany(Harvest::class);
+        return $this->hasMany(HarvestDetail::class);
     }
-
+    
 }

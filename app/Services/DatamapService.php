@@ -2,14 +2,29 @@
 
 namespace App\Services;
 
+use App\Models\Crop;
 use App\Models\Farm;
+use App\Models\Harvest;
+use App\Models\Planting;
 use Illuminate\Support\Str;
+use App\Models\PostPlanting;
 use Illuminate\Http\Request;
+use App\Models\HarvestDetail;
+use App\Models\PlantingDetail;
+use App\Http\Requests\CropRequest;
 use App\Http\Requests\FarmRequest;
+use App\Models\PostPlantingDetail;
+use Stats4sd\OdkLink\Models\Xlsform;
+use App\Http\Requests\HarvestRequest;
+use App\Http\Requests\PlantingRequest;
 use Stats4sd\OdkLink\Models\Submission;
+use App\Http\Requests\PostPlantingRequest;
+use App\Http\Requests\HarvestDetailRequest;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\PlantingDetailRequest;
 use Stats4sd\OdkLink\Services\OdkLinkService;
 use Illuminate\Validation\ValidationException;
+use App\Http\Requests\PostPlantingDetailRequest;
 
 class DatamapService
 {
@@ -21,8 +36,22 @@ class DatamapService
             $data = $this->prepareDataArray($submission);
             $data = $this->removeGroupNames($data);
 
+            $data['code'] = $data['camera_scane'];
+            
             $entries = [];
-                                
+
+            if(isset($data['activite_secondaire_autre_1'])) {
+
+                $data['activite_secondaire'] = str_replace('autre1', $data['activite_secondaire_autre_1'], $data['activite_secondaire']);
+                
+            }
+
+            if(isset($data['activite_secondaire_autre_2'])) {
+
+                $data['activite_secondaire'] = str_replace('autre2', $data['activite_secondaire_autre_2'], $data['activite_secondaire']);
+                
+            }
+
             $validatedFarm = $this->getValidated($data, $submission, (new FarmRequest));
             $farm = Farm::create($validatedFarm);
             $entries[Farm::class] = [$farm->id];
@@ -34,11 +63,18 @@ class DatamapService
             $submission->save();
 
             // Update the csvs with new data by deploying draft and publishing live
-            $form = $submission->xlsformVersion->xlsform;
 
-            $service = new OdkLinkService(config('odk-link.odk.base_endpoint'));
-            $service->createDraftForm($form);
-            $service->publishForm($form);
+            $forms = Xlsform::get();
+
+            foreach($forms as $form) {
+
+                $service = new OdkLinkService(config('odk-link.odk.base_endpoint'));
+                $service->createDraftForm($form);
+
+                if($form->is_active) {
+                    $service->publishForm($form);
+                }
+            }
 
             return true;
 
@@ -46,6 +82,192 @@ class DatamapService
             return false;
         }
     }
+
+    public function sectionSemis(Submission $submission) : bool
+    {
+        try {
+
+            $data = $this->prepareDataArray($submission);
+            $data = $this->removeGroupNames($data);
+
+            $entries = [];
+                                
+            $validatedPlanting = $this->getValidated($data, $submission, (new PlantingRequest));
+            $planting = Planting::create($validatedPlanting);
+            $entries[Planting::class] = [$planting->id];
+
+            if (isset($data['culture_repeat'])) {
+
+                foreach ($data['culture_repeat'] as $cropData) {
+
+                    if($cropData['culture_value']=='999' | $cropData['culture_value']=='998') {
+
+                        $newCrop = [];
+                        $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $cropData['culture_label']));
+                        $newCrop['nom_fr'] = $cropData['culture_label'];
+                        $newCrop['nom_bm'] =$cropData['culture_label'];
+                        $newCrop['type'] = 'autre';
+                        $newCrop['farm_id'] = $cropData['farm_id'];
+
+                        $validatedOperation = $this->getValidated($newCrop, $submission, (new CropRequest));
+
+                        $crop = Crop::create($validatedOperation);
+                        $crops[] = $crop->id;
+
+                        $cropData = $this->removeGroupNames($cropData);
+                        $cropData['planting_id'] = $planting->id;
+                        $cropData['crop_id'] = $crop->id;
+
+                        $validatedOperation = $this->getValidated($cropData, $submission, (new PlantingDetailRequest));
+
+                        $plantingDetail = PlantingDetail::create($validatedOperation);
+                        $plantingDetails[] = $plantingDetail->id;
+
+                    }
+                    else {
+
+                        $cropData = $this->removeGroupNames($cropData);
+                        $cropData['planting_id'] = $planting->id;
+                        $cropData['crop_id'] = $cropData['culture_value'];
+
+                        $validatedOperation = $this->getValidated($cropData, $submission, (new PlantingDetailRequest));
+
+                        $plantingDetail = PlantingDetail::create($validatedOperation);
+                        $plantingDetails[] = $plantingDetail->id;
+
+                    }
+                }
+
+                $entries[PlantingDetail::class] = $plantingDetails;
+            }
+
+            /* At the end, you should update the $submission entry: */
+            $submission->processed = 1;
+            $submission->entries = $entries;
+            $submission->save();
+
+            return true;
+
+        } catch (\JsonException|ValidationException $e) {
+            return false;
+        }
+    }
+
+
+    public function sectionPostSemis(Submission $submission) : bool
+    {
+        try {
+
+            $data = $this->prepareDataArray($submission);
+            $data = $this->removeGroupNames($data);
+
+            $entries = [];
+                                
+            $validatedPostPlanting = $this->getValidated($data, $submission, (new PostPlantingRequest));
+            $postPlanting = PostPlanting::create($validatedPostPlanting);
+            $entries[PostPlanting::class] = [$postPlanting->id];
+
+            if (isset($data['culture_repeat'])) {
+
+                foreach ($data['culture_repeat'] as $cropData) {
+
+                    $cropData = $this->removeGroupNames($cropData);
+                    $cropData['post_planting_id'] = $postPlanting->id;
+                    $cropData['crop_id'] = $cropData['culture_value'];
+
+                    $validatedOperation = $this->getValidated($cropData, $submission, (new PostPlantingDetailRequest));
+
+                    $postPlantingDetail = PostPlantingDetail::create($validatedOperation);
+                    $postPlantingDetails[] = $postPlantingDetail->id;
+
+                }
+
+                $entries[PostPlantingDetail::class] = $postPlantingDetails;
+            }
+
+
+            /* At the end, you should update the $submission entry: */
+            $submission->processed = 1;
+            $submission->entries = $entries;
+            $submission->save();
+
+            return true;
+
+        } catch (\JsonException|ValidationException $e) {
+            return false;
+        }
+    }
+
+    public function sectionRecolte(Submission $submission) : bool
+    {
+        try {
+
+            $data = $this->prepareDataArray($submission);
+            $data = $this->removeGroupNames($data);
+
+            $entries = [];
+                                
+            $validatedHarvest = $this->getValidated($data, $submission, (new HarvestRequest));
+            $harvest = Harvest::create($validatedHarvest);
+            $entries[Harvest::class] = [$harvest->id];
+
+            if (isset($data['culture_repeat'])) {
+
+                foreach ($data['culture_repeat'] as $cropData) {
+
+                    if($cropData['culture_value']=='999' | $cropData['culture_value']=='998') {
+
+                        $newCrop = [];
+                        $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $cropData['culture_label']));
+                        $newCrop['nom_fr'] = $cropData['culture_label'];
+                        $newCrop['nom_bm'] =$cropData['culture_label'];
+                        $newCrop['type'] = 'autre';
+                        $newCrop['farm_id'] = $cropData['farm_id'];
+
+                        $validatedOperation = $this->getValidated($newCrop, $submission, (new CropRequest));
+
+                        $crop = Crop::create($validatedOperation);
+                        $crops[] = $crop->id;
+
+                        $cropData = $this->removeGroupNames($cropData);
+                        $cropData['harvest_id'] = $harvest->id;
+                        $cropData['crop_id'] = $crop->id;
+
+                        $validatedOperation = $this->getValidated($cropData, $submission, (new HarvestDetailRequest));
+
+                        $harvestDetail = HarvestDetail::create($validatedOperation);
+                        $harvestDetails[] = $harvestDetail->id;
+
+                    }
+                    else {
+
+                        $cropData = $this->removeGroupNames($cropData);
+                        $cropData['harvest_id'] = $harvest->id;
+                        $cropData['crop_id'] = $cropData['culture_value'];
+    
+                        $validatedOperation = $this->getValidated($cropData, $submission, (new HarvestDetailRequest));
+    
+                        $harvestDetail = HarvestDetail::create($validatedOperation);
+                        $harvestDetails[] = $harvestDetail->id;
+                    }
+                }
+
+                $entries[HarvestDetail::class] = $harvestDetails;
+            }
+
+
+            /* At the end, you should update the $submission entry: */
+            $submission->processed = 1;
+            $submission->entries = $entries;
+            $submission->save();
+
+            return true;
+
+        } catch (\JsonException|ValidationException $e) {
+            return false;
+        }
+    }
+
 
     /*****************************************************************************/
     /******************************** HELPER METHODS *****************************/

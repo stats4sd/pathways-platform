@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FarmRequest extends FormRequest
+class PlantingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,18 +26,9 @@ class FarmRequest extends FormRequest
     {
         return [
             'id' => 'nullable|integer',
-            'code' => 'nullable',
+            'farm_id' => 'required',
             'year' => 'nullable',
-            'chef_upa' => 'nullable',
-            'chef_travaux' => 'nullable',
-            'neo_alphabete' => 'nullable',
-            'activite_primaire' => 'nullable',
-            'activite_secondaire' => 'nullable',
-            'cereales_favoris_1' => 'nullable',
-            'cereales_favoris_2' => 'nullable',
-            'cereales_favoris_3' => 'nullable',
-            'superficie_possede_upa' => 'nullable',
-            'superficie_cultive_upa' => 'nullable'
+            'cout_total' => 'nullable'
         ];
     }
 

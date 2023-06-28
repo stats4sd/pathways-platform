@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\FarmRequest;
-use App\Models\Farm;
+use App\Http\Requests\PlantingDetailRequest;
+use App\Models\PlantingDetail;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 /**
- * Class FarmCrudController
+ * Class PlantingDetailCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class FarmCrudController extends CrudController
+class PlantingDetailCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
@@ -25,9 +25,9 @@ class FarmCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\Farm::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/farm');
-        CRUD::setEntityNameStrings('UPA', 'UPAs');
+        CRUD::setModel(\App\Models\PlantingDetail::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/planting_detail');
+        CRUD::setEntityNameStrings('semis - culture', 'semis - culture');
     }
 
     /**
