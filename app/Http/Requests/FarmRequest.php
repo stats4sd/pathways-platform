@@ -32,10 +32,10 @@ class FarmRequest extends FormRequest
             'chef_travaux' => 'nullable',
             'neo_alphabete' => 'nullable',
             'activite_primaire' => 'nullable',
-            'activitie_primaire_other' => 'nullable',
             'activite_secondaire' => 'nullable',
-            'activitie_secondaire_other' => 'nullable',
-            'cereales_favoris_upa' => 'nullable',
+            'cereales_favoris_1' => 'nullable',
+            'cereales_favoris_2' => 'nullable',
+            'cereales_favoris_3' => 'nullable',
             'superficie_possede_upa' => 'nullable',
             'superficie_cultive_upa' => 'nullable'
         ];

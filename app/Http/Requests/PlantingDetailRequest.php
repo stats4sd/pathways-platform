@@ -45,7 +45,7 @@ class PlantingDetailRequest extends FormRequest
             'cout_herbicide_prelevee' => 'nullable',
             'cout' => 'nullable',
             'observation_audio' => 'nullable',
-            'observation_video' => 'nullable',
+            'observation_videos' => 'nullable',
             'observation_texte' => 'nullable',
             'observation_image' => 'nullable',
         ];

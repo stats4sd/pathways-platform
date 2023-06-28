@@ -44,7 +44,7 @@ class PostPlantingDetailRequest extends FormRequest
             'cout_insecticide' => 'nullable',
             'cout' => 'nullable',
             'observation_audio' => 'nullable',
-            'observation_video' => 'nullable',
+            'observation_videos' => 'nullable',
             'observation_texte' => 'nullable',
             'observation_image' => 'nullable',
         ];
