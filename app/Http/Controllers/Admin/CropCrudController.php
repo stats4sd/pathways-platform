@@ -40,9 +40,9 @@ class CropCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        CRUD::column('id');
-        CRUD::column('nom_fr');
-        CRUD::column('nom_bm');
+        CRUD::column('id')->label('Name');
+        CRUD::column('label_fr');
+        CRUD::column('label_bm');
         CRUD::column('nom_fichier_image');
         CRUD::column('type');
 
@@ -58,9 +58,9 @@ class CropCrudController extends CrudController
 
         CRUD::setValidation(CropRequest::class);
 
-        CRUD::field('id');
-        CRUD::field('nom_fr');
-        CRUD::field('nom_bm');
+        CRUD::field('id')->label('Choice List Name');
+        CRUD::field('label_fr');
+        CRUD::field('label_bm');
         CRUD::field('nom_fichier_image');
         CRUD::field('type')->type('select_from_array')->options(['primaire' => 'Primaire', 'secondaire' => 'Secondaire']);
         

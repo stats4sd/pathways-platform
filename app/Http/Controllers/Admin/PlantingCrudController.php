@@ -39,7 +39,10 @@ class PlantingCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        CRUD::setFromDb();
+        CRUD::column('id')->label('ID');
+        CRUD::column('farm_id')->label('UPA');
+        CRUD::column('year');
+        CRUD::column('cout_total');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
