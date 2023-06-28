@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Crop;
 use App\Models\Farm;
 use App\Models\Harvest;
 use App\Models\Planting;
@@ -10,6 +11,7 @@ use App\Models\PostPlanting;
 use Illuminate\Http\Request;
 use App\Models\HarvestDetail;
 use App\Models\PlantingDetail;
+use App\Http\Requests\CropRequest;
 use App\Http\Requests\FarmRequest;
 use App\Models\PostPlantingDetail;
 use Stats4sd\OdkLink\Models\Xlsform;
@@ -34,8 +36,22 @@ class DatamapService
             $data = $this->prepareDataArray($submission);
             $data = $this->removeGroupNames($data);
 
-            $entries = [];
+            $data['code'] = $data['camera_scane'];
             
+            $entries = [];
+
+            if(isset($data['activite_secondaire_autre_1'])) {
+
+                $data['activite_secondaire'] = str_replace('autre1', $data['activite_secondaire_autre_1'], $data['activite_secondaire_select']);
+                
+            }
+
+            if(isset($data['activite_secondaire_autre_2'])) {
+
+                $data['activite_secondaire'] = str_replace('autre2', $data['activite_secondaire_autre_2'], $data['activite_secondaire_select']);
+                
+            }
+
             $validatedFarm = $this->getValidated($data, $submission, (new FarmRequest));
             $farm = Farm::create($validatedFarm);
             $entries[Farm::class] = [$farm->id];
@@ -84,15 +100,42 @@ class DatamapService
 
                 foreach ($data['culture_repeat'] as $cropData) {
 
-                    $cropData = $this->removeGroupNames($cropData);
-                    $cropData['planting_id'] = $planting->id;
-                    $cropData['crop_id'] = $cropData['culture_value'];
+                    if($cropData['culture_value']=='999' | $cropData['culture_value']=='998') {
 
-                    $validatedOperation = $this->getValidated($cropData, $submission, (new PlantingDetailRequest));
+                        $newCrop = [];
+                        $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $cropData['culture_label']));
+                        $newCrop['nom_fr'] = $cropData['culture_label'];
+                        $newCrop['nom_bm'] =$cropData['culture_label'];
+                        $newCrop['type'] = 'autre';
+                        $newCrop['farm_id'] = $cropData['farm_id'];
 
-                    $plantingDetail = PlantingDetail::create($validatedOperation);
-                    $plantingDetails[] = $plantingDetail->id;
+                        $validatedOperation = $this->getValidated($newCrop, $submission, (new CropRequest));
 
+                        $crop = Crop::create($validatedOperation);
+                        $crops[] = $crop->id;
+
+                        $cropData = $this->removeGroupNames($cropData);
+                        $cropData['planting_id'] = $planting->id;
+                        $cropData['crop_id'] = $crop->id;
+
+                        $validatedOperation = $this->getValidated($cropData, $submission, (new PlantingDetailRequest));
+
+                        $plantingDetail = PlantingDetail::create($validatedOperation);
+                        $plantingDetails[] = $plantingDetail->id;
+
+                    }
+                    else {
+
+                        $cropData = $this->removeGroupNames($cropData);
+                        $cropData['planting_id'] = $planting->id;
+                        $cropData['crop_id'] = $cropData['culture_value'];
+
+                        $validatedOperation = $this->getValidated($cropData, $submission, (new PlantingDetailRequest));
+
+                        $plantingDetail = PlantingDetail::create($validatedOperation);
+                        $plantingDetails[] = $plantingDetail->id;
+
+                    }
                 }
 
                 $entries[PlantingDetail::class] = $plantingDetails;
@@ -172,15 +215,41 @@ class DatamapService
 
                 foreach ($data['culture_repeat'] as $cropData) {
 
-                    $cropData = $this->removeGroupNames($cropData);
-                    $cropData['harvest_id'] = $harvest->id;
-                    $cropData['crop_id'] = $cropData['culture_value'];
+                    if($cropData['culture_value']=='999' | $cropData['culture_value']=='998') {
 
-                    $validatedOperation = $this->getValidated($cropData, $submission, (new HarvestDetailRequest));
+                        $newCrop = [];
+                        $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $cropData['culture_label']));
+                        $newCrop['nom_fr'] = $cropData['culture_label'];
+                        $newCrop['nom_bm'] =$cropData['culture_label'];
+                        $newCrop['type'] = 'autre';
+                        $newCrop['farm_id'] = $cropData['farm_id'];
 
-                    $harvestDetail = HarvestDetail::create($validatedOperation);
-                    $harvestDetails[] = $harvestDetail->id;
-                    
+                        $validatedOperation = $this->getValidated($newCrop, $submission, (new CropRequest));
+
+                        $crop = Crop::create($validatedOperation);
+                        $crops[] = $crop->id;
+
+                        $cropData = $this->removeGroupNames($cropData);
+                        $cropData['harvest_id'] = $harvest->id;
+                        $cropData['crop_id'] = $crop->id;
+
+                        $validatedOperation = $this->getValidated($cropData, $submission, (new HarvestDetailRequest));
+
+                        $harvestDetail = HarvestDetail::create($validatedOperation);
+                        $harvestDetails[] = $harvestDetail->id;
+
+                    }
+                    else {
+
+                        $cropData = $this->removeGroupNames($cropData);
+                        $cropData['harvest_id'] = $harvest->id;
+                        $cropData['crop_id'] = $cropData['culture_value'];
+    
+                        $validatedOperation = $this->getValidated($cropData, $submission, (new HarvestDetailRequest));
+    
+                        $harvestDetail = HarvestDetail::create($validatedOperation);
+                        $harvestDetails[] = $harvestDetail->id;
+                    }
                 }
 
                 $entries[HarvestDetail::class] = $harvestDetails;

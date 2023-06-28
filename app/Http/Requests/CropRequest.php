@@ -25,10 +25,12 @@ class CropRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'nullable|integer',
-            'name_fr' => 'nullable|integer',
-            'name_bm' => 'required',
-            'image' => 'required',
+            'id' => 'nullable',
+            'name' => 'nullable',
+            'label_fr' => 'nullable',
+            'label_bm' => 'nullable',
+            'nom_fichier_image' => 'nullable',
+            'type' => 'nullable'
         ];
     }
 

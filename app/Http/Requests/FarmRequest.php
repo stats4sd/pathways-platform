@@ -26,7 +26,7 @@ class FarmRequest extends FormRequest
     {
         return [
             'id' => 'nullable|integer',
-            'code' => 'required',
+            'code' => 'nullable',
             'year' => 'nullable',
             'chef_upa' => 'nullable',
             'chef_travaux' => 'nullable',
