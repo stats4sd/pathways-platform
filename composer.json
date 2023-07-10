@@ -15,7 +15,9 @@
         "stats4sd/laravel-file-util": "dev-main",
         "stats4sd/laravel-odk-link": "dev-dev",
         "stats4sd/laravel-sql-views": "*",
-        "stats4sd/laravel-team-management": "dev-main"
+        "stats4sd/laravel-team-management": "dev-main",
+        "symfony/http-client": "^6.3",
+        "symfony/mailgun-mailer": "^6.3"
     },
     "require-dev": {
         "backpack/generators": "^3.3",
