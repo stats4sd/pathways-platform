@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Http\database\seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $user->assignRole('Research Team');
-        $this->call(CropsTableSeeder::class);
+
     }
 }

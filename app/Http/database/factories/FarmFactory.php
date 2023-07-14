@@ -1,8 +1,9 @@
 <?php
 
-namespace Database\Factories;
+namespace App\Http\database\factories;
 
 use App\Models\Crop;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,10 +18,13 @@ class FarmFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->name;
+
         return [
+            'user_id' => User::factory(['name' => $name]),
             'code' => 'TEST_00' . $this->faker->randomNumber(4),
             'year' => '2023',
-            'chef_upa' => $this->faker->name,
+            'chef_upa' => $name,
             'chef_travaux' => $this->faker->name,
             'neo_alphabete' => $this->faker->word,
             'activite_primaire' => $this->faker->jobTitle,

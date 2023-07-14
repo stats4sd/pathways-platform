@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionFarmerController;
 use Illuminate\Support\Facades\Route;
 
 /**
@@ -38,6 +39,15 @@ Route::get(config('backpack.base.route_prefix') . '/login', function () {
 //     Route::view('dashboard')->name('dashboard');
 // });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+// farmer authentication
+Route::get('login-farmer', [AuthenticatedSessionFarmerController::class, 'create'])
+    ->name('login-farmer')
+    ->middleware('guest');
+
+Route::post('login-farmer', [AuthenticatedSessionFarmerController::class, 'store'])
+    ->name('post-login-farmer')
+    ->middleware('guest');
 
 Route::post('admin/submissions/process', [SubmissionController::class, 'process'])->name('submission.process');

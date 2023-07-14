@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Http\database\seeders;
 
 use Illuminate\Database\Seeder;
 
@@ -14,12 +14,12 @@ class CropsTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('crops')->delete();
-        
+
         \DB::table('crops')->insert(array (
-            0 => 
+            0 =>
             array (
                 'created_at' => NULL,
                 'id' => 'arachide',
@@ -29,7 +29,7 @@ class CropsTableSeeder extends Seeder
                 'type' => 'primaire',
                 'updated_at' => NULL,
             ),
-            1 => 
+            1 =>
             array (
                 'created_at' => NULL,
                 'id' => 'bissap',
@@ -39,7 +39,7 @@ class CropsTableSeeder extends Seeder
                 'type' => 'secondaire',
                 'updated_at' => NULL,
             ),
-            2 => 
+            2 =>
             array (
                 'created_at' => NULL,
                 'id' => 'coton',
@@ -49,7 +49,7 @@ class CropsTableSeeder extends Seeder
                 'type' => 'primaire',
                 'updated_at' => NULL,
             ),
-            3 => 
+            3 =>
             array (
                 'created_at' => NULL,
                 'id' => 'fonio',
@@ -59,7 +59,7 @@ class CropsTableSeeder extends Seeder
                 'type' => 'secondaire',
                 'updated_at' => NULL,
             ),
-            4 => 
+            4 =>
             array (
                 'created_at' => NULL,
                 'id' => 'fourrage',
@@ -69,7 +69,7 @@ class CropsTableSeeder extends Seeder
                 'type' => 'primaire',
                 'updated_at' => NULL,
             ),
-            5 => 
+            5 =>
             array (
                 'created_at' => NULL,
                 'id' => 'mais',
@@ -79,7 +79,7 @@ class CropsTableSeeder extends Seeder
                 'type' => 'primaire',
                 'updated_at' => NULL,
             ),
-            6 => 
+            6 =>
             array (
                 'created_at' => NULL,
                 'id' => 'mil',
@@ -89,7 +89,7 @@ class CropsTableSeeder extends Seeder
                 'type' => 'primaire',
                 'updated_at' => NULL,
             ),
-            7 => 
+            7 =>
             array (
                 'created_at' => NULL,
                 'id' => 'patate_douce',
@@ -99,7 +99,7 @@ class CropsTableSeeder extends Seeder
                 'type' => 'secondaire',
                 'updated_at' => NULL,
             ),
-            8 => 
+            8 =>
             array (
                 'created_at' => NULL,
                 'id' => 'rice',
@@ -109,7 +109,7 @@ class CropsTableSeeder extends Seeder
                 'type' => 'secondaire',
                 'updated_at' => NULL,
             ),
-            9 => 
+            9 =>
             array (
                 'created_at' => NULL,
                 'id' => 'sesame',
@@ -119,7 +119,7 @@ class CropsTableSeeder extends Seeder
                 'type' => 'secondaire',
                 'updated_at' => NULL,
             ),
-            10 => 
+            10 =>
             array (
                 'created_at' => NULL,
                 'id' => 'sorgho',
@@ -129,7 +129,7 @@ class CropsTableSeeder extends Seeder
                 'type' => 'primaire',
                 'updated_at' => NULL,
             ),
-            11 => 
+            11 =>
             array (
                 'created_at' => NULL,
                 'id' => 'wouandzou',
@@ -140,7 +140,7 @@ class CropsTableSeeder extends Seeder
                 'updated_at' => NULL,
             ),
         ));
-        
-        
+
+
     }
 }

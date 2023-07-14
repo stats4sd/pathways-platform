@@ -1,9 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Http\database\seeders;
 
 use App\Models\Farm;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class FarmSeeder extends Seeder
@@ -14,5 +13,7 @@ class FarmSeeder extends Seeder
     public function run(): void
     {
         Farm::factory()->count(10)->create();
+
+
     }
 }

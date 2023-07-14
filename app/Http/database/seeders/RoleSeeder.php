@@ -1,8 +1,7 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Http\database\seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 

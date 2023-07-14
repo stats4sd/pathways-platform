@@ -66,16 +66,16 @@ class FarmCrudController extends CrudController
                         <div class='col-md-6 col-lg-4'>
                             $qrCode
                         </div>
-                        <div class='col-md-6 d-flex flex-column justify-content-center'>
-                            <div class='d-flex'>
+                        <div class='col-md-6 col-lg-8 d-flex flex-column justify-content-center'>
+                            <div class='d-flex w-100'>
                                 <span class='w-50 font-weight-bold text-right mr-3'>CODE:</span>
                                 <span>$farm->code</span>
                             </div>
-                            <div class='d-flex'>
+                            <div class='d-flex w-100'>
                                 <span class='w-50 font-weight-bold text-right mr-3'>CHEF UPA:</span>
                                 <span>$farm->chef_upa</span>
                             </div>
-                            <div class='d-flex'>
+                            <div class='d-flex w-100'>
                                 <span class='w-50 font-weight-bold text-right mr-3'>CHEF TRAVAUX:</span>
                                 <span>$farm->chef_travaux</span>
                             </div>
@@ -84,7 +84,7 @@ class FarmCrudController extends CrudController
                 ",
             ])
         ->wrapper([
-            'class' => 'pl-0 col-12 col-lg-6 col-xl-4 offset-xl-2'
+            'class' => 'pl-0 col-12 col-lg-8 col-xl-4 offset-xl-2'
         ]);
 
         $this->setupListOperation();
