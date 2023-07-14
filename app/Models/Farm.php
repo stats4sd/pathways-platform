@@ -16,6 +16,16 @@ class Farm extends Model
     protected $table = 'farms';
     protected $guarded = [];
 
+    protected static function booted()
+    {
+        static::creating(function (Farm $farm) {
+            $user = User::factory()->create();
+
+            $farm->user_id = $user->id;
+        });
+
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
