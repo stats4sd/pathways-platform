@@ -20,6 +20,7 @@ class Farm extends Model
     {
         static::creating(function (Farm $farm) {
             $user = User::factory()->create();
+            $user->addRole('Farmer');
 
             $farm->user_id = $user->id;
         });
