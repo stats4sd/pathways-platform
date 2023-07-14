@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\FarmerLoginRequest;
 use App\Models\Farm;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
@@ -11,16 +12,18 @@ use Prologue\Alerts\Facades\Alert;
 
 class AuthenticatedSessionFarmerController extends Controller
 {
-    public function create(): View
+    public function create()
     {
         return view('auth.login-farmer');
     }
 
-    public function store()
+    public function store(FarmerLoginRequest $request)
     {
-        $farm_code = request()->input('farm_code');
+        $validated = $request->validated();
 
-        $farm = Farm::where('code', $farm_code)->first();
+        $farm = Farm::where('code', $validated['code'])
+            ->where('phone_number', $validated['phone_number'])
+            ->first();
 
         if($farm) {
             Auth::login($farm->user);

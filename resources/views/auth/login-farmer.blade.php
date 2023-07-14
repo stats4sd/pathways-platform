@@ -4,9 +4,17 @@
 
     <div id="farm-login-card">
         <Suspense>
-            <farm-login login-route="{{ route('post-login') }}"/>
+            <farm-login
+                login-route="{{ route('post-login') }}"
+                :code-errors="{{json_encode($errors->get('code'))}}"
+                :phone-number-errors="{{json_encode($errors->get('phone_number'))}}"
+                old-phone-number="{{  old('phone_number_text') }}"
+
+            />
         </Suspense>
     </div>
+
+    @dump(old('phone_number'), old('phone_number_text'), old('code'))
 
     <x-slot:alternateLogin>
         <a href="{{ route('login-researcher') }}"  class="btn btn-link">Login as Researcher</a>

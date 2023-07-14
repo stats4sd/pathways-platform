@@ -6,19 +6,48 @@
 
             <h3>Scannez le code QR sur votre carte d'identité</h3>
 
-            <video id="preview" class="m-4 w-100"></video>
+
+            <video
+                id="preview"
+                class="m-4 w-100"
+                :class="scannedCode ? 'border border-success' : ''"
+            />
+
+            <h4
+                v-if="scannedCode"
+                class="text-success d-flex justify-content-center align-items-center"
+            >
+                CODE SCANNED
+                <i class="la la-check-circle font-weight-bold font-5xl text-success"></i>
+            </h4>
+
+
+            <p
+                v-for="error in codeErrors"
+                class="help-block text-danger">
+                {{ error }}
+            </p>
 
             <div class="my-4">
-                <h5>Scanned code: <br/><br/>
-                    <span class="font-weight-bold font-2xl">{{ scannedCode.data }}</span>
+                <h5>Enter Phone Number: <br/><br/>
+                    <input class="form-control" name='phone_number_text' v-model="phoneNumberText">
                 </h5>
+                <p
+                    v-for="error in phoneNumberErrors"
+                    class="help-block text-danger">
+                    {{ error }}
+                </p>
             </div>
 
-            <input type="hidden" name='farm_code' v-model="scannedCode.data"/>
+            <input type="hidden" name="phone_number" v-model="phoneNumber"/>
+            <input type="hidden" name='code' v-model="scannedCode.data"/>
             <input type="hidden" name="_token" :value="csrf">
 
-            <button type="submit" class="mt-4 btn" :class="scannedCode ? 'btn-primary' : 'btn-secondary'"
-                    :disabled="!scannedCode">
+            <button
+                type="submit"
+                class="mt-4 btn"
+                :class="scannedCode && phoneNumber ? 'btn-primary' : 'btn-secondary'"
+                :disabled="!scannedCode && !phoneNumber">
                 Login
             </button>
         </div>
@@ -28,23 +57,35 @@
 <script setup>
 
 import QrScanner from 'qr-scanner';
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 
 const props = defineProps({
     loginRoute: String,
+    codeErrors: Array,
+    phoneNumberErrors: Array,
+    oldPhoneNumber: String,
 });
 
 const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 
 
 const scannedCode = ref('')
+const phoneNumberText = ref('')
 
+
+const phoneNumber = computed(() => phoneNumberText.value.replaceAll(/\D/ig, ''))
 
 onMounted(async () => {
 
+    if(props.oldPhoneNumber) {
+        phoneNumberText.value = props.oldPhoneNumber;
+    }
+
     const qrScanner = new QrScanner(
         document.getElementById('preview'),
-        result => scannedCode.value = result,
+        result => {
+            scannedCode.value = result
+        },
         {
             returnDetailedScanResult: true,
         },
