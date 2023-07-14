@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\database\factories;
+namespace Database\Factories;
 
 use App\Models\Crop;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Farm>
@@ -22,6 +23,7 @@ class FarmFactory extends Factory
 
         return [
             'user_id' => User::factory(['name' => $name]),
+            'phone_number' => preg_replace('/\D/', '', $this->faker->phoneNumber),
             'code' => 'TEST_00' . $this->faker->randomNumber(4),
             'year' => '2023',
             'chef_upa' => $name,

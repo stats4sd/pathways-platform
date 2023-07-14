@@ -48,10 +48,14 @@
 
 </head>
 <body>
-<div class="d-flex flex-column justify-content-center w-100 pt-0 h-100">
+<div class="d-flex flex-column justify-content-center w-100 py-0 h-100">
 
     <div class="form-signin card p-4 shadow-sm text-center">
         {{ $slot }}
+    </div>
+
+    <div class="text-center">
+        {{ $alternateLogin }}
     </div>
 </div>
 </body>

@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Http\database\seeders;
-
+namespace Database\Seeders;
 use App\Models\Farm;
 use Illuminate\Database\Seeder;
 

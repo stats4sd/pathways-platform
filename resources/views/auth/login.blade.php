@@ -3,7 +3,7 @@
     <h3>Chemins l'IAE</h3>
     <h5 class="mb-4">Login</h5>
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('post-login-researcher') }}">
         @csrf
 
         <div class="form-group row">
@@ -61,9 +61,11 @@
                 </a>
             @endif
         </div>
-        </div>
+
     </form>
 
-
+    <x-slot:alternateLogin>
+        <a href="{{ route('login') }}" class="btn btn-link">Login as Farmer with QR Code</a>
+    </x-slot:alternateLogin>
 
 </x-guest-layout>

@@ -44,50 +44,13 @@ class FarmCrudController extends CrudController
 
         CRUD::setFromDb();
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
     }
 
-    protected function setupShowOperation()
+    protected function show($id)
     {
-        $farm = $this->crud->getCurrentEntry();
+        $farm = Farm::find($id);
 
-        $qrCode = QrCode::size(150)->generate($farm->code);
-
-        Widget::add()
-            ->to('before_content')
-            ->type('card')
-            ->content([
-                'body' => "
-                    <div class='row'>
-                        <div class='col-md-6 col-lg-4'>
-                            $qrCode
-                        </div>
-                        <div class='col-md-6 col-lg-8 d-flex flex-column justify-content-center'>
-                            <div class='d-flex w-100'>
-                                <span class='w-50 font-weight-bold text-right mr-3'>CODE:</span>
-                                <span>$farm->code</span>
-                            </div>
-                            <div class='d-flex w-100'>
-                                <span class='w-50 font-weight-bold text-right mr-3'>CHEF UPA:</span>
-                                <span>$farm->chef_upa</span>
-                            </div>
-                            <div class='d-flex w-100'>
-                                <span class='w-50 font-weight-bold text-right mr-3'>CHEF TRAVAUX:</span>
-                                <span>$farm->chef_travaux</span>
-                            </div>
-                        </div>
-                    </div>
-                ",
-            ])
-        ->wrapper([
-            'class' => 'pl-0 col-12 col-lg-8 col-xl-4 offset-xl-2'
-        ]);
-
-        $this->setupListOperation();
+        return view('farms.show', ['farm' => $farm]);
     }
 
 }

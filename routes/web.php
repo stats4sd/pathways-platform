@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionFarmerController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,13 +42,21 @@ Route::get(config('backpack.base.route_prefix') . '/login', function () {
 
 require __DIR__ . '/auth.php';
 
+// overwrite login routes
+    Route::get('login', [AuthenticatedSessionFarmerController::class, 'create'])
+                ->name('login');
+
+    Route::post('login', [AuthenticatedSessionFarmerController::class, 'store'])
+    ->name('post-login');
+
+
 // farmer authentication
-Route::get('login-farmer', [AuthenticatedSessionFarmerController::class, 'create'])
-    ->name('login-farmer')
+Route::get('login-researcher', [AuthenticatedSessionController::class, 'create'])
+    ->name('login-researcher')
     ->middleware('guest');
 
-Route::post('login-farmer', [AuthenticatedSessionFarmerController::class, 'store'])
-    ->name('post-login-farmer')
+Route::post('login-researcher', [AuthenticatedSessionController::class, 'store'])
+    ->name('post-login-researcher')
     ->middleware('guest');
 
 Route::post('admin/submissions/process', [SubmissionController::class, 'process'])->name('submission.process');

@@ -29,6 +29,6 @@ class AuthenticatedSessionFarmerController extends Controller
             return back();
         }
 
-        return redirect(RouteServiceProvider::HOME);
+        return redirect('/admin/farm/' . $farm->id . '/show');
     }
 }
