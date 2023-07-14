@@ -14,8 +14,6 @@
         </Suspense>
     </div>
 
-    @dump(old('phone_number'), old('phone_number_text'), old('code'))
-
     <x-slot:alternateLogin>
         <a href="{{ route('login-researcher') }}"  class="btn btn-link">Login as Researcher</a>
     </x-slot:alternateLogin>
