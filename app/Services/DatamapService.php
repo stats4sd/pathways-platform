@@ -91,6 +91,10 @@ class DatamapService
             $data = $this->removeGroupNames($data);
 
             $entries = [];
+
+            if(!isset($data['farm_id'])) {
+                $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
+            }
                                 
             $validatedPlanting = $this->getValidated($data, $submission, (new PlantingRequest));
             $planting = Planting::create($validatedPlanting);
@@ -162,7 +166,11 @@ class DatamapService
             $data = $this->removeGroupNames($data);
 
             $entries = [];
-                                
+
+            if(!isset($data['farm_id'])) {
+                $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
+            }
+            
             $validatedPostPlanting = $this->getValidated($data, $submission, (new PostPlantingRequest));
             $postPlanting = PostPlanting::create($validatedPostPlanting);
             $entries[PostPlanting::class] = [$postPlanting->id];
@@ -206,6 +214,10 @@ class DatamapService
             $data = $this->removeGroupNames($data);
 
             $entries = [];
+
+            if(!isset($data['farm_id'])) {
+                $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
+            }
                                 
             $validatedHarvest = $this->getValidated($data, $submission, (new HarvestRequest));
             $harvest = Harvest::create($validatedHarvest);
