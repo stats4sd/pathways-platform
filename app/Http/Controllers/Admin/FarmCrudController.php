@@ -15,8 +15,10 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class FarmCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -46,6 +48,25 @@ class FarmCrudController extends CrudController
          * - CRUD::column('price')->type('number');
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
          */
+    }
+
+    protected function setupUpdateOperation()
+    {
+        CRUD::setValidation(FarmRequest::class);
+
+        CRUD::field('code');
+        CRUD::field('year');
+        CRUD::field('num_phone');
+        CRUD::field('chef_upa');
+        CRUD::field('chef_travaux');
+        CRUD::field('neo_alphabete');
+        CRUD::field('activite_primaire');
+        CRUD::field('activite_secondaire');
+        CRUD::field('cereales_favoris_1');
+        CRUD::field('cereales_favoris_2');
+        CRUD::field('cereales_favoris_3');
+        CRUD::field('superficie_possede_upa');
+        CRUD::field('superficie_cultive_upa');
     }
 
 }
