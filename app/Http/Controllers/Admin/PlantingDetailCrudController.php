@@ -39,8 +39,29 @@ class PlantingDetailCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        CRUD::setFromDb();
-
+        CRUD::column('planting.id')->label('Semis ID');
+        CRUD::column('crop_id')->label('Culture');
+        CRUD::column('superficie_ha');
+        CRUD::column('culture_prev');
+        CRUD::column('quantite_fumure_organique');
+        CRUD::column('cout_transport');
+        CRUD::column('quantite_chaux_agricole');
+        CRUD::column('cout_chaux_agricole');
+        CRUD::column('quantite_pnt_png');
+        CRUD::column('cout_pnt_png');
+        CRUD::column('superficie_labouree');
+        CRUD::column('cout_superficie_labouree');
+        CRUD::column('date_semence');
+        CRUD::column('quantite_semence');
+        CRUD::column('cout_semence_achetee');
+        CRUD::column('quantite_herbicide_prelevee');
+        CRUD::column('cout_herbicide_prelevee');
+        CRUD::column('cout');
+        CRUD::column('observation_audio');
+        CRUD::column('observation_videos');
+        CRUD::column('observation_texte');
+        CRUD::column('observation_image');
+        
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');

@@ -39,7 +39,19 @@ class HarvestDetailCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        CRUD::setFromDb();
+        CRUD::column('harvest.id')->label('Récolte ID');
+        CRUD::column('crop_id')->label('Culture');
+        CRUD::column('superficie_recolte_prestation');
+        CRUD::column('cout_total_prestation_recolte');
+        CRUD::column('production');
+        CRUD::column('cout_total_battage');
+        CRUD::column('production_residu_culture');
+        CRUD::column('nombre_botte');
+        CRUD::column('cout');
+        CRUD::column('observation_audio');
+        CRUD::column('observation_videos');
+        CRUD::column('observation_texte');
+        CRUD::column('observation_image');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
