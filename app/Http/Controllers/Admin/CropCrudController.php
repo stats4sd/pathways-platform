@@ -15,9 +15,9 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class CropCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -29,6 +29,7 @@ class CropCrudController extends CrudController
         CRUD::setModel(\App\Models\Crop::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/crop');
         CRUD::setEntityNameStrings('culture', 'cultures');
+        CRUD::orderBy('order');
     }
 
     /**
@@ -45,6 +46,7 @@ class CropCrudController extends CrudController
         CRUD::column('label_bm');
         CRUD::column('nom_fichier_image');
         CRUD::column('type');
+        CRUD::column('order');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -63,7 +65,8 @@ class CropCrudController extends CrudController
         CRUD::field('label_bm');
         CRUD::field('nom_fichier_image');
         CRUD::field('type')->type('select_from_array')->options(['primaire' => 'Primaire', 'secondaire' => 'Secondaire']);
-        
+        CRUD::field('order');
+
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');

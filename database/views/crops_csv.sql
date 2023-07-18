@@ -3,6 +3,8 @@ select
     label_fr,
     label_bm,
     nom_fichier_image,
-    type
+    type,
+    `order`
 from crops
-where type!='autre';
+where type!='autre'
+order by `order`;
