@@ -38,7 +38,7 @@ class PlantingDetailCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
+        CRUD::column('planting.farm.code')->label('UPA code');
         CRUD::column('planting.id')->label('Semis ID');
         CRUD::column('crop_id')->label('Culture');
         CRUD::column('superficie_ha');
