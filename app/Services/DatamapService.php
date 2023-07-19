@@ -108,10 +108,10 @@ class DatamapService
 
                         $newCrop = [];
                         $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $cropData['culture_label']));
-                        $newCrop['nom_fr'] = $cropData['culture_label'];
-                        $newCrop['nom_bm'] =$cropData['culture_label'];
+                        $newCrop['label_fr'] = $cropData['culture_label'];
+                        $newCrop['label_bm'] =$cropData['culture_label'];
                         $newCrop['type'] = 'autre';
-                        $newCrop['farm_id'] = $cropData['farm_id'];
+                        $newCrop['farm_id'] = $data['farm_id'];
 
                         $validatedOperation = $this->getValidated($newCrop, $submission, (new CropRequest));
 
@@ -231,10 +231,11 @@ class DatamapService
 
                         $newCrop = [];
                         $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $cropData['culture_label']));
-                        $newCrop['nom_fr'] = $cropData['culture_label'];
-                        $newCrop['nom_bm'] =$cropData['culture_label'];
+                        $newCrop['label_fr'] = $cropData['culture_label'];
+                        $newCrop['label_bm'] =$cropData['culture_label'];
+                        $newCrop['order'] = '999';
                         $newCrop['type'] = 'autre';
-                        $newCrop['farm_id'] = $cropData['farm_id'];
+                        $newCrop['farm_id'] = $data['farm_id'];
 
                         $validatedOperation = $this->getValidated($newCrop, $submission, (new CropRequest));
 
@@ -256,7 +257,7 @@ class DatamapService
                         $cropData = $this->removeGroupNames($cropData);
                         $cropData['harvest_id'] = $harvest->id;
                         $cropData['crop_id'] = $cropData['culture_value'];
-    
+
                         $validatedOperation = $this->getValidated($cropData, $submission, (new HarvestDetailRequest));
     
                         $harvestDetail = HarvestDetail::create($validatedOperation);

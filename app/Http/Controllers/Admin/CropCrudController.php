@@ -47,6 +47,19 @@ class CropCrudController extends CrudController
         CRUD::column('nom_fichier_image');
         CRUD::column('type');
         CRUD::column('order');
+        CRUD::column('farm.code')->label('UPA code');
+
+        $this->crud->addFilter([
+            'name' => 'type',
+            'type' => 'dropdown',
+        ],
+        function () {
+            return Crop::all()->pluck('type', 'type')->unique()->toArray();
+        },
+        function ($value) {
+                $this->crud->addClause('where', 'type', $value);
+            }
+        );
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -66,6 +79,7 @@ class CropCrudController extends CrudController
         CRUD::field('nom_fichier_image');
         CRUD::field('type')->type('select_from_array')->options(['primaire' => 'Primaire', 'secondaire' => 'Secondaire']);
         CRUD::field('order');
+        CRUD::field('farm_id');
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
