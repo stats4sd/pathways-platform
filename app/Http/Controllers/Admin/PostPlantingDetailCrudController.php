@@ -38,7 +38,7 @@ class PostPlantingDetailCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('postPlanting.farm.code')->label('UPA code');
+        CRUD::column('postPlanting.farm.code')->label('UPA');
         CRUD::column('postPlanting.id')->label('Post-Semis ID');
         CRUD::column('crop_id')->label('Culture');
         CRUD::column('superficie_sarclage');

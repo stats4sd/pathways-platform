@@ -38,7 +38,7 @@ class HarvestDetailCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('harvest.farm.code')->label('UPA code');
+        CRUD::column('harvest.farm.code')->label('UPA');
         CRUD::column('harvest.id')->label('Récolte ID');
         CRUD::column('crop_id')->label('Culture');
         CRUD::column('superficie_recolte_prestation');
