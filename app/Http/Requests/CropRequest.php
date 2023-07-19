@@ -30,7 +30,9 @@ class CropRequest extends FormRequest
             'label_fr' => 'nullable',
             'label_bm' => 'nullable',
             'nom_fichier_image' => 'nullable',
-            'type' => 'nullable'
+            'type' => 'nullable',
+            'order' => 'nullable',
+            'farm_id' => 'nullable'
         ];
     }
 

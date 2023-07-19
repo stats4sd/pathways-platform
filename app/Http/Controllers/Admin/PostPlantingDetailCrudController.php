@@ -38,8 +38,28 @@ class PostPlantingDetailCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
-        CRUD::setFromDb();
+        CRUD::column('postPlanting.farm.code')->label('UPA');
+        CRUD::column('postPlanting.id')->label('Post-Semis ID');
+        CRUD::column('crop_id')->label('Culture');
+        CRUD::column('superficie_sarclage');
+        CRUD::column('cout_sarclage');
+        CRUD::column('superficie_desherbage');
+        CRUD::column('cout_desherbage');
+        CRUD::column('quantite_npk');
+        CRUD::column('cout_npk');
+        CRUD::column('quantite_uree');
+        CRUD::column('cout_uree');
+        CRUD::column('quantite_herbicide');
+        CRUD::column('cout_herbicide');
+        CRUD::column('superficie_butee');
+        CRUD::column('cout_buttage');
+        CRUD::column('quantite_insecticide');
+        CRUD::column('cout_insecticide');
+        CRUD::column('cout');
+        CRUD::column('observation_audio');
+        CRUD::column('observation_videos');
+        CRUD::column('observation_texte');
+        CRUD::column('observation_image');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:

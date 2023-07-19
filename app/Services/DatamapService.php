@@ -108,19 +108,19 @@ class DatamapService
 
                         $newCrop = [];
                         $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $cropData['culture_label']));
-                        $newCrop['nom_fr'] = $cropData['culture_label'];
-                        $newCrop['nom_bm'] =$cropData['culture_label'];
+                        $newCrop['label_fr'] = $cropData['culture_label'];
+                        $newCrop['label_bm'] =$cropData['culture_label'];
                         $newCrop['type'] = 'autre';
-                        $newCrop['farm_id'] = $cropData['farm_id'];
+                        $newCrop['farm_id'] = $data['farm_id'];
 
                         $validatedOperation = $this->getValidated($newCrop, $submission, (new CropRequest));
 
-                        $crop = Crop::create($validatedOperation);
-                        $crops[] = $crop->id;
+                        Crop::create($validatedOperation);
+                        $crops[] = $newCrop['id'];
 
                         $cropData = $this->removeGroupNames($cropData);
                         $cropData['planting_id'] = $planting->id;
-                        $cropData['crop_id'] = $crop->id;
+                        $cropData['crop_id'] = $newCrop['id'];
 
                         $validatedOperation = $this->getValidated($cropData, $submission, (new PlantingDetailRequest));
 
@@ -143,6 +143,7 @@ class DatamapService
                 }
 
                 $entries[PlantingDetail::class] = $plantingDetails;
+                $entries[Crop::class] = $crops;
             }
 
             /* At the end, you should update the $submission entry: */
@@ -231,19 +232,20 @@ class DatamapService
 
                         $newCrop = [];
                         $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $cropData['culture_label']));
-                        $newCrop['nom_fr'] = $cropData['culture_label'];
-                        $newCrop['nom_bm'] =$cropData['culture_label'];
+                        $newCrop['label_fr'] = $cropData['culture_label'];
+                        $newCrop['label_bm'] =$cropData['culture_label'];
+                        $newCrop['order'] = '999';
                         $newCrop['type'] = 'autre';
-                        $newCrop['farm_id'] = $cropData['farm_id'];
+                        $newCrop['farm_id'] = $data['farm_id'];
 
                         $validatedOperation = $this->getValidated($newCrop, $submission, (new CropRequest));
 
-                        $crop = Crop::create($validatedOperation);
-                        $crops[] = $crop->id;
+                        Crop::create($validatedOperation);
+                        $crops[] = $newCrop['id'];
 
                         $cropData = $this->removeGroupNames($cropData);
                         $cropData['harvest_id'] = $harvest->id;
-                        $cropData['crop_id'] = $crop->id;
+                        $cropData['crop_id'] = $newCrop['id'];
 
                         $validatedOperation = $this->getValidated($cropData, $submission, (new HarvestDetailRequest));
 
@@ -256,7 +258,7 @@ class DatamapService
                         $cropData = $this->removeGroupNames($cropData);
                         $cropData['harvest_id'] = $harvest->id;
                         $cropData['crop_id'] = $cropData['culture_value'];
-    
+
                         $validatedOperation = $this->getValidated($cropData, $submission, (new HarvestDetailRequest));
     
                         $harvestDetail = HarvestDetail::create($validatedOperation);
@@ -265,6 +267,7 @@ class DatamapService
                 }
 
                 $entries[HarvestDetail::class] = $harvestDetails;
+                $entries[Crop::class] = $crops;
             }
 
 
