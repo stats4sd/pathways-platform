@@ -47,7 +47,7 @@ class CropCrudController extends CrudController
         CRUD::column('nom_fichier_image');
         CRUD::column('type');
         CRUD::column('order');
-        CRUD::column('farm.code')->label('UPA code');
+        CRUD::column('farm.code')->label('UPA');
 
         $this->crud->addFilter([
             'name' => 'type',

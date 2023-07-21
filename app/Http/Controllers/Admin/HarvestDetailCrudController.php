@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\HarvestDetailRequest;
+use Carbon\Carbon;
 use App\Models\HarvestDetail;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MonitoringWorkbookExport;
+use App\Http\Requests\HarvestDetailRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use \Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
  * Class HarvestDetailCrudController
@@ -17,6 +21,7 @@ class HarvestDetailCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ExportOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -27,7 +32,8 @@ class HarvestDetailCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\HarvestDetail::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/harvest_detail');
-        CRUD::setEntityNameStrings('récolte - culture', 'récolte - cuture');
+        CRUD::setEntityNameStrings('récolte - culture', 'récolte - culture');
+        CRUD::set('export.exporter', MonitoringWorkbookExport::class);
     }
 
     /**
@@ -58,6 +64,11 @@ class HarvestDetailCrudController extends CrudController
          * - CRUD::column('price')->type('number');
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
          */
+    }
+
+    public function export() 
+    {
+        return Excel::download(new MonitoringWorkbookExport, 'donnees_de_suivi - '.Carbon::now()->format('Ymd_His').'.xlsx');
     }
 
 }

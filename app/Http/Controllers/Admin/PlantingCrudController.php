@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\PlantingRequest;
+use Carbon\Carbon;
 use App\Models\Planting;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\PlantingRequest;
+use App\Exports\MonitoringWorkbookExport;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use \Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
  * Class PlantingCrudController
@@ -17,6 +21,7 @@ class PlantingCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ExportOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -28,6 +33,7 @@ class PlantingCrudController extends CrudController
         CRUD::setModel(\App\Models\Planting::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/planting');
         CRUD::setEntityNameStrings('semis', 'semis');
+        CRUD::set('export.exporter', MonitoringWorkbookExport::class);
     }
 
     /**
@@ -51,4 +57,9 @@ class PlantingCrudController extends CrudController
          */
     }
 
+    public function export() 
+    {
+        return Excel::download(new MonitoringWorkbookExport, 'donnees_de_suivi - '.Carbon::now()->format('Ymd_His').'.xlsx');
+    }
+    
 }
