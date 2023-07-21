@@ -13,6 +13,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/telescope": "^4.15",
         "laravel/tinker": "^2.8",
+        "maatwebsite/excel": "^3.1",
         "stats4sd/laravel-file-util": "dev-main",
         "stats4sd/laravel-odk-link": "dev-dev",
         "stats4sd/laravel-sql-views": "*",

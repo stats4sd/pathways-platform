@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\FarmRequest;
+use Carbon\Carbon;
 use App\Models\Farm;
+use App\Http\Requests\FarmRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MonitoringWorkbookExport;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use \Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
  * Class FarmCrudController
@@ -18,6 +22,7 @@ class FarmCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ExportOperation;
 
 
     /**
@@ -30,6 +35,7 @@ class FarmCrudController extends CrudController
         CRUD::setModel(\App\Models\Farm::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/farm');
         CRUD::setEntityNameStrings('UPA', 'UPAs');
+        CRUD::set('export.exporter', MonitoringWorkbookExport::class);
     }
 
     /**
@@ -69,4 +75,9 @@ class FarmCrudController extends CrudController
         CRUD::field('superficie_cultive_upa');
     }
 
+    public function export() 
+    {
+        return Excel::download(new MonitoringWorkbookExport, 'donnees_de_suivi - '.Carbon::now()->format('Ymd_His').'.xlsx');
+    }
+    
 }
