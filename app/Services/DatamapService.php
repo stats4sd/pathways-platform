@@ -36,44 +36,56 @@ class DatamapService
             $data = $this->prepareDataArray($submission);
             $data = $this->removeGroupNames($data);
 
-            $data['code'] = $data['camera_scane'];
-            
             $entries = [];
+            
+            if($data['consentement_question']=='non') {
 
-            if(isset($data['activite_secondaire_autre_1'])) {
+                $submission->consent = 0;
+                $submission->processed = 1;
+                $submission->save();
 
-                $data['activite_secondaire'] = str_replace('autre1', $data['activite_secondaire_autre_1'], $data['activite_secondaire']);
-                
             }
 
-            if(isset($data['activite_secondaire_autre_2'])) {
+            elseif($data['consentement_question']=='oui') {
 
-                $data['activite_secondaire'] = str_replace('autre2', $data['activite_secondaire_autre_2'], $data['activite_secondaire']);
-                
-            }
+                $data['code'] = $data['camera_scane'];
 
-            $validatedFarm = $this->getValidated($data, $submission, (new FarmRequest));
-            $farm = Farm::updateOrCreate(['code' => $data['code']], $validatedFarm);
-            $entries[Farm::class] = [$farm->id];
+                if(isset($data['activite_secondaire_autre_1'])) {
 
-
-            /* At the end, you should update the $submission entry: */
-            $submission->processed = 1;
-            $submission->entries = $entries;
-            $submission->save();
-
-            // Update the csvs with new data by deploying draft and publishing live
-
-            $forms = Xlsform::get();
-
-            foreach($forms as $form) {
-
-                $service = new OdkLinkService(config('odk-link.odk.base_endpoint'));
-                $service->createDraftForm($form);
-
-                if($form->is_active) {
-                    $service->publishForm($form);
+                    $data['activite_secondaire'] = str_replace('autre1', $data['activite_secondaire_autre_1'], $data['activite_secondaire']);
+                    
                 }
+    
+                if(isset($data['activite_secondaire_autre_2'])) {
+    
+                    $data['activite_secondaire'] = str_replace('autre2', $data['activite_secondaire_autre_2'], $data['activite_secondaire']);
+                    
+                }
+
+                $validatedFarm = $this->getValidated($data, $submission, (new FarmRequest));
+                $farm = Farm::updateOrCreate(['code' => $data['code']], $validatedFarm);
+                $entries[Farm::class] = [$farm->id];
+    
+                /* At the end, you should update the $submission entry: */
+                $submission->consent = 1;
+                $submission->processed = 1;
+                $submission->entries = $entries;
+                $submission->save();
+    
+                // Update the csvs with new data by deploying draft and publishing live
+    
+                $forms = Xlsform::get();
+    
+                foreach($forms as $form) {
+    
+                    $service = new OdkLinkService(config('odk-link.odk.base_endpoint'));
+                    $service->createDraftForm($form);
+    
+                    if($form->is_active) {
+                        $service->publishForm($form);
+                    }
+                }
+
             }
 
             return true;
