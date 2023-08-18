@@ -129,6 +129,8 @@ class DatamapService
 
             if (isset($data['culture_repeat'])) {
 
+                $crops = [];
+
                 foreach ($data['culture_repeat'] as $cropData) {
 
                     if($cropData['culture_value']=='999' | $cropData['culture_value']=='998') {
@@ -282,6 +284,8 @@ class DatamapService
             $entries[Harvest::class] = [$harvest->id];
 
             if (isset($data['culture_repeat'])) {
+
+                $crops = [];
 
                 foreach ($data['culture_repeat'] as $cropData) {
 
