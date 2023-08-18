@@ -139,6 +139,7 @@ class DatamapService
                         $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $cropData['culture_label']));
                         $newCrop['label_fr'] = $cropData['culture_label'];
                         $newCrop['label_bm'] =$cropData['culture_label'];
+                        $newCrop['order'] = '999';
                         $newCrop['type'] = 'autre';
                         $newCrop['farm_id'] = $data['farm_id'];
 
