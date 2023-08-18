@@ -129,6 +129,8 @@ class DatamapService
 
             if (isset($data['culture_repeat'])) {
 
+                $crops = [];
+
                 foreach ($data['culture_repeat'] as $cropData) {
 
                     if($cropData['culture_value']=='999' | $cropData['culture_value']=='998') {
@@ -170,7 +172,11 @@ class DatamapService
                 }
 
                 $entries[PlantingDetail::class] = $plantingDetails;
-                $entries[Crop::class] = $crops;
+
+                if (!empty($crops)) {
+                    $entries[Crop::class] = $crops;
+                }
+
             }
 
             /* At the end, you should update the $submission entry: */
@@ -283,6 +289,8 @@ class DatamapService
 
             if (isset($data['culture_repeat'])) {
 
+                $crops = [];
+
                 foreach ($data['culture_repeat'] as $cropData) {
 
                     if($cropData['culture_value']=='999' | $cropData['culture_value']=='998') {
@@ -324,7 +332,10 @@ class DatamapService
                 }
 
                 $entries[HarvestDetail::class] = $harvestDetails;
-                $entries[Crop::class] = $crops;
+
+                if (!empty($crops)) {
+                    $entries[Crop::class] = $crops;
+                }
             }
 
 
