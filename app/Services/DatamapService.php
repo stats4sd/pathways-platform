@@ -173,7 +173,7 @@ class DatamapService
 
                 $entries[PlantingDetail::class] = $plantingDetails;
 
-                if (isset($crops)) {
+                if (!empty($crops)) {
                     $entries[Crop::class] = $crops;
                 }
 
@@ -332,8 +332,8 @@ class DatamapService
                 }
 
                 $entries[HarvestDetail::class] = $harvestDetails;
-                
-                if (isset($crops)) {
+
+                if (!empty($crops)) {
                     $entries[Crop::class] = $crops;
                 }
             }
