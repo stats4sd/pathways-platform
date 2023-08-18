@@ -42,10 +42,7 @@ class PlantingDetailsExport implements FromQuery, WithTitle, WithHeadings, WithS
             $plantingDetail->quantite_herbicide_prelevee,
             $plantingDetail->cout_herbicide_prelevee,
             $plantingDetail->cout,
-            $plantingDetail->observation_audio,
-            $plantingDetail->observation_videos,
             $plantingDetail->observation_texte,
-            $plantingDetail->observation_image,
         ];
     }
 
