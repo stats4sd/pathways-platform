@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nom')->nullable();
             $table->text('type_sol')->nullable();
             $table->text('pente')->nullable();
+            $table->decimal('superficie_total')->nullable();
             $table->timestamps();
         });
     }

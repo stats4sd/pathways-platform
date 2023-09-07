@@ -27,7 +27,7 @@ class PlotCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\Plot::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/plot');
-        CRUD::setEntityNameStrings('plot', 'plots');
+        CRUD::setEntityNameStrings('parcelle', 'parcelles');
     }
 
     /**
@@ -39,7 +39,15 @@ class PlotCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        CRUD::setFromDb();
+        CRUD::column('id')->label('ID');
+        CRUD::column('field_id')->label('Champ ID');
+        CRUD::column('numero_parcelle');
+        CRUD::column('nombre_arbre');
+        CRUD::column('crop_id');
+        CRUD::column('associated_crops');
+        CRUD::column('superficie_estimee');
+        CRUD::column('superficie_measuree');
+        CRUD::column('trace_superficie');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:

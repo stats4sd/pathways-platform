@@ -25,9 +25,12 @@ class FieldRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'nullable',
-            'farm_id' => 'nullable',
-            'name' => 'nullable',
+            'id' => 'nullable|integer',
+            'farm_id' => 'required',
+            'nom' => 'nullable',
+            'type_sol' => 'nullable',
+            'pente' => 'nullable',
+            'superficie_total' => 'nullable',
         ];
     }
 

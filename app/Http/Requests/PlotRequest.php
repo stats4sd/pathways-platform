@@ -25,8 +25,16 @@ class PlotRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'nullable',
-            'field_id' => 'nullable'
+            'id' => 'nullable|integer',
+            'field_id' => 'required',
+            'numero_parcelle' => 'required',
+            'nombre_abre' => 'nullable',
+            'fertilite' => 'nullable',
+            'crop_id' => 'required',
+            'associated_crops' => 'nullable',
+            'superficie_estimee' => 'nullable',
+            'superficie_measuree' => 'nullable',
+            'trace_superficie' => 'nullable'
         ];
     }
 

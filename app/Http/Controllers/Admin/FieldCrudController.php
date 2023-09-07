@@ -26,8 +26,8 @@ class FieldCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\Field::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/plot');
-        CRUD::setEntityNameStrings('plot', 'plots');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/field');
+        CRUD::setEntityNameStrings('champ', 'champs');
     }
 
     /**
@@ -39,7 +39,12 @@ class FieldCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        CRUD::setFromDb();
+        CRUD::column('id')->label('ID');
+        CRUD::column('farm_id')->label('UPA');
+        CRUD::column('nom');
+        CRUD::column('type_sol');
+        CRUD::column('pente');
+        CRUD::column('superficie_total');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
