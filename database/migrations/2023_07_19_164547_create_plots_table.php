@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('nombre_arbre')->nullable();
             $table->text('fertilite')->nullable();
             $table->string('crop_id')->constrained('crops')->nullable();
-            $table->text('associated_crops')->nullable();
+            $table->text('cultures_associations')->nullable();
             $table->decimal('superficie_estimee')->nullable();
             $table->decimal('superficie_measuree')->nullable();
             $table->text('trace_superficie')->nullable();
