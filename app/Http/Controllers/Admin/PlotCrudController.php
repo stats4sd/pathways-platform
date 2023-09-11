@@ -40,7 +40,7 @@ class PlotCrudController extends CrudController
     {
 
         CRUD::column('id')->label('ID');
-        CRUD::column('field_id')->label('Champ ID');
+        CRUD::column('field.id')->label('Champ ID');
         CRUD::column('numero_parcelle');
         CRUD::column('nombre_arbre');
         CRUD::column('crop_id')->label('Culture');
