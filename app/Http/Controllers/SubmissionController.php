@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\DatamapService;
 use Illuminate\Support\Str;
-use Stats4sd\OdkLink\Models\Submission;
+use App\Models\Submission;
 
 class SubmissionController
 {
