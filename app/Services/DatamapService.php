@@ -8,10 +8,12 @@ use App\Models\Plot;
 use App\Models\Field;
 use App\Models\Harvest;
 use App\Models\Planting;
+use App\Models\Submission;
 use Illuminate\Support\Str;
 use App\Models\PostPlanting;
 use Illuminate\Http\Request;
 use App\Models\HarvestDetail;
+use App\Models\InterestPoint;
 use App\Models\PlantingDetail;
 use App\Http\Requests\CropRequest;
 use App\Http\Requests\FarmRequest;
@@ -21,9 +23,9 @@ use App\Http\Requests\FieldRequest;
 use Stats4sd\OdkLink\Models\Xlsform;
 use App\Http\Requests\HarvestRequest;
 use App\Http\Requests\PlantingRequest;
-use App\Models\Submission;
 use App\Http\Requests\PostPlantingRequest;
 use App\Http\Requests\HarvestDetailRequest;
+use App\Http\Requests\InterestPointRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\PlantingDetailRequest;
 use Stats4sd\OdkLink\Services\OdkLinkService;
@@ -462,7 +464,56 @@ class DatamapService
             } catch (\JsonException|ValidationException $e) {
                 return false;
             }
-    }
+        }
+
+        public function pointDinteret(Submission $submission) : bool
+        {
+            try {
+
+                $data = $this->prepareDataArray($submission);
+                $data = $this->removeGroupNames($data);
+    
+                $entries = [];
+    
+                if(!isset($data['farm_id'])) {
+    
+                    $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
+    
+                    if(!isset($data['farm_id'])) {
+    
+                        $newFarm = [];
+                        $newFarm['code'] = $data['camera_scane'];
+    
+                        $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
+                        $farm = Farm::create($validatedFarm);
+                        $entries[Farm::class] = [$farm->id];
+    
+                        $data['farm_id'] = $farm->id;
+    
+                    }
+
+                    if (isset($data['gps'])) {
+                        $data = array_merge($data, $this->splitGps($data, 'gps'));
+                    }
+    
+                }
+                
+                $validatedInterestPoint = $this->getValidated($data, $submission, (new InterestPointRequest));
+                $interestPoint = InterestPoint::create($validatedInterestPoint);
+                $entries[InterestPoint::class] = [$interestPoint->id];
+    
+
+            /* At the end, you should update the $submission entry: */
+            $submission->processed = 1;
+            $submission->entries = $entries;
+            $submission->save();
+
+            return true;
+
+            } catch (\JsonException|ValidationException $e) {
+                return false;
+            }
+        }
 
 
     /*****************************************************************************/
@@ -489,6 +540,26 @@ class DatamapService
         }
     }
 
+    /**
+     * @param array $data (the data before gps split)
+     * @param string $varName (the variable containing the GPS data as a space-separated string)
+     * @return array (the data)
+     */
+    public function splitGps(array $data, string $varName): array
+    {
+        // some gps variables may be optional;
+        if (isset($data[$varName])) {
+            $gps = is_array($data[$varName]['coordinates']) ? $data[$varName]['coordinates'] : explode(' ', $data[$varName]['coordinates']);
+            $gpsData=[];
+            $gpsData['latitude'] = $gps[0] ?? null;
+            $gpsData['longitude'] = $gps[1] ?? null;
+            $gpsData['altitude'] = $gps[2] ?? null;
+            $gpsData['accuracy'] = $data[$varName]['properties']['accuracy'] ?? null;
+
+        }
+
+        return $gpsData;
+    }
 
     /**
      * @param array $data

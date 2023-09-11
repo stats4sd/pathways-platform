@@ -41,4 +41,14 @@ class Farm extends Model
         return $this->hasMany(Crop::class);
     }
 
+    public function fields(): HasMany
+    {
+        return $this->hasMany(Field::class);
+    }
+
+    public function interestPoints(): HasMany
+    {
+        return $this->hasMany(InterestPoint::class);
+    }
+
 }
