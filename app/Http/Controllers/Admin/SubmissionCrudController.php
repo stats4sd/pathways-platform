@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
+use App\Models\Submission;
+use Illuminate\Support\Facades\DB;
 use Stats4sd\OdkLink\Models\Xlsform;
-use Stats4sd\OdkLink\Models\Submission;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanel;
 use Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -45,7 +46,7 @@ class SubmissionCrudController extends Stats4sdSubmissionCrudController
 
         CRUD::column('xlsform_title')->label('XLS Form')->limit(1000);
         CRUD::column('xlsformVersion')->label('Form Version')->type('relationship')->attribute('version');
-        CRUD::column('id')->label('Submission ID');
+        CRUD::column('id')->label('Submission ID')->orderable('true');
         CRUD::column('submitted_at')->type('datetime')->format('YYYY-MM-DD HH:mm:ss');
         CRUD::column('processed')->label('Processed?')->type('boolean');
         CRUD::column('consent')
@@ -58,6 +59,13 @@ class SubmissionCrudController extends Stats4sdSubmissionCrudController
                 return 'Oui';}});
         CRUD::column('errors')->label('Validation Errors')->type('submission_errors')->view_namespace('odk-link::columns')->limit(1000);
         CRUD::column('entries')->label('Db Entries Created')->type('submission_entries')->view_namespace('odk-link::columns')->limit(1000);
+
+        CRUD::column('duration')
+            ->orderable('true')
+            ->orderLogic(function ($query, $column, $columnDirection) {
+                return $query->orderBy(DB::raw('TIMESTAMPDIFF(SECOND, TRIM(BOTH \'"\' FROM content->"$.starttime"), TRIM(BOTH \'"\' FROM content->"$.endtime"))'), $columnDirection);
+            }
+        );
 
         CRUD::filter('xlsform')
             ->type('select2')

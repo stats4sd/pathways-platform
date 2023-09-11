@@ -17,7 +17,7 @@ use App\Models\PostPlantingDetail;
 use Stats4sd\OdkLink\Models\Xlsform;
 use App\Http\Requests\HarvestRequest;
 use App\Http\Requests\PlantingRequest;
-use Stats4sd\OdkLink\Models\Submission;
+use App\Models\Submission;
 use App\Http\Requests\PostPlantingRequest;
 use App\Http\Requests\HarvestDetailRequest;
 use Illuminate\Foundation\Http\FormRequest;
