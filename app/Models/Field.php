@@ -8,14 +8,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Crop extends Model
+class Field extends Model
 {
     use CrudTrait;
     use HasFactory;
 
-    protected $table = 'crops';
+    protected $table = 'fields';
     protected $guarded = [];
-    protected $keyType = 'string';
 
     /*
     |--------------------------------------------------------------------------
@@ -23,29 +22,14 @@ class Crop extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function plantingDetails(): HasMany
+    public function plots(): HasMany
     {
-        return $this->hasMany(PlantingDetail::class);
-    }
-
-    public function postPlantingDetails(): HasMany
-    {
-        return $this->hasMany(PostPlantingDetail::class);
-    }
-
-    public function harvestDetails(): HasMany
-    {
-        return $this->hasMany(HarvestDetail::class);
+        return $this->hasMany(Plot::class);
     }
 
     public function farm(): BelongsTo
     {
         return $this->belongsTo(Farm::class);
-    }
-
-    public function plot(): BelongsTo
-    {
-        return $this->belongsTo(Plot::class);
     }
     
 }
