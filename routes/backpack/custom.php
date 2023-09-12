@@ -28,4 +28,5 @@ Route::group([
     Route::crud('harvest_detail', 'HarvestDetailCrudController');
     Route::crud('plot', 'PlotCrudController');
     Route::crud('field', 'FieldCrudController');
+    Route::crud('interest_point', 'InterestPointCrudController');
 }); // this should be the absolute last line of this file
