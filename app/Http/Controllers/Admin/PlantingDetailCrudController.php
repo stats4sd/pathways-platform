@@ -47,6 +47,36 @@ class PlantingDetailCrudController extends CrudController
         CRUD::column('planting.farm.code')->label('UPA');
         CRUD::column('planting.id')->label('Semis ID');
         CRUD::column('crop_id')->label('Culture');
+
+        CRUD::column('observation_image')
+                ->type('url')
+                ->wrapper(['href'=>function($crud, $column, $entry) {
+                    if(!empty($entry->observation_image)) {
+                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->observation_image)->first()->getUrl();
+                        return $mediaUrl;
+                    }
+                }]);
+
+        CRUD::column('observation_audio')
+                ->type('url')
+                ->wrapper(['href'=>function($crud, $column, $entry) {
+                    if(!empty($entry->observation_audio)) {
+                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->observation_audio)->first()->getUrl();
+                        return $mediaUrl;
+                    }
+                }]);
+                
+        CRUD::column('observation_videos')
+                ->type('url')
+                ->wrapper(['href'=>function($crud, $column, $entry) {
+                    if(!empty($entry->observation_videos)) {
+                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->observation_videos)->first()->getUrl();
+                        return $mediaUrl;
+                    }
+                }]);
+
+        CRUD::column('observation_texte');
+
         CRUD::column('superficie_ha');
         CRUD::column('culture_prev');
         CRUD::column('quantite_fumure_organique');
@@ -63,16 +93,17 @@ class PlantingDetailCrudController extends CrudController
         CRUD::column('quantite_herbicide_prelevee');
         CRUD::column('cout_herbicide_prelevee');
         CRUD::column('cout');
-        CRUD::column('observation_audio');
-        CRUD::column('observation_videos');
-        CRUD::column('observation_texte');
-        CRUD::column('observation_image');
-        
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
          */
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
     }
 
     public function export() 

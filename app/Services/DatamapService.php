@@ -19,6 +19,7 @@ use App\Http\Requests\CropRequest;
 use App\Http\Requests\FarmRequest;
 use App\Http\Requests\PlotRequest;
 use App\Models\PostPlantingDetail;
+use Stats4sd\OdkLink\Models\Media;
 use App\Http\Requests\FieldRequest;
 use Stats4sd\OdkLink\Models\Xlsform;
 use App\Http\Requests\HarvestRequest;
@@ -163,6 +164,12 @@ class DatamapService
                         $plantingDetail = PlantingDetail::create($validatedOperation);
                         $plantingDetails[] = $plantingDetail->id;
 
+                        $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+                                        ->where('model_id', $submission->id)
+                                        ->get();
+                        foreach($mediaEntries as $mediaEntry) {
+                            $mediaEntry->copy($plantingDetail, 'default', 'local');
+                        }
                     }
                     else {
 
@@ -175,11 +182,18 @@ class DatamapService
                         $plantingDetail = PlantingDetail::create($validatedOperation);
                         $plantingDetails[] = $plantingDetail->id;
 
+                        $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+                                        ->where('model_id', $submission->id)
+                                        ->get();
+                        foreach($mediaEntries as $mediaEntry) {
+                            $mediaEntry->copy($plantingDetail, 'default', 'local');
+                        }
+
                     }
                 }
 
                 $entries[PlantingDetail::class] = $plantingDetails;
-
+                
                 if (!empty($crops)) {
                     $entries[Crop::class] = $crops;
                 }
@@ -244,6 +258,12 @@ class DatamapService
                     $postPlantingDetail = PostPlantingDetail::create($validatedOperation);
                     $postPlantingDetails[] = $postPlantingDetail->id;
 
+                    $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+                                    ->where('model_id', $submission->id)
+                                    ->get();
+                    foreach($mediaEntries as $mediaEntry) {
+                        $mediaEntry->copy($postPlantingDetail, 'default', 'local');
+                    }
                 }
 
                 $entries[PostPlantingDetail::class] = $postPlantingDetails;
@@ -324,6 +344,14 @@ class DatamapService
                         $harvestDetail = HarvestDetail::create($validatedOperation);
                         $harvestDetails[] = $harvestDetail->id;
 
+                        $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+                                        ->where('model_id', $submission->id)
+                                        ->get();
+                        foreach($mediaEntries as $mediaEntry) {
+                            $mediaEntry->copy($harvestDetail, 'default', 'local');
+                        }
+                        
+
                     }
                     else {
 
@@ -335,11 +363,18 @@ class DatamapService
     
                         $harvestDetail = HarvestDetail::create($validatedOperation);
                         $harvestDetails[] = $harvestDetail->id;
+
+                        $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+                                        ->where('model_id', $submission->id)
+                                        ->get();
+                        foreach($mediaEntries as $mediaEntry) {
+                            $mediaEntry->copy($harvestDetail, 'default', 'local');
+                        }
                     }
                 }
 
                 $entries[HarvestDetail::class] = $harvestDetails;
-
+                
                 if (!empty($crops)) {
                     $entries[Crop::class] = $crops;
                 }

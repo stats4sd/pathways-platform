@@ -33,6 +33,9 @@ class HarvestDetailsExport implements FromQuery, WithTitle, WithHeadings, WithSt
             $harvestDetails->production_residu_culture,
             $harvestDetails->nombre_botte,
             $harvestDetails->cout,
+            $harvestDetails->observation_image,
+            $harvestDetails->observation_audio,
+            $harvestDetails->observation_videos,
             $harvestDetails->observation_texte,
         ];
     }
@@ -77,6 +80,9 @@ class HarvestDetailsExport implements FromQuery, WithTitle, WithHeadings, WithSt
             'production_residu_culture',
             'nombre_botte',
             'cout',
+            'observation_image',
+            'observation_audio',
+            'observation_videos',
             'observation_texte',
         ];
     }
