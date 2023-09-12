@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Farm extends Model
+class Plot extends Model
 {
     use CrudTrait;
     use HasFactory;
 
-    protected $table = 'farms';
+    protected $table = 'plots';
     protected $guarded = [];
 
     /*
@@ -21,34 +22,13 @@ class Farm extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function plantings(): HasMany
+    public function field(): BelongsTo
     {
-        return $this->hasMany(Planting::class);
+        return $this->belongsTo(Field::class);
     }
-
-    public function postPlantings(): HasMany
-    {
-        return $this->hasMany(PostPlanting::class);
-    }
-
-    public function harvests(): HasMany
-    {
-        return $this->hasMany(Harvest::class);
-    }
-
+    
     public function crops(): HasMany
     {
         return $this->hasMany(Crop::class);
     }
-
-    public function fields(): HasMany
-    {
-        return $this->hasMany(Field::class);
-    }
-
-    public function interestPoints(): HasMany
-    {
-        return $this->hasMany(InterestPoint::class);
-    }
-
 }
