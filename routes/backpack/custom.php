@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\SubmissionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TeamCrudController;
 use Stats4sd\TeamManagement\Http\Controllers\TeamMemberController;
