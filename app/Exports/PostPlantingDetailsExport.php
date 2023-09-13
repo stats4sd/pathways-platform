@@ -41,6 +41,9 @@ class PostPlantingDetailsExport implements FromQuery, WithTitle, WithHeadings, W
             $postPlantingDetail->quantite_insecticide,
             $postPlantingDetail->cout_insecticide,
             $postPlantingDetail->cout,
+            $postPlantingDetail->observation_image,
+            $postPlantingDetail->observation_audio,
+            $postPlantingDetail->observation_videos,
             $postPlantingDetail->observation_texte,
         ];
     }
@@ -93,6 +96,9 @@ class PostPlantingDetailsExport implements FromQuery, WithTitle, WithHeadings, W
             'quantite_insecticide',
             'cout_insecticide',
             'cout',
+            'observation_image',
+            'observation_audio',
+            'observation_videos',
             'observation_texte',
         ];
     }

@@ -2,20 +2,17 @@
 
 namespace App\Models;
 
-use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PlantingDetail extends Model implements HasMedia
+class InterestPoint extends Model
 {
     use CrudTrait;
     use HasFactory;
-    use InteractsWithMedia;
 
-    protected $table = 'plantings_details';
+    protected $table = 'interest_points';
     protected $guarded = [];
 
     /*
@@ -24,9 +21,9 @@ class PlantingDetail extends Model implements HasMedia
     |--------------------------------------------------------------------------
     */
 
-    public function planting(): BelongsTo
+    public function farm(): BelongsTo
     {
-        return $this->belongsTo(Planting::class);
+        return $this->belongsTo(Farm::class);
     }
-
+    
 }
