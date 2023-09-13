@@ -35,7 +35,13 @@ trait ExportMediaOperation
         });
 
         $this->crud->operation('list', function () {
-            $this->crud->addButton('top', 'export-media', 'view', 'vendor.backpack.crud.buttons.export-media');
+
+            // check if the model has a media library
+            // only show the export media button if the model has media.
+            if (method_exists(new($this->crud->getModel()), 'getMedia')) {
+                $this->crud->addButton('top', 'export-media', 'view', 'vendor.backpack.crud.buttons.export-media');
+            }
+
         });
     }
 
@@ -44,15 +50,13 @@ trait ExportMediaOperation
     public function exportMedia()
     {
 
-        $xlsform = Xlsform::find($this->crud->get('xlsform_id'));
+        $entries = $this->crud->getModel()::all();
 
-        $submissions = $xlsform->submissions;
-
-        $allMedia = $submissions->map(function (Submission $submission) {
-            return $submission->getMedia();
+        $allMedia = $entries->map(function ($entry) {
+            return $entry->getMedia();
         })->flatten();
 
-        return MediaStream::create('media.zip')->addMedia($allMedia);
+        return MediaStream::create($this->crud->entity_name_plural . ' - media.zip')->addMedia($allMedia);
 
     }
 
