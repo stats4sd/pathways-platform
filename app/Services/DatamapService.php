@@ -71,8 +71,8 @@ class DatamapService
 
                 $validatedFarm = $this->getValidated($data, $submission, (new FarmRequest));
                 $farm = Farm::updateOrCreate(['code' => $data['code']], $validatedFarm);
-                $entries[Farm::class] = [$farm->id];
-    
+
+
                 /* At the end, you should update the $submission entry: */
                 $submission->consent = 1;
                 $submission->processed = 1;
@@ -122,8 +122,6 @@ class DatamapService
                     
                     $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
                     $farm = Farm::create($validatedFarm);
-                    $entries[Farm::class] = [$farm->id];
-
                     $data['farm_id'] = $farm->id;
 
                 }
@@ -233,8 +231,6 @@ class DatamapService
 
                     $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
                     $farm = Farm::create($validatedFarm);
-                    $entries[Farm::class] = [$farm->id];
-
                     $data['farm_id'] = $farm->id;
 
                 }
@@ -302,8 +298,6 @@ class DatamapService
                     
                     $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
                     $farm = Farm::create($validatedFarm);
-                    $entries[Farm::class] = [$farm->id];
-
                     $data['farm_id'] = $farm->id;
 
                 }
@@ -521,7 +515,6 @@ class DatamapService
     
                         $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
                         $farm = Farm::create($validatedFarm);
-                        $entries[Farm::class] = [$farm->id];
     
                         $data['farm_id'] = $farm->id;
     
