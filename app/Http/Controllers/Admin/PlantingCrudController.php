@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\Traits\ExportMediaOperation;
 use Carbon\Carbon;
 use App\Models\Planting;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,7 +22,7 @@ class PlantingCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use ExportOperation;
-    use ExportMediaOperation;
+
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -36,7 +35,6 @@ class PlantingCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/planting');
         CRUD::setEntityNameStrings('semis', 'semis');
         CRUD::set('export.exporter', MonitoringWorkbookExport::class);
-        CRUD::set('xlsform_id', 2);
     }
 
     /**
