@@ -42,6 +42,9 @@ class PlantingDetailsExport implements FromQuery, WithTitle, WithHeadings, WithS
             $plantingDetail->quantite_herbicide_prelevee,
             $plantingDetail->cout_herbicide_prelevee,
             $plantingDetail->cout,
+            $plantingDetail->observation_image,
+            $plantingDetail->observation_audio,
+            $plantingDetail->observation_videos,
             $plantingDetail->observation_texte,
         ];
     }
@@ -95,6 +98,9 @@ class PlantingDetailsExport implements FromQuery, WithTitle, WithHeadings, WithS
             'quantite_herbicide_prelevee',
             'cout_herbicide_prelevee',
             'cout',
+            'observation_image',
+            'observation_audio',
+            'observation_videos',
             'observation_texte',
         ];
     }

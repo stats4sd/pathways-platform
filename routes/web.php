@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FileController;
 
 /**
  * No seperate Front-end
@@ -32,11 +33,12 @@ Route::get(config('backpack.base.route_prefix') . '/login', function () {
 //     return view('welcome');
 // })->name('home');
 
-// Route::group([
-//     'middleware' => ['web', 'auth'],
-// ], function () {
-//     Route::view('dashboard')->name('dashboard');
-// });
+Route::group([
+    'middleware' => ['web', 'auth'],
+], function () {
+    Route::get('download/{path}', [FileController::class, 'download'])->where('path', '.*')->name('file.download');
+
+});
 
 require __DIR__.'/auth.php';
 

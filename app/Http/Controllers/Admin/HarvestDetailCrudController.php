@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MonitoringWorkbookExport;
 use App\Http\Requests\HarvestDetailRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use App\Http\Controllers\Admin\Traits\ExportMediaOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use \Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
@@ -22,6 +23,7 @@ class HarvestDetailCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use ExportOperation;
+    use ExportMediaOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -47,6 +49,36 @@ class HarvestDetailCrudController extends CrudController
         CRUD::column('harvest.farm.code')->label('UPA');
         CRUD::column('harvest.id')->label('Récolte ID');
         CRUD::column('crop_id')->label('Culture');
+
+        CRUD::column('observation_image')
+                ->type('url')
+                ->wrapper(['href'=>function($crud, $column, $entry) {
+                    if(!empty($entry->observation_image)) {
+                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->observation_image)->first()->getUrl();
+                        return $mediaUrl;
+                    }
+                }]);
+
+        CRUD::column('observation_audio')
+                ->type('url')
+                ->wrapper(['href'=>function($crud, $column, $entry) {
+                    if(!empty($entry->observation_audio)) {
+                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->observation_audio)->first()->getUrl();
+                        return $mediaUrl;
+                    }
+                }]);
+
+        CRUD::column('observation_videos')
+                ->type('url')
+                ->wrapper(['href'=>function($crud, $column, $entry) {
+                    if(!empty($entry->observation_videos)) {
+                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->observation_videos)->first()->getUrl();
+                        return $mediaUrl;
+                    }
+                }]);
+
+        CRUD::column('observation_texte');
+
         CRUD::column('superficie_recolte_prestation');
         CRUD::column('cout_total_prestation_recolte');
         CRUD::column('production');
@@ -54,16 +86,17 @@ class HarvestDetailCrudController extends CrudController
         CRUD::column('production_residu_culture');
         CRUD::column('nombre_botte');
         CRUD::column('cout');
-        CRUD::column('observation_audio');
-        CRUD::column('observation_videos');
-        CRUD::column('observation_texte');
-        CRUD::column('observation_image');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
          */
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
     }
 
     public function export() 
