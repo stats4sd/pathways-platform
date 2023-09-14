@@ -397,7 +397,20 @@ class DatamapService
                 $entries = [];
 
                 if(!isset($data['farm_id'])) {
+
                     $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
+    
+                    if(!isset($data['farm_id'])) {
+    
+                        $newFarm = [];
+                        $newFarm['code'] = $data['camera_scane'];
+                        
+                        $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
+                        $farm = Farm::create($validatedFarm);
+                        $data['farm_id'] = $farm->id;
+    
+                    }
+    
                 }
 
                 $data['nom'] = $data['champ'];
