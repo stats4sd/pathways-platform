@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MonitoringWorkbookExport;
 use App\Http\Requests\HarvestDetailRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use App\Http\Controllers\Admin\Traits\ExportMediaOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use \Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
@@ -22,6 +23,7 @@ class HarvestDetailCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use ExportOperation;
+    use ExportMediaOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
