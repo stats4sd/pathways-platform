@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Traits\ExportMediaOperation;
 use Carbon\Carbon;
 use App\Models\PlantingDetail;
 use Maatwebsite\Excel\Facades\Excel;
@@ -22,10 +23,11 @@ class PlantingDetailCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use ExportOperation;
+    use ExportMediaOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -34,11 +36,12 @@ class PlantingDetailCrudController extends CrudController
         CRUD::setRoute(config('backpack.base.route_prefix') . '/planting_detail');
         CRUD::setEntityNameStrings('semis - culture', 'semis - culture');
         CRUD::set('export.exporter', MonitoringWorkbookExport::class);
+
     }
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -65,7 +68,7 @@ class PlantingDetailCrudController extends CrudController
                         return $mediaUrl;
                     }
                 }]);
-                
+
         CRUD::column('observation_videos')
                 ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
@@ -97,7 +100,7 @@ class PlantingDetailCrudController extends CrudController
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
@@ -106,9 +109,9 @@ class PlantingDetailCrudController extends CrudController
         $this->setupListOperation();
     }
 
-    public function export() 
+    public function export()
     {
         return Excel::download(new MonitoringWorkbookExport, 'donnees_de_suivi - '.Carbon::now()->format('Ymd_His').'.xlsx');
     }
-    
+
 }

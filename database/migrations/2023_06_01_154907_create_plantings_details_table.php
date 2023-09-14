@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('crop_id')->constrained('crops');
 
             $table->decimal('superficie_ha')->nullable();;
-            $table->string('culture_prev')->constrained('crops')->nullable();;
+            $table->string('culture_prev')->constrained('crops')->nullable();
 
             $table->integer('quantite_fumure_organique')->nullable();;
             $table->integer('cout_transport')->nullable();;
@@ -44,7 +44,7 @@ return new class extends Migration
             $table->text('observation_videos')->nullable();
             $table->text('observation_texte')->nullable();
             $table->text('observation_image')->nullable();
-            
+
             $table->timestamps();
         });
     }
