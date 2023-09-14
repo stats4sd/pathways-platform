@@ -543,6 +543,12 @@ class DatamapService
                 $interestPoint = InterestPoint::create($validatedInterestPoint);
                 $entries[InterestPoint::class] = [$interestPoint->id];
     
+                $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+                ->where('model_id', $submission->id)
+                ->get();
+                foreach($mediaEntries as $mediaEntry) {
+                    $mediaEntry->copy($interestPoint, 'default', 'local');
+                }
 
             /* At the end, you should update the $submission entry: */
             $submission->processed = 1;

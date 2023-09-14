@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Traits;
 
-use Illuminate\Support\Facades\Route;
-use Spatie\MediaLibrary\Support\MediaStream;
-use Stats4sd\OdkLink\Models\Submission;
+use Carbon\Carbon;
 use Stats4sd\OdkLink\Models\Xlsform;
+use Illuminate\Support\Facades\Route;
+use Stats4sd\OdkLink\Models\Submission;
+use Spatie\MediaLibrary\Support\MediaStream;
 
 trait ExportMediaOperation
 {
@@ -56,7 +57,7 @@ trait ExportMediaOperation
             return $entry->getMedia();
         })->flatten();
 
-        return MediaStream::create($this->crud->entity_name_plural . ' - media.zip')->addMedia($allMedia);
+        return MediaStream::create($this->crud->entity_name_plural . ' - media ' . Carbon::now()->format('Ymd_His'). '.zip')->addMedia($allMedia);
 
     }
 
