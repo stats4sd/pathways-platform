@@ -12,8 +12,6 @@ class FarmController extends Controller
 
     public function show(Farm $farm)
     {
-        // TODO: authorise user
-
         return view('farms.show', ['farm' => $farm]);
     }
 
@@ -46,28 +44,35 @@ class FarmController extends Controller
         $ycos=0.0;
         $zsin=0.0;
         
-        foreach ($coords as $lnglat)
-        {
-            $lat = $lnglat['lat'] * pi() / 180;
-            $lon = $lnglat['lng'] * pi() / 180;
+        if($count_coords>0) {
+            foreach ($coords as $lnglat)
+            {
+                $lat = $lnglat['lat'] * pi() / 180;
+                $lon = $lnglat['lng'] * pi() / 180;
+                
+                $acos = cos($lat) * cos($lon);
+                $bcos = cos($lat) * sin($lon);
+                $csin = sin($lat);
+                $xcos += $acos;
+                $ycos += $bcos;
+                $zsin += $csin;
+            }
             
-            $acos = cos($lat) * cos($lon);
-            $bcos = cos($lat) * sin($lon);
-            $csin = sin($lat);
-            $xcos += $acos;
-            $ycos += $bcos;
-            $zsin += $csin;
+            $xcos /= $count_coords;
+            $ycos /= $count_coords;
+            $zsin /= $count_coords;
+            $lon = atan2($ycos, $xcos);
+            $sqrt = sqrt($xcos * $xcos + $ycos * $ycos);
+            $lat = atan2($zsin, $sqrt);
+            
+            $farmCenter = array($lat * 180 / pi(), $lon * 180 / pi());
         }
         
-        $xcos /= $count_coords;
-        $ycos /= $count_coords;
-        $zsin /= $count_coords;
-        $lon = atan2($ycos, $xcos);
-        $sqrt = sqrt($xcos * $xcos + $ycos * $ycos);
-        $lat = atan2($zsin, $sqrt);
+        else {
+            $farmCenter = [17.5739347, -3.9861092];
+        }
         
-        $farmCenter = array($lat * 180 / pi(), $lon * 180 / pi());
-
+        
         # PLOTS
         
         $field_ids = $farm->fields()->pluck('id');
