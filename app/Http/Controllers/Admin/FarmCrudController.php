@@ -49,6 +49,12 @@ class FarmCrudController extends CrudController
 
         CRUD::setFromDb();
 
+        CRUD::button('map')
+            ->stack('line')
+            ->type('view')
+            ->view('crud::buttons.map')
+            ->after('update');
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
@@ -78,6 +84,11 @@ class FarmCrudController extends CrudController
     public function export() 
     {
         return Excel::download(new MonitoringWorkbookExport, 'donnees_de_suivi - '.Carbon::now()->format('Ymd_His').'.xlsx');
+    }
+
+    public function renderMap(Farm $farm)
+    {
+        return view('farms.map', ['farm' => $farm]);
     }
     
 }

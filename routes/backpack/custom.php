@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\FarmCrudController;
 use App\Http\Controllers\Admin\TeamCrudController;
 use Stats4sd\TeamManagement\Http\Controllers\TeamMemberController;
 
@@ -20,6 +21,7 @@ Route::group([
 ], function () { // custom admin routes
     Route::crud('crop', 'CropCrudController');
     Route::crud('farm', 'FarmCrudController');
+    Route::get('farm/{farm}/map', [FarmCrudController::class, 'renderMap']);
     Route::crud('planting', 'PlantingCrudController');
     Route::crud('planting_detail', 'PlantingDetailCrudController');
     Route::crud('post_planting', 'PostPlantingCrudController');
