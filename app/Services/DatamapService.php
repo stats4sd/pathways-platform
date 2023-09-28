@@ -441,7 +441,6 @@ class DatamapService
 
                             $plotData['field_id'] = $field->id;
                             $plotData['crop_id'] = $newCrop['id'];
-                            $plotData['associated_crops'] = 
                             $plotData['superficie_estimee'] = $plotData['superficie'];
                             $plotData['superficie_measuree'] = $plotData['surface_h'];
 
