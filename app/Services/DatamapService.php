@@ -469,6 +469,7 @@ class DatamapService
                                 $plotData['crop_id'] = $plotData['culture'];
                                 $plotData['superficie_estimee'] = $plotData['superficie'];
                                 $plotData['superficie_measuree'] = $plotData['surface_h'];
+                                $plotData['trace_superficie'] = $plotData['trace_superficie']['coordinates'][0];
 
                                 if(isset($plotData['autre_cult_associe_1'])) {
 
@@ -492,7 +493,9 @@ class DatamapService
                     }
 
                     $entries[Plot::class] = $plots;
-                    $entries[Crop::class] = $crops;
+                    if (!empty($crops)) {
+                        $entries[Crop::class] = $crops;
+                    }
 
                 }
 

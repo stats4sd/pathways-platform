@@ -39,11 +39,8 @@ class Field extends Model
 
         foreach($this->plots as $plot) {
 
-            $points = explode(';', $plot->trace_superficie);
-
-            foreach($points as $point){
-                $coordinate=explode(' ', $point);
-                $coords[]=['lat' => floatval($coordinate[0]), 'lng' => floatval($coordinate[1])];
+            foreach($plot->trace_superficie as $point){
+                $coords[]=['lat' => $point[1], 'lng' => $point[0]];
             }
         }
 

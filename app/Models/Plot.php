@@ -15,6 +15,7 @@ class Plot extends Model
 
     protected $table = 'plots';
     protected $guarded = [];
+    protected $casts = ['trace_superficie' => 'array'];
 
     /*
     |--------------------------------------------------------------------------

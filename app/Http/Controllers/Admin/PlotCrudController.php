@@ -47,13 +47,18 @@ class PlotCrudController extends CrudController
         CRUD::column('cultures_associations');
         CRUD::column('superficie_estimee');
         CRUD::column('superficie_measuree');
-        CRUD::column('trace_superficie');
+        CRUD::column('trace_superficie')->type('text')->limit(1000);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
          */
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
     }
 
 }

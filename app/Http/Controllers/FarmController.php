@@ -24,12 +24,8 @@ class FarmController extends Controller
 
         foreach($farm->fields as $field){
             foreach($field->plots as $plot) {
-
-                $points = explode(';', $plot->trace_superficie);
-
-                foreach($points as $point){
-                    $coordinate=explode(' ', $point);
-                    $coords[]=['lat' => floatval($coordinate[0]), 'lng' => floatval($coordinate[1])];
+                foreach($plot->trace_superficie as $point){
+                    $coords[]=['lat' => $point[1], 'lng' => $point[0]];
                 }
             }
         }
@@ -81,12 +77,10 @@ class FarmController extends Controller
         
         $plotCoords = $plots->map(function($plot) {
 
-            $points = explode(';', $plot->trace_superficie);
             $latlngs = [];
 
-            foreach($points as $point){
-                $coordinate=explode(' ', $point);
-                $latlngs[]=[floatval($coordinate[0]), floatval($coordinate[1])];
+            foreach($plot->trace_superficie as $point){
+                $latlngs[]=[$point[1], $point[0]];
             }
 
             // remove duplicate points
