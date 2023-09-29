@@ -424,7 +424,7 @@ class DatamapService
 
                     foreach ($data['parcelles'] as $plotData) {
 
-                        if($plotData['culture']=='999' | $plotData['culture']=='998') {
+                        if($plotData['culture']=='999') {
 
                             $newCrop = [];
                             $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $plotData['culture_label']));
@@ -443,16 +443,17 @@ class DatamapService
                             $plotData['crop_id'] = $newCrop['id'];
                             $plotData['superficie_estimee'] = $plotData['superficie'];
                             $plotData['superficie_measuree'] = $plotData['surface_h'];
+                            $plotData['trace_superficie'] = $plotData['trace_superficie']['coordinates'][0];
 
                             if(isset($plotData['autre_cult_associe_1'])) {
 
-                                $plotData['cultures_associations'] = str_replace('autre1', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
+                                $plotData['cultures_associations'] = str_replace('999', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
                                 
                             }
                 
                             if(isset($plotData['autre_cult_associe_2'])) {
                 
-                                $plotData['cultures_associations'] = str_replace('autre2', $plotData['autre_cult_associe_2'], $plotData['cultures_associations']);
+                                $plotData['cultures_associations'] = str_replace('998', $plotData['autre_cult_associe_2'], $plotData['cultures_associations']);
                                 
                             }
 

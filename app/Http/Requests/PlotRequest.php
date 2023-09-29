@@ -31,7 +31,7 @@ class PlotRequest extends FormRequest
             'nombre_arbre' => 'nullable',
             'fertilite' => 'nullable',
             'crop_id' => 'required',
-            'associated_crops' => 'nullable',
+            'cultures_associations' => 'nullable',
             'superficie_estimee' => 'nullable',
             'superficie_measuree' => 'nullable',
             'trace_superficie' => 'nullable'
