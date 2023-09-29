@@ -447,7 +447,7 @@ class DatamapService
 
                             if(isset($plotData['autre_cult_associe_1'])) {
 
-                                $plotData['cultures_associations'] = str_replace('999', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
+                                $plotData['cultures_associations'] = str_replace('997', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
                                 
                             }
                 
@@ -473,13 +473,13 @@ class DatamapService
 
                                 if(isset($plotData['autre_cult_associe_1'])) {
 
-                                    $plotData['cultures_associations'] = str_replace('autre1', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
+                                    $plotData['cultures_associations'] = str_replace('997', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
                                     
                                 }
                     
                                 if(isset($plotData['autre_cult_associe_2'])) {
                     
-                                    $plotData['cultures_associations'] = str_replace('autre2', $plotData['autre_cult_associe_2'], $plotData['cultures_associations']);
+                                    $plotData['cultures_associations'] = str_replace('998', $plotData['autre_cult_associe_2'], $plotData['cultures_associations']);
                                     
                                 }
         
