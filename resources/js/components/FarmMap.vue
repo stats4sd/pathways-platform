@@ -45,7 +45,7 @@
                   Type sol: <b> {{ plot.field.type_sol }}</b><br/><br/>
                   Pente: <b> {{ plot.field.pente }}</b><br/><br/>
                   Superficie total: <b> {{ plot.field.superficie_total }}</b><br/><br/>
-                  <a @click="fieldLevel=false; selectedField=plot.field.id; setFieldCenter(plot.field.center)" href="#"><b>View plots for this field</b></a>
+                  <a @click="fieldLevel=false; selectedField=plot.field.id; setFieldCenter(plot.field.center)" href="#"><b>Montrer les parcelles pour ce champ</b></a>
           </l-popup>
         </l-polygon>
       </div>
@@ -67,7 +67,7 @@
                 Culture: <b> {{ plot.crop_id }}</b><br/><br/>
                 Cultures Associations: <b> {{ plot.cultures_associations }}</b><br/><br/>
                 Superficie: <b> {{ plot.superficie_measuree}}</b><br/><br/>
-                <a @click="fieldLevel=true; setFarmCenter(farmCenter)" href="#"><b>Back to fields</b></a>
+                <a @click="fieldLevel=true; setFarmCenter(farmCenter)" href="#"><b>Retour aux champs</b></a>
           </l-popup>
         </l-polygon>
       </div>

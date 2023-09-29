@@ -2,8 +2,6 @@
     <div class="container pt-5">
         <div class="card shadow-sm bg-light">
             <div class="card-header bg-light p-5">
-                <h1>Farmer: {{ farm.chef_upa }}</h1>
-                <h1>Code: {{ farm.code }}</h1>
                 <FarmMap :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter"/>
             </div>
         </div>
