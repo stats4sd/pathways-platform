@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionFarmerController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FileController;
 
 /**
  * No seperate Front-end
@@ -34,11 +35,15 @@ Route::get(config('backpack.base.route_prefix') . '/login', function () {
 //     return view('welcome');
 // })->name('home');
 
-// Route::group([
-//     'middleware' => ['web', 'auth'],
-// ], function () {
-//     Route::view('dashboard')->name('dashboard');
-// });
+Route::group([
+    'middleware' => ['web', 'auth'],
+], function () {
+    Route::get('download/{path}', [FileController::class, 'download'])->where('path', '.*')->name('file.download');
+
+    Route::get('farms/{farm}', [App\Http\Controllers\FarmController::class, 'show']);
+    Route::get('farms/{farm}/FarmMap', [App\Http\Controllers\FarmController::class,'getFarmCoords']);
+
+});
 
 require __DIR__ . '/auth.php';
 

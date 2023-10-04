@@ -17,13 +17,6 @@
             </div>
         </div>
 
-        <h4>For testing:</h4>
-
-        <div class="p-4 my-4">
-
-            Login QR Code: {{ QrCode::size(150)->generate($farm->code) }}
-
-        </div>
         <form method="POST" action={{ route('logout') }}>
             @csrf
             <button class="btn btn-info" type="submit"><i class="la la-lock"></i> {{ trans('backpack::base.logout') }}

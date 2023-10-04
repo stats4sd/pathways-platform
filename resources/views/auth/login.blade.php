@@ -1,13 +1,13 @@
 <x-guest-layout>
 
     <h3>Chemins l'IAE</h3>
-    <h5 class="mb-4">Login</h5>
+    <h5 class="mb-4">Connexion</h5>
 
     <form method="POST" action="{{ route('post-login-researcher') }}">
         @csrf
 
         <div class="form-group row">
-            <label for="email" class="col-md-4 col-form-label text-md-right">E-Mail Address</label>
+            <label for="email" class="col-md-4 col-form-label text-md-right">Adresse e-mail</label>
 
             <div class="col-md-8">
                 <input id="email" type="email"
@@ -23,7 +23,7 @@
         </div>
 
         <div class="form-group row">
-            <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
+            <label for="password" class="col-md-4 col-form-label text-md-right">Mot de passe</label>
 
             <div class="col-md-8">
                 <input id="password" type="password"
@@ -43,7 +43,7 @@
 
             <div>
                 <button type="submit" class="btn btn-primary mb-4">
-                    Login
+                    Connexion
                 </button>
             </div>
 
@@ -52,12 +52,12 @@
                        id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                 <label class="form-check-label" for="remember">
-                    Remember Me
+                    Se souvenir de moi
                 </label>
             </div>
             @if (Route::has('password.request'))
                 <a class="btn btn-link" href="{{ route('password.request') }}">
-                    Forgot Your Password?
+                    Mot de passe oublié?
                 </a>
             @endif
         </div>

@@ -29,7 +29,7 @@
             </p>
 
             <div class="my-4">
-                <h5>Enter Phone Number: <br/><br/>
+                <h5>Saisir votre numéro de téléphone: <br/><br/>
                     <input class="form-control" name='phone_number_text' v-model="phoneNumberText">
                 </h5>
                 <p
@@ -48,7 +48,7 @@
                 class="mt-4 btn"
                 :class="scannedCode && phoneNumber ? 'btn-primary' : 'btn-secondary'"
                 :disabled="!scannedCode && !phoneNumber">
-                Login
+                Connexion
             </button>
         </div>
     </form>

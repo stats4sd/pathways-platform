@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\FarmRequest;
+use Carbon\Carbon;
 use App\Models\Farm;
+use App\Http\Requests\FarmRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MonitoringWorkbookExport;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\CRUD\app\Library\Widget;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use src\View\Components\Qr;
+use \Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
  * Class FarmCrudController
@@ -19,8 +23,11 @@ use src\View\Components\Qr;
 class FarmCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ExportOperation;
+
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -32,6 +39,7 @@ class FarmCrudController extends CrudController
         CRUD::setModel(\App\Models\Farm::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/farm');
         CRUD::setEntityNameStrings('UPA', 'UPAs');
+        CRUD::set('export.exporter', MonitoringWorkbookExport::class);
     }
 
     /**
@@ -45,8 +53,47 @@ class FarmCrudController extends CrudController
 
         CRUD::setFromDb();
 
+        CRUD::button('map')
+        ->stack('line')
+        ->type('view')
+        ->view('crud::buttons.map')
+        ->after('update');
+
+    /**
+     * Columns can be defined using the fluent syntax or array syntax:
+     * - CRUD::column('price')->type('number');
+     * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+     */
     }
 
+    protected function setupUpdateOperation()
+    {
+        CRUD::setValidation(FarmRequest::class);
+
+        CRUD::field('code');
+        CRUD::field('year');
+        CRUD::field('num_phone');
+        CRUD::field('chef_upa');
+        CRUD::field('chef_travaux');
+        CRUD::field('neo_alphabete');
+        CRUD::field('activite_primaire');
+        CRUD::field('activite_secondaire');
+        CRUD::field('cereales_favoris_1');
+        CRUD::field('cereales_favoris_2');
+        CRUD::field('cereales_favoris_3');
+        CRUD::field('superficie_possede_upa');
+        CRUD::field('superficie_cultive_upa');
+    }
+
+    public function export() 
+    {
+        return Excel::download(new MonitoringWorkbookExport, 'donnees_de_suivi - '.Carbon::now()->format('Ymd_His').'.xlsx');
+    }
+
+    public function renderMap(Farm $farm)
+    {
+        return view('farms.map', ['farm' => $farm]);
+    }
 
     protected function show($id)
     {
@@ -54,5 +101,5 @@ class FarmCrudController extends CrudController
 
         return view('farms.show', ['farm' => $farm]);
     }
-
+    
 }
