@@ -8,7 +8,11 @@ use App\Http\Requests\FarmRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MonitoringWorkbookExport;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Library\Widget;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use src\View\Components\Qr;
 use \Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
@@ -27,7 +31,7 @@ class FarmCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -40,7 +44,7 @@ class FarmCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -50,16 +54,16 @@ class FarmCrudController extends CrudController
         CRUD::setFromDb();
 
         CRUD::button('map')
-            ->stack('line')
-            ->type('view')
-            ->view('crud::buttons.map')
-            ->after('update');
+        ->stack('line')
+        ->type('view')
+        ->view('crud::buttons.map')
+        ->after('update');
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
-         */
+    /**
+     * Columns can be defined using the fluent syntax or array syntax:
+     * - CRUD::column('price')->type('number');
+     * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+     */
     }
 
     protected function setupUpdateOperation()
@@ -89,6 +93,13 @@ class FarmCrudController extends CrudController
     public function renderMap(Farm $farm)
     {
         return view('farms.map', ['farm' => $farm]);
+    }
+
+    protected function show($id)
+    {
+        $farm = Farm::find($id);
+
+        return view('farms.show', ['farm' => $farm]);
     }
     
 }

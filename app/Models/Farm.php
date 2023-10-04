@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -15,12 +16,31 @@ class Farm extends Model
     protected $table = 'farms';
     protected $guarded = [];
 
+    protected static function booted()
+    {
+        static::creating(function (Farm $farm) {
+            $user = User::create(['name' => $farm->chef_upa, 'email' => 'farm_'.$farm->id, 'email_verified_at' => now(), 'password' => bcrypt(rand(10000,99999))]);
+            $user->addRole('Farmer');
+
+            $farm->user_id = $user->id;
+        });
+
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
 
+    // platform management
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+    // collected data
     public function plantings(): HasMany
     {
         return $this->hasMany(Planting::class);

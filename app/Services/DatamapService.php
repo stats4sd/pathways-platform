@@ -43,6 +43,9 @@ class DatamapService
             $data = $this->prepareDataArray($submission);
             $data = $this->removeGroupNames($data);
 
+            $data['code'] = $data['camera_scane'];
+            $data['phone_number'] = $data['num_phone'];
+            
             $entries = [];
             
             if($data['consentement_question']=='non') {

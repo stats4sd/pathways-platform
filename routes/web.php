@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\AuthenticatedSessionFarmerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 
@@ -43,6 +45,23 @@ Route::group([
 
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+// overwrite login routes
+    Route::get('login', [AuthenticatedSessionFarmerController::class, 'create'])
+                ->name('login');
+
+    Route::post('login', [AuthenticatedSessionFarmerController::class, 'store'])
+    ->name('post-login');
+
+
+// farmer authentication
+Route::get('login-researcher', [AuthenticatedSessionController::class, 'create'])
+    ->name('login-researcher')
+    ->middleware('guest');
+
+Route::post('login-researcher', [AuthenticatedSessionController::class, 'store'])
+    ->name('post-login-researcher')
+    ->middleware('guest');
 
 Route::post('admin/submissions/process', [SubmissionController::class, 'process'])->name('submission.process');
