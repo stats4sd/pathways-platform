@@ -8,4 +8,4 @@ import './bootstrap';
 
 createApp()
     .component('farm-page', FarmPage)
-    .mount('#farm-app');
+    .mount('#farm-admin');

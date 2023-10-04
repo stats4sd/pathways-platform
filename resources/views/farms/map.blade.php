@@ -2,7 +2,7 @@
 
 
 @section('after_scripts')
-    @vite(['resources/css/app.css', 'resources/js/farm-app.js'])
+    @vite(['resources/css/app.css', 'resources/js/farm-admin.js'])
 @endsection
 
 @section('content')
@@ -17,7 +17,7 @@
         Retour à la liste UPAs</span></a></small>
     </p>
 
-    <div id="farm-app">
+    <div id="farm-admin">
         <farm-page :farm="{{ $farm->toJson() }}"/>
     </div>
 @endsection
