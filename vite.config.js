@@ -10,7 +10,8 @@ export default defineConfig({
                 'resources/sass/app.scss',
                 'resources/js/app.js',
                 'resources/js/login.js',
-                'resources/js/farm-admin.js'
+                'resources/js/farm-admin.js',
+                'resources/js/farm-app.js'
             ],
             refresh: true,
         }),

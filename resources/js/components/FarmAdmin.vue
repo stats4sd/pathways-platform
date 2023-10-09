@@ -31,7 +31,7 @@ const getData = async () => {
     console.log('Getting data from server and/or local storage');
 
     const coords = await axios
-        .get("/farms/"+ props.farm.id + "/FarmMap")
+        .get("/farm/"+ props.farm.id + "/FarmMap")
         plotCoords.value = coords.data.plotCoords
         interestPointCoords.value = coords.data.interestPointCoords
         farmCenter.value = coords.data.farmCenter

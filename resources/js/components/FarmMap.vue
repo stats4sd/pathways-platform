@@ -9,7 +9,7 @@
       >
   </div>
 
-  <div style="height:600px; width:900px">
+    <div style="height:500px">
 
     <l-map ref="map" v-model:zoom="zoom" :center="farmCenter" :use-global-leaflet="false">
       

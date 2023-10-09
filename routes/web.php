@@ -40,8 +40,8 @@ Route::group([
 ], function () {
     Route::get('download/{path}', [FileController::class, 'download'])->where('path', '.*')->name('file.download');
 
-    Route::get('farms/{farm}', [App\Http\Controllers\FarmController::class, 'show']);
-    Route::get('farms/{farm}/FarmMap', [App\Http\Controllers\FarmController::class,'getFarmCoords']);
+    Route::get('farm/{farm}', [App\Http\Controllers\FarmController::class, 'show']);
+    Route::get('farm/{farm}/FarmMap', [App\Http\Controllers\FarmController::class,'getFarmCoords']);
 
 });
 

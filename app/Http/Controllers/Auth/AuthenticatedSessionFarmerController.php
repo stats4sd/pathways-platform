@@ -32,6 +32,6 @@ class AuthenticatedSessionFarmerController extends Controller
             return back();
         }
 
-        return redirect('/admin/farm/' . $farm->id . '/show');
+        return redirect('farm/' . $farm->id);
     }
 }

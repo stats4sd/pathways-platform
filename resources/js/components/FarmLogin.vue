@@ -5,6 +5,7 @@
         <div class="d-flex flex-column justify-content-center align-items-center">
 
             <h3>Scannez le code QR sur votre carte d'identité</h3>
+            <img src="images/qr_code.jpg" id="image_qr" width="75"/>
 
 
             <video
@@ -17,7 +18,7 @@
                 v-if="scannedCode"
                 class="text-success d-flex justify-content-center align-items-center"
             >
-                CODE SCANNED
+                CODE QR SCANNÉ
                 <i class="la la-check-circle font-weight-bold font-5xl text-success"></i>
             </h4>
 
@@ -29,8 +30,9 @@
             </p>
 
             <div class="my-4">
-                <h5>Saisir votre numéro de téléphone: <br/><br/>
-                    <input class="form-control" name='phone_number_text' v-model="phoneNumberText">
+                <h5>Saisir votre numéro de téléphone <br/><br/>
+                    <img src="images/phone_number.jpg" id="image_phone" width="75"/>
+                    <input class="form-control mt-4" name='phone_number_text' v-model="phoneNumberText">
                 </h5>
                 <p
                     v-for="error in phoneNumberErrors"

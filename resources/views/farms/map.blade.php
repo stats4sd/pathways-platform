@@ -18,6 +18,6 @@
     </p>
 
     <div id="farm-admin">
-        <farm-page :farm="{{ $farm->toJson() }}"/>
+        <farm-admin :farm="{{ $farm->toJson() }}"/>
     </div>
 @endsection

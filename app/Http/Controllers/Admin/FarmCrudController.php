@@ -94,12 +94,5 @@ class FarmCrudController extends CrudController
     {
         return view('farms.map', ['farm' => $farm]);
     }
-
-    protected function show($id)
-    {
-        $farm = Farm::find($id);
-
-        return view('farms.show', ['farm' => $farm]);
-    }
     
 }
