@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Crop;
 use App\Models\Farm;
 use App\Models\Plot;
 use Illuminate\Support\Facades\Storage;
@@ -134,5 +135,222 @@ class FarmController extends Controller
         ];
 
     }
+
+    public static function getFarmArea(Farm $farm)
+    {
+        $field_ids = $farm->fields()->pluck('id');
+        $plots = Plot::whereIn('field_id', $field_ids)->get();
+        
+        // TOTAL AREA (SUPERFICIE) ALL CROPS
+
+        $totalArea = $farm->fields->sum('superficie_total');
+
+        // AREA PER PRIMARY CROP
+
+        $primaryCrops = Crop::where('type', 'primaire')->select('id', 'label_bm', 'nom_fichier_image', 'order')->get()->sortBy('order');
+        $primaryCropIds = $primaryCrops->pluck('id')->toArray();
+
+        $plotAreas = [];
+
+        foreach ($plots as $plot) {
+            if(in_array($plot['crop_id'], $primaryCropIds)) {
+                $plotAreas[$plot['crop_id']][]= $plot['superficie_measuree'];
+            }
+        }
+
+        $plotAreas = array_map('array_sum', $plotAreas);
+
+        foreach($primaryCrops as $key => $primaryCrop){
+            if(in_array($primaryCrop->id, array_keys($plotAreas))) {
+                $primaryCrop->area = $plotAreas[$primaryCrop->id];
+            }
+            else {
+                unset($primaryCrops[$key]);
+            }
+        }
+
+        // AREA PER SECONDARY CROP
+
+        $secondaryCrops = Crop::where('type', 'secondaire')->select('id', 'label_bm', 'nom_fichier_image', 'order')->get()->sortBy('order');
+        $secondaryCropIds = $secondaryCrops->pluck('id')->toArray();
+
+        $plotAreas = [];
+
+        foreach ($plots as $plot) {
+            if(in_array($plot['crop_id'], $secondaryCropIds)) {
+                $plotAreas[$plot['crop_id']][]= $plot['superficie_measuree'];
+            }
+        }
+
+        $plotAreas = array_map('array_sum', $plotAreas);
+
+        foreach($secondaryCrops as $key => $secondaryCrop){
+            if(in_array($secondaryCrop->id, array_keys($plotAreas))) {
+                $secondaryCrop->area = $plotAreas[$secondaryCrop->id];
+            }
+            else {
+                unset($secondaryCrops[$key]);
+            }
+        }
+
+        return[
+            "totalArea" => $totalArea,
+            "primaryArea" => $primaryCrops,
+            "secondaryArea" => $secondaryCrops,
+        ];
+
+    }
+    
+    public static function getFarmCosts(Farm $farm)
+    {
+        // TOTAL COST
+        $plantingTotalCost = $farm->plantings->sum('cout_total');
+        $postPlantingTotalCost = $farm->postPlantings->sum('cout_total');
+        $harvestTotalCost = $farm->harvests->sum('cout_total');
+
+        $totalCost = $plantingTotalCost + $postPlantingTotalCost + $harvestTotalCost;
+
+
+        // COST PER CROP
+
+        $primaryCrops = Crop::where('type', 'primaire')->select('id', 'label_bm', 'nom_fichier_image', 'order')->get()->sortBy('order');
+        $primaryCropIds = $primaryCrops->pluck('id')->toArray();
+
+        $cropCosts = [];
+
+        foreach($farm->plantings as $planting){
+            foreach($planting->plantingDetails as $plantingDetail){
+                if(in_array($plantingDetail['crop_id'], $primaryCropIds)) {
+                    $cropCosts[$plantingDetail['crop_id']][]= $plantingDetail['cout'];
+                }
+            }
+        }
+
+        foreach($farm->postPlantings as $postPlanting){
+            foreach($postPlanting->postPlantingDetails as $postPlantingDetail){
+                if(in_array($postPlantingDetail['crop_id'], $primaryCropIds)) {
+                    $cropCosts[$postPlantingDetail['crop_id']][] = $postPlantingDetail['cout'];
+                }
+            }
+        }
+
+        foreach($farm->harvests as $harvest){
+            foreach($harvest->harvestDetails as $harvestDetail){
+                if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
+                    $cropCosts[$harvestDetail['crop_id']][]= $harvestDetail['cout'];
+                }
+            }
+        }
+
+        $cropCosts = array_map('array_sum', $cropCosts);
+        
+        foreach($primaryCrops as $key => $primaryCrop){
+            if(in_array($primaryCrop->id, array_keys($cropCosts))) {
+                $primaryCrop->cost = $cropCosts[$primaryCrop->id];
+            }
+            else {
+                unset($primaryCrops[$key]);
+            }
+        }
+
+        return[
+            "totalCost" => $totalCost,
+            "cropCosts" => $primaryCrops
+        ];
+
+    }
+
+    public static function getFarmProduction(Farm $farm)
+    {
+        // PRODUCTION PER CROP
+
+        $primaryCrops = Crop::where('type', 'primaire')->select('id', 'label_bm', 'nom_fichier_image', 'order')->get()->sortBy('order');
+        $primaryCropIds = $primaryCrops->pluck('id')->toArray();
+
+        $cropProductions = [];
+
+        foreach($farm->harvests as $harvest){
+            foreach($harvest->harvestDetails as $harvestDetail){
+                if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
+                    $cropProductions[$harvestDetail['crop_id']][]= $harvestDetail['production'];
+                }
+            }
+        }
+
+        foreach($primaryCrops as $key => $primaryCrop){
+            if(in_array($primaryCrop->id, array_keys($cropProductions))) {
+                $primaryCrop->production = $cropProductions[$primaryCrop->id][0];
+            }
+            else {
+                unset($primaryCrops[$key]);
+            }
+        }
+
+        return[
+            "cropProductions" => $primaryCrops
+        ];
+        
+    }
+
+    public static function getFarmYield(Farm $farm)
+    {
+        // PRODUCTION
+
+        $primaryCrops = Crop::where('type', 'primaire')->select('id', 'label_bm', 'nom_fichier_image', 'order')->get()->sortBy('order');
+        $primaryCropIds = $primaryCrops->pluck('id')->toArray();
+
+        $cropProductions = [];
+
+        foreach($farm->harvests as $harvest){
+            foreach($harvest->harvestDetails as $harvestDetail){
+                if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
+                    $cropProductions[$harvestDetail['crop_id']][]= $harvestDetail['production'];
+                }
+            }
+        }
+
+        foreach($primaryCrops as $key => $primaryCrop){
+            if(in_array($primaryCrop->id, array_keys($cropProductions))) {
+                $primaryCrop->production = floatval($cropProductions[$primaryCrop->id][0]);
+            }
+            else {
+                unset($primaryCrops[$key]);
+            }
+        }
+
+        // dd($primaryCrops);
+
+        // AREA
+
+        $field_ids = $farm->fields()->pluck('id');
+        $plots = Plot::whereIn('field_id', $field_ids)->get();
+
+        $primaryCropIds = $primaryCrops->pluck('id')->toArray();
+
+        $plotAreas = [];
+
+        foreach ($plots as $plot) {
+            if(in_array($plot['crop_id'], $primaryCropIds)) {
+                $plotAreas[$plot['crop_id']][]= $plot['superficie_measuree'];
+            }
+        }
+
+        $plotAreas = array_map('array_sum', $plotAreas);
+
+        foreach($primaryCrops as $key => $primaryCrop){
+            if(in_array($primaryCrop->id, array_keys($plotAreas))) {
+                $primaryCrop->area = $plotAreas[$primaryCrop->id];
+                $primaryCrop->yield = round($primaryCrop->production/$primaryCrop->area,3);
+            }
+            else {
+                unset($primaryCrops[$key]);
+            }
+        }
+
+        return[
+            "cropYields" => $primaryCrops
+        ];
+    }
+
 
 }

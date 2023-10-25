@@ -42,6 +42,10 @@ Route::group([
 
     Route::get('farm/{farm}', [App\Http\Controllers\FarmController::class, 'show']);
     Route::get('farm/{farm}/FarmMap', [App\Http\Controllers\FarmController::class,'getFarmCoords']);
+    Route::get('farm/{farm}/FarmArea', [App\Http\Controllers\FarmController::class,'getFarmArea']);
+    Route::get('farm/{farm}/FarmCosts', [App\Http\Controllers\FarmController::class,'getFarmCosts']);
+    Route::get('farm/{farm}/FarmProduction', [App\Http\Controllers\FarmController::class,'getFarmProduction']);
+    Route::get('farm/{farm}/FarmYield', [App\Http\Controllers\FarmController::class,'getFarmYield']);
 
 });
 
