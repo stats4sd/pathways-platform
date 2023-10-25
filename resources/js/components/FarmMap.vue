@@ -1,7 +1,7 @@
 <template>
 
   <div>
-     <label for="checkboxInterestPoint">Points d'intérêt  </label>
+     <label for="checkboxInterestPoint">Cikɛda nafa sira  </label>
       <input
         id="checkboxInterestPoint"
         v-model="show"
@@ -41,11 +41,11 @@
             :fillColor="plot.field_color"
         >
           <l-popup>
-                  Nom du champ: <b> {{ plot.field.nom }}</b><br/><br/>
-                  Type sol: <b> {{ plot.field.type_sol }}</b><br/><br/>
-                  Pente: <b> {{ plot.field.pente }}</b><br/><br/>
-                  Superficie total: <b> {{ plot.field.superficie_total }}</b><br/><br/>
-                  <a @click="fieldLevel=false; selectedField=plot.field.id; setFieldCenter(plot.field.center)" href="#"><b>Montrer les parcelles pour ce champ</b></a>
+                  Foro tɔgɔ ye di: <b> {{ plot.field.nom }}</b><br/><br/>
+                  Dugu kolo suguya: <b> {{ plot.field.type_sol }}</b><br/><br/>
+                  Kɛnɛ fɛcɛ cogo: <b> {{ plot.field.pente }}</b><br/><br/>
+                  Kɛnɛ mumɛ: <b> {{ plot.field.superficie_total }}</b><br/><br/>
+                  <a @click="fieldLevel=false; selectedField=plot.field.id; setFieldCenter(plot.field.center)" href="#"><b>Kɛnɛ jirali fɔrɔ kɔnɔ</b></a>
           </l-popup>
         </l-polygon>
       </div>
@@ -62,12 +62,12 @@
             :fillColor="plot.field_color"
         >
           <l-popup>
-                Numero Parcelle: <b> {{ plot.numero_parcelle }}</b><br/><br/>
-                Nombre Abre: <b> {{ plot.nombre_arbre }}</b><br/><br/>
-                Culture: <b> {{ plot.crop_id }}</b><br/><br/>
-                Cultures Associations: <b> {{ plot.cultures_associations }}</b><br/><br/>
-                Superficie: <b> {{ plot.superficie_measuree}}</b><br/><br/>
-                <a @click="fieldLevel=true; setFarmCenter(farmCenter)" href="#"><b>Retour aux champs</b></a>
+                Kɛnɛ N⁰: <b> {{ plot.numero_parcelle }}</b><br/><br/>
+                Jiri sun hakɛ: <b> {{ plot.nombre_arbre }}</b><br/><br/>
+                Sɛnɛfen jɔnjɔn: <b> {{ plot.crop_id }}</b><br/><br/>
+                Sɛnɛfen wɛrɛw: <b> {{ plot.cultures_associations }}</b><br/><br/>
+                Fɔrɔ: <b> {{ plot.superficie_measuree}}</b><br/><br/>
+                <a @click="fieldLevel=true; setFarmCenter(farmCenter)" href="#"><b>Sɛkili kana kɛnɛw la</b></a>
           </l-popup>
         </l-polygon>
       </div>
