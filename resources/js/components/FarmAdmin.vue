@@ -2,7 +2,7 @@
     <div class="container pt-5">
         <div class="card shadow-sm bg-light">
             <div class="card-header bg-light p-5">
-                <FarmMap :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter"/>
+                <FarmMapFrench :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter"/>
             </div>
         </div>
     </div>
@@ -11,7 +11,7 @@
 
 <script setup>
 import {onMounted, ref} from "vue";
-import FarmMap from "./FarmMap.vue";
+import FarmMapFrench from "./FarmMapFrench.vue";
 
 const props = defineProps({
     farm: Object,
