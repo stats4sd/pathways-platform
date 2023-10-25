@@ -35,10 +35,10 @@ class FarmerLoginRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'code.required' => 'Veuillez scanner votre code QR.',
-            'phone_number.required' => 'Veuillez entrer votre numéro de téléphone',
-            'phone_number.exists' => "Le numéro de téléphone n'est pas reconnu. Veuillez vérifier l'entrée.",
-            'code.exists' => "Le code scanné n'est pas reconnu. S'il vous plaît, vérifiez et essayez à nouveau.",
+            'code.required' => 'Cikɛda numerɔ kunafoni ta ni kamera ye',
+            'phone_number.required' => 'Cikɛda talefone numerɔ don',
+            'phone_number.exists' => "Talefone numerɔ donlenɲi ma lakodon. A sɛgɛ-sqgɛ kaɲɛ",
+            'code.exists' => "Cikɛda numerɔ talenɲi ma lakodon. A sɛgɛ-sɛgɛ kaɲɛ, ni ka lajɛ tuguni",
         ];
     }
 

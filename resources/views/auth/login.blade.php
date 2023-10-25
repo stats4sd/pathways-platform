@@ -65,7 +65,7 @@
     </form>
 
     <x-slot:alternateLogin>
-        <a href="{{ route('login') }}" class="btn btn-link">Login as Farmer with QR Code</a>
+        <a href="{{ route('login') }}" class="btn btn-link">Yɛlen do a kan</a>
     </x-slot:alternateLogin>
 
 </x-guest-layout>
