@@ -113,7 +113,7 @@
                 </div>
             </div>
 
-            <FarmMap :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter"/>
+            <FarmMap :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter" :no-coords="noCoords"/>
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -295,6 +295,7 @@ let showYield = ref(false)
 let plotCoords = ref([])
 let interestPointCoords = ref([])
 let farmCenter = ref([0,0])
+let noCoords = ref()
 
 let farmTotalArea = ref([])
 let farmPrimaryArea = ref([])
@@ -317,10 +318,7 @@ const getData = async () => {
         plotCoords.value = coords.data.plotCoords
         interestPointCoords.value = coords.data.interestPointCoords
         farmCenter.value = coords.data.farmCenter
-
-    console.log(plotCoords)
-    console.log(interestPointCoords)
-    console.log(farmCenter)
+        noCoords.value = coords.data.noCoords
 
     const area = await axios
         .get("/farm/"+ props.farm.id + "/FarmArea")

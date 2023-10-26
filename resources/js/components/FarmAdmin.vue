@@ -2,7 +2,7 @@
     <div class="container pt-5">
         <div class="card shadow-sm bg-light">
             <div class="card-header bg-light p-5">
-                <FarmMapFrench :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter"/>
+                <FarmMapFrench :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter" :no-coords="noCoords"/>
             </div>
         </div>
     </div>
@@ -21,6 +21,7 @@ const props = defineProps({
 let plotCoords = ref([])
 let interestPointCoords = ref([])
 let farmCenter = ref([0,0])
+let noCoords = ref()
 
 onMounted(() => {
     console.log('Mounted Farm Page');
@@ -35,10 +36,8 @@ const getData = async () => {
         plotCoords.value = coords.data.plotCoords
         interestPointCoords.value = coords.data.interestPointCoords
         farmCenter.value = coords.data.farmCenter
+        noCoords.value = coords.data.noCoords
 
-    console.log(plotCoords)
-    console.log(interestPointCoords)
-    console.log(farmCenter)
 }
 
 </script>

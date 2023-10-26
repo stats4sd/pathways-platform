@@ -63,10 +63,13 @@ class FarmController extends Controller
             $lat = atan2($zsin, $sqrt);
             
             $farmCenter = array($lat * 180 / pi(), $lon * 180 / pi());
+            $noCoords = 0;
+
         }
         
         else {
             $farmCenter = [17.5739347, -3.9861092];
+            $noCoords = 1;
         }
         
         
@@ -126,12 +129,11 @@ class FarmController extends Controller
 
         });
 
-
-
         return[
             "plotCoords" => $plotCoords,
             "interestPointCoords" => $interestPointCoords,
             "farmCenter" => $farmCenter,
+            "noCoords" => $noCoords,
         ];
 
     }
@@ -318,7 +320,6 @@ class FarmController extends Controller
             }
         }
 
-        // dd($primaryCrops);
 
         // AREA
 
