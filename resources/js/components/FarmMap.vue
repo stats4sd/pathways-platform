@@ -17,7 +17,7 @@
           icon-url="/images/question_icon.png"
           />
           <l-popup>
-            <b> Please fill out the Superficie Champs or Points d'interets ODK forms to see your farm on the map</b><br/>
+            <b>Kunafoniw ta fɔlo fɔrɔ kɛnɛ wali cikɛda nafa siraw kan walassa uw jaw ka bɔ yan</b><br/>
           </l-popup>
         </l-marker>
 
