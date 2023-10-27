@@ -11,7 +11,8 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/login.js',
                 'resources/js/farm-admin.js',
-                'resources/js/farm-app.js'
+                'resources/js/farm-app.js',
+                'resources/css/app.css'
             ],
             refresh: true,
         }),
