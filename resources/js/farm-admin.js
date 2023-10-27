@@ -1,10 +1,12 @@
 import {createApp} from 'vue/dist/vue.esm-bundler';
-import FarmApp from "./components/FarmApp.vue";
+import FarmAdmin from "./components/FarmAdmin.vue";
 import axios from 'axios';
+// import './bootstrap';
+import {onMounted, ref} from "vue";
 
 window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 createApp()
-    .component('FarmApp', FarmApp)
-    .mount('#farm-app')
+    .component('farm-admin', FarmAdmin)
+    .mount('#farm-admin');

@@ -4,8 +4,9 @@
 
         <div class="d-flex flex-column justify-content-center align-items-center">
 
-            <h3>Scannez le code QR sur votre carte d'identité</h3>
-
+            <h3>Cikɛda numerɔ kunafoni ta ni kamera ye</h3>
+            <img src="images/qr_code.png" id="image_qr" width="35"/>
+            <br/><br/>
 
             <video
                 id="preview"
@@ -17,7 +18,7 @@
                 v-if="scannedCode"
                 class="text-success d-flex justify-content-center align-items-center"
             >
-                CODE SCANNED
+                Cikɛda numerɔ tala
                 <i class="la la-check-circle font-weight-bold font-5xl text-success"></i>
             </h4>
 
@@ -29,9 +30,11 @@
             </p>
 
             <div class="my-4">
-                <h5>Saisir votre numéro de téléphone: <br/><br/>
-                    <input class="form-control" name='phone_number_text' v-model="phoneNumberText">
-                </h5>
+                <br/><br/>
+                <h3>Cikɛda talefone numerɔ don</h3>
+                <img src="images/phone_number.png" id="image_phone" width="35"/>
+                <br/>
+                <input class="form-control mt-4" name='phone_number_text' v-model="phoneNumberText">
                 <p
                     v-for="error in phoneNumberErrors"
                     class="help-block text-danger">
@@ -45,10 +48,10 @@
 
             <button
                 type="submit"
-                class="mt-4 btn"
+                class="mt-4 mb-5 btn"
                 :class="scannedCode && phoneNumber ? 'btn-primary' : 'btn-secondary'"
                 :disabled="!scannedCode && !phoneNumber">
-                Connexion
+                Yɛlɛ a kan
             </button>
         </div>
     </form>

@@ -15,7 +15,7 @@
     </div>
 
     <x-slot:alternateLogin>
-        <a href="{{ route('login-researcher') }}"  class="btn btn-link">Login as Researcher</a>
+        <a href="{{ route('login-researcher') }}"  class="btn btn-link">Connexion des chercheurs</a>
     </x-slot:alternateLogin>
 
 </x-guest-layout>

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\User;
 
 class CheckIfAdmin
 {
@@ -25,10 +26,11 @@ class CheckIfAdmin
      * @param  \Illuminate\Contracts\Auth\Authenticatable|null  $user
      * @return bool
      */
-    private function checkIfUserIsAdmin($user)
+    private function checkIfUserIsAdmin(User $user)
     {
-        // return ($user->is_admin == 1);
-        return true;
+        if(!$user->hasRole('Farmer')) {
+            return true;
+        }
     }
 
     /**

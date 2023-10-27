@@ -2,7 +2,7 @@
     <div class="container pt-5">
         <div class="card shadow-sm bg-light">
             <div class="card-header bg-light p-5">
-                <FarmMap :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter"/>
+                <FarmMapFrench :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter" :no-coords="noCoords"/>
             </div>
         </div>
     </div>
@@ -11,7 +11,7 @@
 
 <script setup>
 import {onMounted, ref} from "vue";
-import FarmMap from "./FarmMap.vue";
+import FarmMapFrench from "./FarmMapFrench.vue";
 
 const props = defineProps({
     farm: Object,
@@ -21,6 +21,7 @@ const props = defineProps({
 let plotCoords = ref([])
 let interestPointCoords = ref([])
 let farmCenter = ref([0,0])
+let noCoords = ref()
 
 onMounted(() => {
     console.log('Mounted Farm Page');
@@ -31,14 +32,12 @@ const getData = async () => {
     console.log('Getting data from server and/or local storage');
 
     const coords = await axios
-        .get("/farms/"+ props.farm.id + "/FarmMap")
+        .get("/farm/"+ props.farm.id + "/FarmMap")
         plotCoords.value = coords.data.plotCoords
         interestPointCoords.value = coords.data.interestPointCoords
         farmCenter.value = coords.data.farmCenter
+        noCoords.value = coords.data.noCoords
 
-    console.log(plotCoords)
-    console.log(interestPointCoords)
-    console.log(farmCenter)
 }
 
 </script>
