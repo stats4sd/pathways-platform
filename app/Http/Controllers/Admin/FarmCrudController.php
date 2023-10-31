@@ -72,7 +72,7 @@ class FarmCrudController extends CrudController
 
         CRUD::field('code');
         CRUD::field('year');
-        CRUD::field('num_phone');
+        CRUD::field('phone_number');
         CRUD::field('chef_upa');
         CRUD::field('chef_travaux');
         CRUD::field('neo_alphabete');
