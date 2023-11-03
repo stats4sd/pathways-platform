@@ -281,7 +281,7 @@ class FarmController extends Controller
 
         foreach($primaryCrops as $key => $primaryCrop){
             if(in_array($primaryCrop->id, array_keys($cropProductions))) {
-                $primaryCrop->production = $cropProductions[$primaryCrop->id][0];
+                $primaryCrop->production = round($cropProductions[$primaryCrop->id][0],1);
             }
             else {
                 unset($primaryCrops[$key]);
@@ -341,7 +341,7 @@ class FarmController extends Controller
         foreach($primaryCrops as $key => $primaryCrop){
             if(in_array($primaryCrop->id, array_keys($plotAreas))) {
                 $primaryCrop->area = $plotAreas[$primaryCrop->id];
-                $primaryCrop->yield = round($primaryCrop->production/$primaryCrop->area,3);
+                $primaryCrop->yield = round($primaryCrop->production/$primaryCrop->area,1);
             }
             else {
                 unset($primaryCrops[$key]);
