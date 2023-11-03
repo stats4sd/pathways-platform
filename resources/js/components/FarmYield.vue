@@ -7,7 +7,7 @@
                 </div>
                 <div class="text-left">
                     <b>{{ crop.label_bm }}<br>
-                        {{ crop.yield }} kg/taari</b>
+                        {{ crop.yield }} kg/ha</b>
                 </div>
             </div>
         </div>

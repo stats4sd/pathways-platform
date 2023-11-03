@@ -4,7 +4,7 @@
         <div class="card-header shadow mb-4">
             <div class="row my-4">
                 <div class="col ml-3"><b>Kɛnɛ mumɛ</b></div>   
-                <div class="col text-left"><b>{{ farmTotalArea }} taari</b></div>
+                <div class="col text-left"><b>{{ farmTotalArea }} ha</b></div>
             </div>
         </div>
 
@@ -19,7 +19,7 @@
                     </div>
                     <div class="text-left">
                         <b>{{ crop.label_bm }}<br>
-                            {{ crop.area }} taari</b>
+                            {{ crop.area }} ha</b>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="text-left">
                         <b>{{ crop.label_bm }}<br>
-                            {{ crop.area }} taari</b>
+                            {{ crop.area }} ha</b>
                     </div>
                 </div>
             </div>
