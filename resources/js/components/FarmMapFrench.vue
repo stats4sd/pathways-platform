@@ -99,13 +99,16 @@
 
                   Culture: 
                   <br/><b> {{ plot.main_crop_fr }}</b> <img :src="`/images/${plot.main_crop_image}`" height="30"><br/><br/>
-                  Cultures Associations:
+                                    
+                  <div v-if="plot.cultures_associations">
+                    Cultures Associations:
 
-                  <div v-for="crop in plot.associated_crops" :key="crop.crop_fr">
-                    <b> {{ crop.label_fr }}</b> <img :src="`/images/${crop.crop_image}`" height="30">
+                    <div v-for="crop in plot.associated_crops" :key="crop.crop_fr">
+                      <b> {{ crop.label_fr }}</b> <img :src="`/images/${crop.crop_image}`" height="30">
+                    </div>
+                    <br/><br/>
                   </div>
-
-                  <br/><br/>
+                  <div else><br/></div>
 
                   <a @click="fieldLevel=true; setFarmCenter(farmCenter)" href="#"><b>Retour aux champs</b></a>
             </l-popup>

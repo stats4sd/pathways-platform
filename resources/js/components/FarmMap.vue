@@ -99,13 +99,16 @@
 
                   Sɛnɛfen jɔnjɔn:
                   <br/><b> {{ plot.main_crop_bm }}</b> <img :src="`/images/${plot.main_crop_image}`" height="30"><br/><br/>
-                  Sɛnɛfen wɛrɛw:
-
-                  <div v-for="crop in plot.associated_crops" :key="crop.crop_bm">
-                    <b> {{ crop.label_bm }}</b> <img :src="`/images/${crop.crop_image}`" height="30">
-                  </div>
                   
-                  <br/><br/>
+                  <div v-if="plot.cultures_associations">
+                    Sɛnɛfen wɛrɛw:
+
+                    <div v-for="crop in plot.associated_crops" :key="crop.crop_bm">
+                      <b> {{ crop.label_bm }}</b> <img :src="`/images/${crop.crop_image}`" height="30">
+                    </div>
+                    <br/><br/>
+                  </div>
+                  <div else><br/></div>
 
                   <a @click="fieldLevel=true; setFarmCenter(farmCenter)" href="#"><b>Sɛkili kana kɛnɛw la</b></a>
             </l-popup>
