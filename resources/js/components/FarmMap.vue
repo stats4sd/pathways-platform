@@ -68,10 +68,12 @@
               :fillColor="plot.field_color"
           >
             <l-popup>
-                    Foro tɔgɔ ye di: <b> {{ plot.field.nom }}</b><br/><br/>
-                    Dugu kolo suguya: <b> {{ plot.field.type_sol }}</b><br/><br/>
-                    Kɛnɛ fɛcɛ cogo: <b> {{ plot.field.pente }}</b><br/><br/>
-                    Kɛnɛ mumɛ: <b> {{ plot.field.superficie_total }}</b><br/><br/>
+                    <h5><b>{{ plot.field.nom }}</b></h5><br/>
+
+                    <img src="/images/soil_type.jpg" height="20"/> Dugu kolo suguya: <b> {{ plot.field.type_sol_bm }}</b><br/><br/>
+                    <img src="/images/pente.jpg" height="20"/> Kɛnɛ fɛcɛ cogo: <b> {{ plot.field.pente_bm }}</b><br/><br/>
+                    <img src="/images/superf_champ.jpg" height="20"/> Kɛnɛ mumɛ: <b> {{ plot.field.superficie_total }} ha</b><br/><br/><br/>
+
                     <a @click="fieldLevel=false; selectedField=plot.field.id; setFieldCenter(plot.field.center)" href="#"><b>Kɛnɛ jirali fɔrɔ kɔnɔ</b></a>
             </l-popup>
           </l-polygon>
@@ -89,11 +91,22 @@
               :fillColor="plot.field_color"
           >
             <l-popup>
-                  Kɛnɛ N⁰: <b> {{ plot.numero_parcelle }}</b><br/><br/>
-                  Jiri sun hakɛ: <b> {{ plot.nombre_arbre }}</b><br/><br/>
-                  Sɛnɛfen jɔnjɔn: <b> {{ plot.crop_id }}</b><br/><br/>
-                  Sɛnɛfen wɛrɛw: <b> {{ plot.cultures_associations }}</b><br/><br/>
-                  Fɔrɔ: <b> {{ plot.superficie_measuree}}</b><br/><br/>
+                  <h5><b>Kɛnɛ N⁰ {{ plot.numero_parcelle }}</b></h5><br/>
+
+                  <img src="/images/fertilite.jpg" height="15"/> Jiri sun hakɛ: <b> {{ plot.fertilite_bm }}</b><br/><br/>
+                  <img src="/images/arbre.jpg" height="20"/> Jiri sun hakɛ: <b> {{ plot.nombre_arbre }}</b><br/><br/>
+                  <img src="/images/superf_unit.jpg" height="12"/> Fɔrɔ: <b> {{ plot.superficie_measuree}} ha</b><br/><br/><br/>
+
+                  Sɛnɛfen jɔnjɔn:
+                  <br/><b> {{ plot.main_crop_bm }}</b> <img :src="`/images/${plot.main_crop_image}`" height="30"><br/><br/>
+                  Sɛnɛfen wɛrɛw:
+
+                  <div v-for="crop in plot.associated_crops" :key="crop.crop_bm">
+                    <b> {{ crop.label_bm }}</b> <img :src="`/images/${crop.crop_image}`" height="30">
+                  </div>
+                  
+                  <br/><br/>
+
                   <a @click="fieldLevel=true; setFarmCenter(farmCenter)" href="#"><b>Sɛkili kana kɛnɛw la</b></a>
             </l-popup>
           </l-polygon>

@@ -39,7 +39,7 @@ Route::group([
     'middleware' => ['web', 'auth'],
 ], function () {
     Route::get('download/{path}', [FileController::class, 'download'])->where('path', '.*')->name('file.download');
-
+    Route::get('farm/{farm}/FarmMapFrench', [App\Http\Controllers\FarmController::class,'getFarmCoords']);
 });
 
 Route::group([

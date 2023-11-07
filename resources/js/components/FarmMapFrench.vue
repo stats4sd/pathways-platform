@@ -68,10 +68,12 @@
               :fillColor="plot.field_color"
           >
             <l-popup>
-                    Nom du champ: <b> {{ plot.field.nom }}</b><br/><br/>
-                    Type sol: <b> {{ plot.field.type_sol }}</b><br/><br/>
-                    Pente: <b> {{ plot.field.pente }}</b><br/><br/>
-                    Superficie total: <b> {{ plot.field.superficie_total }}</b><br/><br/>
+                    <h5><b>{{ plot.field.nom }}</b></h5><br/>
+
+                    <img src="/images/soil_type.jpg" height="20"/> Type sol: <b> {{ plot.field.type_sol }}</b><br/><br/>
+                    <img src="/images/pente.jpg" height="20"/> Pente: <b> {{ plot.field.pente }}</b><br/><br/>
+                    <img src="/images/superf_champ.jpg" height="20"/> Superficie total: <b> {{ plot.field.superficie_total }} ha</b><br/><br/><br/>
+                    
                     <a @click="fieldLevel=false; selectedField=plot.field.id; setFieldCenter(plot.field.center)" href="#"><b>Montrer les parcelles pour ce champ</b></a>
             </l-popup>
           </l-polygon>
@@ -89,11 +91,22 @@
               :fillColor="plot.field_color"
           >
             <l-popup>
-                  Numero Parcelle: <b> {{ plot.numero_parcelle }}</b><br/><br/>
-                  Nombre Abre: <b> {{ plot.nombre_arbre }}</b><br/><br/>
-                  Culture: <b> {{ plot.crop_id }}</b><br/><br/>
-                  Cultures Associations: <b> {{ plot.cultures_associations }}</b><br/><br/>
-                  Superficie: <b> {{ plot.superficie_measuree}}</b><br/><br/>
+                  <h5><b>Numero Parcelle {{ plot.numero_parcelle }}</b></h5><br/>
+
+                  <img src="/images/fertilite.jpg" height="15"/> Fertilite: <b> {{ plot.fertilite }}</b><br/><br/>
+                  <img src="/images/arbre.jpg" height="20"/> Nombre Abre: <b> {{ plot.nombre_arbre }}</b><br/><br/>
+                  <img src="/images/superf_unit.jpg" height="12"/> Superficie: <b> {{ plot.superficie_measuree}} ha</b><br/><br/><br/>
+
+                  Culture: 
+                  <br/><b> {{ plot.main_crop_fr }}</b> <img :src="`/images/${plot.main_crop_image}`" height="30"><br/><br/>
+                  Cultures Associations:
+
+                  <div v-for="crop in plot.associated_crops" :key="crop.crop_fr">
+                    <b> {{ crop.label_fr }}</b> <img :src="`/images/${crop.crop_image}`" height="30">
+                  </div>
+
+                  <br/><br/>
+
                   <a @click="fieldLevel=true; setFarmCenter(farmCenter)" href="#"><b>Retour aux champs</b></a>
             </l-popup>
           </l-polygon>

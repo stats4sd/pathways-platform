@@ -92,13 +92,56 @@ class FarmController extends Controller
 
             $plot->latlngs = $latlngs_plot_unique;
             
-            # include field details
+            // include field details
             $plot->load('field');
+
+            // include main crop details
+            $plot->main_crop_image = Crop::where('id', $plot->crop_id)->pluck('nom_fichier_image')->first();
+            $plot->main_crop_bm = Crop::where('id', $plot->crop_id)->pluck('label_bm')->first();
+            $plot->main_crop_fr = Crop::where('id', $plot->crop_id)->pluck('label_fr')->first();
+
+            // include associated crop details
+            $associated_crops = explode(' ', $plot->cultures_associations);
+            $associated_crops_details = [];
+
+            foreach($associated_crops as $associated_crop) {
+                $crop_image = Crop::where('id', $associated_crop)->pluck('nom_fichier_image')->first();
+                $crop_bm = Crop::where('id', $associated_crop)->pluck('label_bm')->first();
+                $crop_fr = Crop::where('id', $associated_crop)->pluck('label_fr')->first();
+
+                $associated_crops_details[]=['crop_image' => $crop_image, 'label_bm' => $crop_bm, 'label_fr' => $crop_fr];
+            }
+
+            $plot->associated_crops = $associated_crops_details;
+
+            // inlcude plot fertility bm label
+            if($plot->fertilite === 'pauvre') {$plot->fertilite_bm = 'Sɛngɛlen';}
+            elseif($plot->fertilite === 'moyen') {$plot->fertilite_bm = 'Camancɛ';}
+            elseif($plot->fertilite === 'fertile') {$plot->fertilite_bm = 'Fangama';}
+            else {$plot->fertilite_bm = $plot->fertilite;}
+
+            // inlcude field soil type bm label
+            if($plot->field->type_sol === 'sable') {$plot->field->type_sol_bm = 'Cɛncɛn';}
+            elseif($plot->field->type_sol === 'gravillon') {$plot->field->type_sol_bm = 'Bɛlɛ';}
+            elseif($plot->field->type_sol === 'argile') {$plot->field->type_sol_bm = 'Bɔgɔ';}
+            else {$plot->field->type_sol_bm = $plot->field->type_sol;}
+            
+            // inlcude field slope bm label
+            if($plot->field->pente === 'plat') {$plot->field->pente_bm = 'Dalen';}
+            elseif($plot->field->pente === 'incline') {$plot->field->pente_bm = 'Jɛgɛlen';}
+            elseif($plot->field->pente === 'escarpe') {$plot->field->pente_bm = 'Jɔlen';}
+            else {$plot->field->pente_bm = $plot->field->pente;}
+
+
+            // add rounding to area
+            $plot->superficie_measuree = round(floatval($plot->superficie_measuree),1);
+            $plot->field->superficie_total = round(floatval($plot->field->superficie_total),1);
 
             return $plot;
         });
 
-        # incldue field color
+
+        // incldue field color
         $colors = ["#b877e6", "#41b782", '#77dbe6', '#e6ba77', '#8077e6', '#77e6cc', 
                     '#d9e677', '#e67777', '#7be677', '#e677dd', '#77b8e6', '#e67d77'];
         $field_colors = [];
@@ -122,7 +165,7 @@ class FarmController extends Controller
         $interestPointCoords = $interestPointCoords->map(function($point) {
             $point->latlng = ['lat' => $point->latitude, 'lng' => $point->longitude];
             
-            # include icon
+            // include icon
             $point->icon = Storage::disk('public')->URL('images/'.strtolower(str_replace(' ', '_', $point->nom)).'.png');
             
             return $point;
@@ -143,11 +186,11 @@ class FarmController extends Controller
         $field_ids = $farm->fields()->pluck('id');
         $plots = Plot::whereIn('field_id', $field_ids)->get();
         
-        // TOTAL AREA (SUPERFICIE) ALL CROPS
+        # TOTAL AREA (SUPERFICIE) ALL CROPS
 
         $totalArea = $farm->fields->sum('superficie_total');
 
-        // AREA PER PRIMARY CROP
+        # AREA PER PRIMARY CROP
 
         $primaryCrops = Crop::where('type', 'primaire')->select('id', 'label_bm', 'nom_fichier_image', 'order')->get()->sortBy('order');
         $primaryCropIds = $primaryCrops->pluck('id')->toArray();
@@ -171,7 +214,7 @@ class FarmController extends Controller
             }
         }
 
-        // AREA PER SECONDARY CROP
+        # AREA PER SECONDARY CROP
 
         $secondaryCrops = Crop::where('type', 'secondaire')->select('id', 'label_bm', 'nom_fichier_image', 'order')->get()->sortBy('order');
         $secondaryCropIds = $secondaryCrops->pluck('id')->toArray();
@@ -205,7 +248,7 @@ class FarmController extends Controller
     
     public static function getFarmCosts(Farm $farm)
     {
-        // TOTAL COST
+        # TOTAL COST
         $plantingTotalCost = $farm->plantings->sum('cout_total');
         $postPlantingTotalCost = $farm->postPlantings->sum('cout_total');
         $harvestTotalCost = $farm->harvests->sum('cout_total');
@@ -213,7 +256,7 @@ class FarmController extends Controller
         $totalCost = $plantingTotalCost + $postPlantingTotalCost + $harvestTotalCost;
 
 
-        // COST PER CROP
+        # COST PER CROP
 
         $primaryCrops = Crop::where('type', 'primaire')->select('id', 'label_bm', 'nom_fichier_image', 'order')->get()->sortBy('order');
         $primaryCropIds = $primaryCrops->pluck('id')->toArray();
@@ -264,7 +307,7 @@ class FarmController extends Controller
 
     public static function getFarmProduction(Farm $farm)
     {
-        // PRODUCTION PER CROP
+        # PRODUCTION PER CROP
 
         $primaryCrops = Crop::where('type', 'primaire')->select('id', 'label_bm', 'nom_fichier_image', 'order')->get()->sortBy('order');
         $primaryCropIds = $primaryCrops->pluck('id')->toArray();
@@ -296,7 +339,7 @@ class FarmController extends Controller
 
     public static function getFarmYield(Farm $farm)
     {
-        // PRODUCTION
+        # PRODUCTION
 
         $primaryCrops = Crop::where('type', 'primaire')->select('id', 'label_bm', 'nom_fichier_image', 'order')->get()->sortBy('order');
         $primaryCropIds = $primaryCrops->pluck('id')->toArray();
@@ -321,7 +364,7 @@ class FarmController extends Controller
         }
 
 
-        // AREA
+        # AREA
 
         $field_ids = $farm->fields()->pluck('id');
         $plots = Plot::whereIn('field_id', $field_ids)->get();
