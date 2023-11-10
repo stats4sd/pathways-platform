@@ -298,6 +298,63 @@ class FarmController extends Controller
             }
         }
 
+
+        # CROP INDIVIDUAL COSTS
+
+        $cropIndividualCosts = [];
+
+        foreach($farm->plantings as $planting){
+            foreach($planting->plantingDetails as $plantingDetail){
+                if(in_array($plantingDetail['crop_id'], $primaryCropIds)) {
+                    $cropIndividualCosts[$plantingDetail['crop_id']]['Tolinɔgɔ donisara'][] = $plantingDetail['cout_transport'];
+                    $cropIndividualCosts[$plantingDetail['crop_id']]['Faranɔgɔ sɔngɔ'][] = $plantingDetail['cout_chaux_agricole'];
+                    $cropIndividualCosts[$plantingDetail['crop_id']]['Burɛmunɔgɔ sɔngɔ'][] = $plantingDetail['cout_pnt_png'];
+                    $cropIndividualCosts[$plantingDetail['crop_id']]['Laburu sara sɔngɔ'][] = $plantingDetail['cout_superficie_labouree'];
+                    $cropIndividualCosts[$plantingDetail['crop_id']]['Dannisi sannen sɔngɔ'][] = $plantingDetail['cout_semence_achetee'];
+                    $cropIndividualCosts[$plantingDetail['crop_id']]['Binnagasi kɔli donnen sɔngɔ'][] = $plantingDetail['cout_herbicide_prelevee'];
+                }
+            }
+        }
+
+        foreach($farm->postPlantings as $postPlanting){
+            foreach($postPlanting->postPlantingDetails as $postPlantingDetail){
+                if(in_array($postPlantingDetail['crop_id'], $primaryCropIds)) {
+                    $cropIndividualCosts[$postPlantingDetail['crop_id']]['Coût total prestation sarclage'][] = $postPlantingDetail['cout_sarclage'];
+                    $cropIndividualCosts[$postPlantingDetail['crop_id']]['Siɲɛli sarala sɔngɔ'][] = $postPlantingDetail['cout_desherbage'];
+                    $cropIndividualCosts[$postPlantingDetail['crop_id']]['Nɔgɔfin mɔninkuru sɔngɔ'][] = $postPlantingDetail['cout_npk'];
+                    $cropIndividualCosts[$postPlantingDetail['crop_id']]['Sɛgɛnin donnen sɔngɔ'][] = $postPlantingDetail['cout_uree'];
+                    $cropIndividualCosts[$postPlantingDetail['crop_id']]['Binkɔrɔ fagalan donnen sɔngɔ'][] = $postPlantingDetail['cout_herbicide'];
+                    $cropIndividualCosts[$postPlantingDetail['crop_id']]['Kɔrɔbarili kɛlen sara la sɔngɔ'][] = $postPlantingDetail['cout_buttage'];
+                    $cropIndividualCosts[$postPlantingDetail['crop_id']]['Bagaji donnen sɔngɔ'][] = $postPlantingDetail['cout_insecticide'];
+                }
+            }
+        }
+
+        foreach($farm->harvests as $harvest){
+            foreach($harvest->harvestDetails as $harvestDetail){
+                if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
+                    $cropIndividualCosts[$harvestDetail['crop_id']]['Bɔli wali tigɛli sara sɔngɔ'][]= $harvestDetail['cout_total_prestation_recolte'];
+                    $cropIndividualCosts[$harvestDetail['crop_id']]['Ɲɔ gosi sara sɔngɔ'][]= $harvestDetail['cout_total_battage'];
+                }
+            }
+        }
+
+        $cropIndividualCostsSummed=[];
+
+        foreach($cropIndividualCosts as $key => $crop) {
+                $cost = array_map('array_sum', $crop);
+                $cropIndividualCostsSummed[$key] = $cost;
+        }
+
+        foreach($primaryCrops as $key => $primaryCrop){
+            if(in_array($primaryCrop->id, array_keys($cropIndividualCostsSummed))) {
+                $primaryCrop->individual_costs = $cropIndividualCostsSummed[$primaryCrop->id];
+            }
+            else {
+                unset($primaryCrops[$key]);
+            }
+        }
+
         return[
             "totalCost" => $totalCost,
             "cropCosts" => $primaryCrops
