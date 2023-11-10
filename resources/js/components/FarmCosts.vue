@@ -22,7 +22,7 @@
                             </div>
                         </div>
                     </button>
-                <div v-if="selectedCrop==crop.id" class="mt-3 mb-5">
+                <div v-if="selectedCrop==crop.id" class="card shadow rounded-1 mt-n3 pt-3 mb-5" style="border-radius: 20px">
                     <div v-for="(cost, name) in crop.individual_costs" :key="cost">
                         <div class="row">
                             <div class="col-7 text-left ml-4">
