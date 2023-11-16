@@ -57,7 +57,7 @@
                         @click="showProduction=true; showDashboard=false">
                         <div class="row">
                             <div class="col">
-                                <img :src="`/images/coins_icon.png`" height="60"/>
+                                <img :src="`/images/production_icon.png`" height="60"/>
                             </div>
                             <div class="col text-left pt-3">
                                 <h5>SƆRƆ KUNBA</h5>
@@ -72,7 +72,7 @@
                         @click="showYield=true; showDashboard=false">
                         <div class="row">
                             <div class="col">
-                                <img :src="`/images/coins_icon.png`" height="60"/>
+                                <img :src="`/images/yield_icon.png`" height="60"/>
                             </div>
                             <div class="col text-left pt-3">
                                 <h5>SƆRƆ LAKIKA</h5>
@@ -204,7 +204,7 @@
             <div class="card-header bg-success mb-4">
                 <div class="row">
                     <div class="col-5 pl-5">
-                        <img :src="`/images/coins_icon.png`" height="60"/>
+                        <img :src="`/images/production_icon.png`" height="60"/>
                     </div>
                     <div class="col text-left pt-3">
                         <h3>SƆRƆ KUNBA</h3>
@@ -237,7 +237,7 @@
             <div class="card-header bg-primary mb-4">
                 <div class="row">
                     <div class="col-5">
-                        <img :src="`/images/coins_icon.png`" height="60"/>
+                        <img :src="`/images/yield_icon.png`" height="60"/>
                     </div>
                     <div class="col text-left pt-3">
                         <h3>SƆRƆ LAKIKA</h3>
