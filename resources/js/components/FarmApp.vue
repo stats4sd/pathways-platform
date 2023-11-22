@@ -88,7 +88,7 @@
                         <i class="la la-home"></i>
                     </button>
                 </a>
-                <button class="btn btn-info mr-2 my-2" type="button">
+                <button class="btn btn-info mr-2 my-2" type="button" @click="dashboard_audio.play()">
                     <i class="la la-volume-up"></i>
                 </button>
                 <form method="POST" :action="logoutRoute" class="btn">
@@ -121,7 +121,7 @@
                         <i class="la la-home"></i>
                     </button>
                 </a>
-                <button class="btn btn-info mr-2 my-2" type="button">
+                <button class="btn btn-info mr-2 my-2" type="button" @click="map_audio.play()">
                     <i class="la la-volume-up"></i>
                 </button>
                 <form method="POST" :action="logoutRoute" class="btn">
@@ -154,7 +154,7 @@
                         <i class="la la-home"></i>
                     </button>
                 </a>
-                <button class="btn btn-info mr-2 my-2" type="button">
+                <button class="btn btn-info mr-2 my-2" type="button"  @click="area_audio.play()">
                     <i class="la la-volume-up"></i>
                 </button>
                 <form method="POST" :action="logoutRoute" class="btn">
@@ -187,7 +187,7 @@
                         <i class="la la-home"></i>
                     </button>
                 </a>
-                <button class="btn btn-info mr-2 my-2" type="button">
+                <button class="btn btn-info mr-2 my-2" type="button"  @click="costs_audio.play()">
                     <i class="la la-volume-up"></i>
                 </button>
                 <form method="POST" :action="logoutRoute" class="btn">
@@ -220,7 +220,7 @@
                         <i class="la la-home"></i>
                     </button>
                 </a>
-                <button class="btn btn-info mr-2 my-2" type="button">
+                <button class="btn btn-info mr-2 my-2" type="button" @click="production_audio.play()">
                     <i class="la la-volume-up"></i>
                 </button>
                 <form method="POST" :action="logoutRoute" class="btn">
@@ -253,7 +253,7 @@
                         <i class="la la-home"></i>
                     </button>
                 </a>
-                <button class="btn btn-info mr-2 my-2" type="button">
+                <button class="btn btn-info mr-2 my-2" type="button" @click="yield_audio.play()">
                     <i class="la la-volume-up"></i>
                 </button>
                 <form method="POST" :action="logoutRoute" class="btn">
@@ -304,6 +304,12 @@ let farmTotalCost = ref([])
 let farmCropCosts = ref([])
 let farmProduction = ref([])
 let farmYield = ref([])
+
+let dashboard_audio = new Audio('/audio/dashboard_bm.mp3')
+let area_audio = new Audio('/audio/area_bm.mp3')
+let costs_audio = new Audio('/audio/costs_bm.mp3')
+let production_audio = new Audio('/audio/production_bm.mp3')
+let yield_audio = new Audio('/audio/yield_bm.mp3')
 
 onMounted(() => {
     console.log('Mounted Farm Page');
