@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\AuthenticatedSessionFarmerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 
@@ -37,9 +39,38 @@ Route::group([
     'middleware' => ['web', 'auth'],
 ], function () {
     Route::get('download/{path}', [FileController::class, 'download'])->where('path', '.*')->name('file.download');
+    Route::get('farm/{farm}/FarmMapFrench', [App\Http\Controllers\FarmController::class,'getFarmCoords']);
+});
+
+Route::group([
+    'middleware' => ['web', 'auth', 'farm.auth'],
+], function () {
+    Route::get('farm/{farm}', [App\Http\Controllers\FarmController::class, 'show']);
+    Route::get('farm/{farm}/FarmMap', [App\Http\Controllers\FarmController::class,'getFarmCoords']);
+    Route::get('farm/{farm}/FarmArea', [App\Http\Controllers\FarmController::class,'getFarmArea']);
+    Route::get('farm/{farm}/FarmCosts', [App\Http\Controllers\FarmController::class,'getFarmCosts']);
+    Route::get('farm/{farm}/FarmProduction', [App\Http\Controllers\FarmController::class,'getFarmProduction']);
+    Route::get('farm/{farm}/FarmYield', [App\Http\Controllers\FarmController::class,'getFarmYield']);
 
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+// overwrite login routes
+    Route::get('login', [AuthenticatedSessionFarmerController::class, 'create'])
+                ->name('login');
+
+    Route::post('login', [AuthenticatedSessionFarmerController::class, 'store'])
+    ->name('post-login');
+
+
+// farmer authentication
+Route::get('login-researcher', [AuthenticatedSessionController::class, 'create'])
+    ->name('login-researcher')
+    ->middleware('guest');
+
+Route::post('login-researcher', [AuthenticatedSessionController::class, 'store'])
+    ->name('post-login-researcher')
+    ->middleware('guest');
 
 Route::post('admin/submissions/process', [SubmissionController::class, 'process'])->name('submission.process');

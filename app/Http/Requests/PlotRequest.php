@@ -28,10 +28,10 @@ class PlotRequest extends FormRequest
             'id' => 'nullable|integer',
             'field_id' => 'required',
             'numero_parcelle' => 'required',
-            'nombre_abre' => 'nullable',
+            'nombre_arbre' => 'nullable',
             'fertilite' => 'nullable',
             'crop_id' => 'required',
-            'associated_crops' => 'nullable',
+            'cultures_associations' => 'nullable',
             'superficie_estimee' => 'nullable',
             'superficie_measuree' => 'nullable',
             'trace_superficie' => 'nullable'

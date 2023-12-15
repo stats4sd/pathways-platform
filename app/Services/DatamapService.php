@@ -43,6 +43,9 @@ class DatamapService
             $data = $this->prepareDataArray($submission);
             $data = $this->removeGroupNames($data);
 
+            $data['code'] = $data['camera_scane'];
+            $data['phone_number'] = $data['num_phone'];
+            
             $entries = [];
             
             if($data['consentement_question']=='non') {
@@ -424,7 +427,7 @@ class DatamapService
 
                     foreach ($data['parcelles'] as $plotData) {
 
-                        if($plotData['culture']=='999' | $plotData['culture']=='998') {
+                        if($plotData['culture']=='999') {
 
                             $newCrop = [];
                             $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $plotData['culture_label']));
@@ -441,19 +444,19 @@ class DatamapService
 
                             $plotData['field_id'] = $field->id;
                             $plotData['crop_id'] = $newCrop['id'];
-                            $plotData['associated_crops'] = 
                             $plotData['superficie_estimee'] = $plotData['superficie'];
                             $plotData['superficie_measuree'] = $plotData['surface_h'];
+                            $plotData['trace_superficie'] = $plotData['trace_superficie']['coordinates'][0];
 
                             if(isset($plotData['autre_cult_associe_1'])) {
 
-                                $plotData['cultures_associations'] = str_replace('autre1', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
+                                $plotData['cultures_associations'] = str_replace('997', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
                                 
                             }
                 
                             if(isset($plotData['autre_cult_associe_2'])) {
                 
-                                $plotData['cultures_associations'] = str_replace('autre2', $plotData['autre_cult_associe_2'], $plotData['cultures_associations']);
+                                $plotData['cultures_associations'] = str_replace('998', $plotData['autre_cult_associe_2'], $plotData['cultures_associations']);
                                 
                             }
 
@@ -469,16 +472,17 @@ class DatamapService
                                 $plotData['crop_id'] = $plotData['culture'];
                                 $plotData['superficie_estimee'] = $plotData['superficie'];
                                 $plotData['superficie_measuree'] = $plotData['surface_h'];
+                                $plotData['trace_superficie'] = $plotData['trace_superficie']['coordinates'][0];
 
                                 if(isset($plotData['autre_cult_associe_1'])) {
 
-                                    $plotData['cultures_associations'] = str_replace('autre1', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
+                                    $plotData['cultures_associations'] = str_replace('997', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
                                     
                                 }
                     
                                 if(isset($plotData['autre_cult_associe_2'])) {
                     
-                                    $plotData['cultures_associations'] = str_replace('autre2', $plotData['autre_cult_associe_2'], $plotData['cultures_associations']);
+                                    $plotData['cultures_associations'] = str_replace('998', $plotData['autre_cult_associe_2'], $plotData['cultures_associations']);
                                     
                                 }
         
@@ -492,7 +496,9 @@ class DatamapService
                     }
 
                     $entries[Plot::class] = $plots;
-                    $entries[Crop::class] = $crops;
+                    if (!empty($crops)) {
+                        $entries[Crop::class] = $crops;
+                    }
 
                 }
 
