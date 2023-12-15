@@ -306,6 +306,7 @@ let farmProduction = ref([])
 let farmYield = ref([])
 
 let dashboard_audio = new Audio('/audio/dashboard_bm.mp3')
+let map_audio = new Audio('/audio/map_bm.mp3')
 let area_audio = new Audio('/audio/area_bm.mp3')
 let costs_audio = new Audio('/audio/costs_bm.mp3')
 let production_audio = new Audio('/audio/production_bm.mp3')
