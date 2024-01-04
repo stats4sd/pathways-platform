@@ -55,7 +55,7 @@
     </div>
 
     <div class="text-center">
-        {{ $alternateLogin }}
+        {{ $alternateLogin ?? null }}
     </div>
 </div>
 </body>
