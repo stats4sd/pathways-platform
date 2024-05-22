@@ -246,12 +246,12 @@ class FarmController extends Controller
 
     }
     
-    public static function getFarmCosts(Farm $farm)
+    public static function getFarmCosts(Farm $farm, $year)
     {
         # TOTAL COST
-        $plantingTotalCost = $farm->plantings->sum('cout_total');
-        $postPlantingTotalCost = $farm->postPlantings->sum('cout_total');
-        $harvestTotalCost = $farm->harvests->sum('cout_total');
+        $plantingTotalCost = $farm->plantings()->where('year', $year)->sum('cout_total');
+        $postPlantingTotalCost = $farm->postPlantings()->where('year', $year)->sum('cout_total');
+        $harvestTotalCost = $farm->harvests()->where('year', $year)->sum('cout_total');
 
         $totalCost = $plantingTotalCost + $postPlantingTotalCost + $harvestTotalCost;
 
@@ -263,7 +263,7 @@ class FarmController extends Controller
 
         $cropCosts = [];
 
-        foreach($farm->plantings as $planting){
+        foreach($farm->plantings()->where('year', $year)->get() as $planting){
             foreach($planting->plantingDetails as $plantingDetail){
                 if(in_array($plantingDetail['crop_id'], $primaryCropIds)) {
                     $cropCosts[$plantingDetail['crop_id']][]= $plantingDetail['cout'];
@@ -271,7 +271,7 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->postPlantings as $postPlanting){
+        foreach($farm->postPlantings()->where('year', $year)->get() as $postPlanting){
             foreach($postPlanting->postPlantingDetails as $postPlantingDetail){
                 if(in_array($postPlantingDetail['crop_id'], $primaryCropIds)) {
                     $cropCosts[$postPlantingDetail['crop_id']][] = $postPlantingDetail['cout'];
@@ -279,7 +279,7 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->harvests as $harvest){
+        foreach($farm->harvests()->where('year', $year)->get() as $harvest){
             foreach($harvest->harvestDetails as $harvestDetail){
                 if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
                     $cropCosts[$harvestDetail['crop_id']][]= $harvestDetail['cout'];
@@ -303,7 +303,7 @@ class FarmController extends Controller
 
         $cropIndividualCosts = [];
 
-        foreach($farm->plantings as $planting){
+        foreach($farm->plantings()->where('year', $year)->get() as $planting){
             foreach($planting->plantingDetails as $plantingDetail){
                 if(in_array($plantingDetail['crop_id'], $primaryCropIds)) {
                     $cropIndividualCosts[$plantingDetail['crop_id']]['Tolinɔgɔ donisara'][] = $plantingDetail['cout_transport'];
@@ -316,7 +316,7 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->postPlantings as $postPlanting){
+        foreach($farm->postPlantings()->where('year', $year)->get() as $postPlanting){
             foreach($postPlanting->postPlantingDetails as $postPlantingDetail){
                 if(in_array($postPlantingDetail['crop_id'], $primaryCropIds)) {
                     $cropIndividualCosts[$postPlantingDetail['crop_id']]['Coût total prestation sarclage'][] = $postPlantingDetail['cout_sarclage'];
@@ -330,7 +330,7 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->harvests as $harvest){
+        foreach($farm->harvests()->where('year', $year)->get() as $harvest){
             foreach($harvest->harvestDetails as $harvestDetail){
                 if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
                     $cropIndividualCosts[$harvestDetail['crop_id']]['Bɔli wali tigɛli sara sɔngɔ'][]= $harvestDetail['cout_total_prestation_recolte'];

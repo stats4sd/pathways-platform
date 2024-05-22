@@ -179,7 +179,8 @@
                 </div>
             </div>
     
-            <FarmCosts :farm-total-cost="farmTotalCost" :farm-crop-costs="farmCropCosts" />
+            <FarmCosts :farm-total-cost="farmTotalCost" :farm-crop-costs="farmCropCosts" :years="years"
+                :selected-year="selectedYear" @updateYear="updateYear" />
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -334,9 +335,10 @@ const getData = async (year) => {
         farmPrimaryArea.value = area.data.primaryArea
         farmSecondaryArea.value = area.data.secondaryArea
 
-    const costs = await axios.get("/farm/"+ props.farm.id + "/FarmCosts")
-        farmTotalCost.value = costs.data.totalCost
-        farmCropCosts.value = costs.data.cropCosts
+    const costsResponse = await axios.get(`/farm/${props.farm.id}/FarmCosts/${year}`);
+        console.log('API Costs Response:', costsResponse.data);
+        farmTotalCost.value = costsResponse.data.totalCost;
+        farmCropCosts.value = costsResponse.data.cropCosts;
 
     const productionResponse = await axios.get(`/farm/${props.farm.id}/FarmProduction/${year}`);
         console.log('API Production Response:', productionResponse.data);
