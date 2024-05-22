@@ -212,7 +212,7 @@
                 </div>
             </div>
 
-            <FarmProduction :farm-production="farmProduction" />
+            <FarmProduction :farm-production="farmProduction" :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -305,6 +305,9 @@ let farmCropCosts = ref([])
 let farmProduction = ref([])
 let farmYield = ref([])
 
+let selectedYear = ref(new Date().getFullYear());
+let years = ref([2023, 2024]);
+
 let dashboard_audio = new Audio('/audio/dashboard_bm.mp3')
 let map_audio = new Audio('/audio/map_bm.mp3')
 let area_audio = new Audio('/audio/area_bm.mp3')
@@ -313,11 +316,11 @@ let production_audio = new Audio('/audio/production_bm.mp3')
 let yield_audio = new Audio('/audio/yield_bm.mp3')
 
 onMounted(() => {
+    getData(selectedYear.value);
     console.log('Mounted Farm Page');
-    getData()
 })
 
-const getData = async () => {
+const getData = async (year) => {
     console.log('Getting data from server and/or local storage');
 
     const coords = await axios
@@ -338,13 +341,21 @@ const getData = async () => {
         farmTotalCost.value = costs.data.totalCost
         farmCropCosts.value = costs.data.cropCosts
 
-    const production = await axios
-        .get("/farm/"+ props.farm.id + "/FarmProduction")
-        farmProduction.value = production.data
-        
-        const fyield = await axios
-        .get("/farm/"+ props.farm.id + "/FarmYield")
-        farmYield.value = fyield.data
+    const url = `/farm/${props.farm.id}/FarmProduction/${year}`;
+        console.log('Fetching data from URL:', url);
+
+        try {
+            const response = await axios.get(url);
+            console.log('API Response:', response.data);
+            farmProduction.value = response.data;
+        } catch (error) {
+            console.error('Error fetching farm production data:', error);
+        }
 }
+
+const updateYear = async (year) => {
+  selectedYear.value = year;
+  getData(year);
+};
 
 </script>
