@@ -245,7 +245,7 @@
                 </div>
             </div>
 
-            <FarmYield :farm-yield="farmYield" />
+            <FarmYield :farm-yield="farmYield" :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -323,34 +323,28 @@ onMounted(() => {
 const getData = async (year) => {
     console.log('Getting data from server and/or local storage');
 
-    const coords = await axios
-        .get("/farm/"+ props.farm.id + "/FarmMap")
+    const coords = await axios.get("/farm/"+ props.farm.id + "/FarmMap")
         plotCoords.value = coords.data.plotCoords
         interestPointCoords.value = coords.data.interestPointCoords
         farmCenter.value = coords.data.farmCenter
         noCoords.value = coords.data.noCoords
 
-    const area = await axios
-        .get("/farm/"+ props.farm.id + "/FarmArea")
+    const area = await axios.get("/farm/"+ props.farm.id + "/FarmArea")
         farmTotalArea.value = area.data.totalArea
         farmPrimaryArea.value = area.data.primaryArea
         farmSecondaryArea.value = area.data.secondaryArea
 
-    const costs = await axios
-        .get("/farm/"+ props.farm.id + "/FarmCosts")
+    const costs = await axios.get("/farm/"+ props.farm.id + "/FarmCosts")
         farmTotalCost.value = costs.data.totalCost
         farmCropCosts.value = costs.data.cropCosts
 
-    const url = `/farm/${props.farm.id}/FarmProduction/${year}`;
-        console.log('Fetching data from URL:', url);
+    const productionResponse = await axios.get(`/farm/${props.farm.id}/FarmProduction/${year}`);
+        console.log('API Production Response:', productionResponse.data);
+        farmProduction.value = productionResponse.data;
 
-        try {
-            const response = await axios.get(url);
-            console.log('API Response:', response.data);
-            farmProduction.value = response.data;
-        } catch (error) {
-            console.error('Error fetching farm production data:', error);
-        }
+    const yieldResponse = await axios.get(`/farm/${props.farm.id}/FarmYield/${year}`);
+        console.log('API Yield Response:', yieldResponse.data);
+        farmYield.value = yieldResponse.data;
 }
 
 const updateYear = async (year) => {

@@ -394,7 +394,7 @@ class FarmController extends Controller
         
     }
 
-    public static function getFarmYield(Farm $farm)
+    public static function getFarmYield(Farm $farm, $year)
     {
         # PRODUCTION
 
@@ -403,7 +403,7 @@ class FarmController extends Controller
 
         $cropProductions = [];
 
-        foreach($farm->harvests as $harvest){
+        foreach($farm->harvests()->where('year', $year)->get() as $harvest){
             foreach($harvest->harvestDetails as $harvestDetail){
                 if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
                     $cropProductions[$harvestDetail['crop_id']][]= $harvestDetail['production'];
