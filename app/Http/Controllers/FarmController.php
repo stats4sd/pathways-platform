@@ -159,6 +159,7 @@ class FarmController extends Controller
         # INTEREST POINTS
         $interestPointCoords = $farm
                                 ->interestPoints()
+                                ->where('year', $year)
                                 ->select('id', 'nom', 'longitude', 'latitude')
                                 ->get();
 
@@ -423,7 +424,7 @@ class FarmController extends Controller
 
         # AREA
 
-        $field_ids = $farm->fields()->pluck('id');
+        $field_ids = $farm->fields()->where('year', $year)->pluck('id');
         $plots = Plot::whereIn('field_id', $field_ids)->get();
 
         $primaryCropIds = $primaryCrops->pluck('id')->toArray();
