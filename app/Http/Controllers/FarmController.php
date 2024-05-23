@@ -75,7 +75,7 @@ class FarmController extends Controller
         
         # PLOTS
         
-        $field_ids = $farm->fields()->pluck('id');
+        $field_ids = $farm->fields->pluck('id');
 
         $plots = Plot::whereIn('field_id', $field_ids)->get();
         
@@ -181,14 +181,14 @@ class FarmController extends Controller
 
     }
 
-    public static function getFarmArea(Farm $farm)
+    public static function getFarmArea(Farm $farm, $year)
     {
-        $field_ids = $farm->fields()->pluck('id');
+        $field_ids = $farm->fields()->where('year', $year)->pluck('id');
         $plots = Plot::whereIn('field_id', $field_ids)->get();
         
         # TOTAL AREA (SUPERFICIE) ALL CROPS
 
-        $totalArea = $farm->fields->sum('superficie_total');
+        $totalArea = $farm->fields->where('year', $year)->sum('superficie_total');
 
         # AREA PER PRIMARY CROP
 

@@ -1,14 +1,27 @@
 <template>
     <div>
-        
-        <div class="card-header shadow mb-4">
+        <div class="row mb-5">
+      <div class="col-12 d-flex justify-content-between align-items-center mt-4">
+        <div>
+          <button class="btn btn-info dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="la la-calendar"></i> {{ localSelectedYear }}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="yearDropdown">
+            <a class="dropdown-item" v-for="year in years" :key="year" @click="selectYear(year)">{{ year }}</a>
+          </div>
+        </div>
+      </div>
+</div>
+
+
+        <div v-if="farmTotalArea" class="card-header shadow mb-4">
             <div class="row my-4">
                 <div class="col ml-3"><b>Kɛnɛ mumɛ</b></div>   
                 <div class="col text-left"><b>{{ farmTotalArea }} ha</b></div>
             </div>
         </div>
 
-        <div class="mt-5">
+        <div v-if="hasPrimaryArea" class="mt-5">
             <b>Sɛnɛfen jɔnjɔn kelen-kelen kɛnɛ</b>
         </div>
         <div>
@@ -26,7 +39,7 @@
         </div>
         
         <br>
-        <div class="mt-3">
+        <div v-if="hasSecondaryArea" class="mt-3">
             <b>Sɛnɛfen wɛrɛw kelen-kelen kɛnɛ</b>
         </div>
         <div>
@@ -47,11 +60,30 @@
 </template>
 
 <script setup>
+import { ref, defineProps, defineEmits, watch, computed } from 'vue';
+import axios from 'axios';
 
 const props = defineProps({
-    farmTotalArea: Object,
+    farmTotalArea: Number,
     farmPrimaryArea: Object,
-    farmSecondaryArea: Object
+    farmSecondaryArea: Object,
+    selectedYear: Number,
+    years: Array
 });
+
+const emit = defineEmits(['updateYear']);
+const localSelectedYear = ref(props.selectedYear);
+
+const selectYear = (year) => {
+    localSelectedYear.value = year;
+    emit('updateYear', year);
+};
+
+watch(() => props.selectedYear, (newYear) => {
+    localSelectedYear.value = newYear;
+});
+
+const hasPrimaryArea = computed(() => props.farmPrimaryArea && props.farmPrimaryArea.length > 0);
+const hasSecondaryArea = computed(() => props.farmSecondaryArea && props.farmSecondaryArea.length > 0);
 
 </script>

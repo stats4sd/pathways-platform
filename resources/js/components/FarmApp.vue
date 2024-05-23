@@ -146,7 +146,8 @@
                 </div>
             </div>
             
-            <FarmArea :farm-total-area="farmTotalArea" :farm-primary-area="farmPrimaryArea" :farm-secondary-area="farmSecondaryArea" />
+            <FarmArea :farm-total-area="farmTotalArea" :farm-primary-area="farmPrimaryArea" :farm-secondary-area="farmSecondaryArea"
+                :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -330,10 +331,11 @@ const getData = async (year) => {
         farmCenter.value = coords.data.farmCenter
         noCoords.value = coords.data.noCoords
 
-    const area = await axios.get("/farm/"+ props.farm.id + "/FarmArea")
-        farmTotalArea.value = area.data.totalArea
-        farmPrimaryArea.value = area.data.primaryArea
-        farmSecondaryArea.value = area.data.secondaryArea
+    const areaResponse = await axios.get(`/farm/${props.farm.id}/FarmArea/${year}`);
+        console.log('API Area Response:', areaResponse.data);
+        farmTotalArea.value = areaResponse.data.totalArea
+        farmPrimaryArea.value = areaResponse.data.primaryArea
+        farmSecondaryArea.value = areaResponse.data.secondaryArea
 
     const costsResponse = await axios.get(`/farm/${props.farm.id}/FarmCosts/${year}`);
         console.log('API Costs Response:', costsResponse.data);
