@@ -113,7 +113,8 @@
                 </div>
             </div>
 
-            <FarmMap :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter" :no-coords="noCoords"/>
+            <FarmMap :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter" :no-coords="!!noCoords"
+                :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -325,11 +326,12 @@ onMounted(() => {
 const getData = async (year) => {
     console.log('Getting data from server and/or local storage');
 
-    const coords = await axios.get("/farm/"+ props.farm.id + "/FarmMap")
-        plotCoords.value = coords.data.plotCoords
-        interestPointCoords.value = coords.data.interestPointCoords
-        farmCenter.value = coords.data.farmCenter
-        noCoords.value = coords.data.noCoords
+    const coordsResponse = await axios.get(`/farm/${props.farm.id}/FarmMap/${year}`)
+        console.log('API Map Response:', coordsResponse.data);
+        plotCoords.value = coordsResponse.data.plotCoords
+        interestPointCoords.value = coordsResponse.data.interestPointCoords
+        farmCenter.value = coordsResponse.data.farmCenter
+        noCoords.value = coordsResponse.data.noCoords
 
     const areaResponse = await axios.get(`/farm/${props.farm.id}/FarmArea/${year}`);
         console.log('API Area Response:', areaResponse.data);

@@ -17,13 +17,13 @@ class FarmController extends Controller
     }
 
 
-    public static function getFarmCoords(Farm $farm)
+    public static function getFarmCoords(Farm $farm,$year)
     {
         # FARM CENTER
 
         $coords = [];
 
-        foreach($farm->fields as $field){
+        foreach($farm->fields()->where('year', $year)->get() as $field){
             foreach($field->plots as $plot) {
                 foreach($plot->trace_superficie as $point){
                     $coords[]=['lat' => $point[1], 'lng' => $point[0]];
@@ -31,7 +31,7 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->interestPoints as $interestPoint) {
+        foreach($farm->interestPoints()->where('year', $year)->get() as $interestPoint) {
             $coords[]=['lat' => floatval($interestPoint->latitude), 'lng' => floatval($interestPoint->longitude)];
         }
 

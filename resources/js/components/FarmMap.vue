@@ -1,5 +1,18 @@
 <template>
 
+<div class="row mb-5">
+      <div class="col-12 d-flex justify-content-between align-items-center mt-4">
+        <div>
+          <button class="btn btn-info dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="la la-calendar"></i> {{ localSelectedYear }}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="yearDropdown">
+            <a class="dropdown-item" v-for="year in years" :key="year" @click="selectYear(year)">{{ year }}</a>
+          </div>
+        </div>
+      </div>
+</div>
+
   <div v-if="noCoords==1">
     <div style="height:500px">
       <l-map ref="map" v-model:zoom="zoom" :center="farmCenter" :use-global-leaflet="false">
@@ -123,7 +136,7 @@
 <script setup>
   import "leaflet/dist/leaflet.css";
   import leaflet, { polygon } from 'leaflet'
-  import {ref} from "vue";
+  import {ref, defineEmits, watch} from "vue";
   import { LMap, LTileLayer, LMarker, LPopup, LPolygon, LControlLayers, LIcon} from "@vue-leaflet/vue-leaflet";
 
   const props = defineProps({
@@ -131,9 +144,21 @@
     plotCoords: Array,
     farmCenter: Array,
     noCoords: Boolean,
+    selectedYear: Number,
+    years: Array
   })
 
-  console.log('this is the farm map')
+  const emit = defineEmits(['updateYear']);
+  const localSelectedYear = ref(props.selectedYear);
+
+  const selectYear = (year) => {
+      localSelectedYear.value = year;
+      emit('updateYear', year);
+  };
+
+  watch(() => props.selectedYear, (newYear) => {
+      localSelectedYear.value = newYear;
+  });
 
   let show = ref(true)
   let fieldLevel = ref(true)
