@@ -308,8 +308,8 @@ let farmCropCosts = ref([])
 let farmProduction = ref([])
 let farmYield = ref([])
 
-let selectedYear = ref(new Date().getFullYear());
-let years = ref([2023, 2024]);
+let selectedYear = ref(null);
+let years = ref([]);
 
 let dashboard_audio = new Audio('/audio/dashboard_bm.mp3')
 let map_audio = new Audio('/audio/map_bm.mp3')
@@ -319,13 +319,24 @@ let production_audio = new Audio('/audio/production_bm.mp3')
 let yield_audio = new Audio('/audio/yield_bm.mp3')
 
 onMounted(() => {
-    getData(selectedYear.value);
+    getData();
     console.log('Mounted Farm Page');
 })
 
-const getData = async (year) => {
+const getData = async () => {
     console.log('Getting data from server and/or local storage');
 
+    const yearsResponse = await axios.get(`/farm/${props.farm.id}/FarmYears`);
+    years.value = yearsResponse.data;
+
+    selectedYear.value = years.value.length > 0 ? parseInt(years.value[0]) : null;
+
+    if (selectedYear.value) {
+        await fetchData(selectedYear.value);
+    }
+}
+
+const fetchData = async (year) => {
     const coordsResponse = await axios.get(`/farm/${props.farm.id}/FarmMap/${year}`)
         console.log('API Map Response:', coordsResponse.data);
         plotCoords.value = coordsResponse.data.plotCoords
@@ -354,8 +365,8 @@ const getData = async (year) => {
 }
 
 const updateYear = async (year) => {
-  selectedYear.value = year;
-  getData(year);
+    selectedYear.value = year;
+    await fetchData(year);
 };
 
 </script>

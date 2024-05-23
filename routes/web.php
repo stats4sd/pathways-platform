@@ -46,6 +46,7 @@ Route::group([
     'middleware' => ['web', 'auth', 'farm.auth'],
 ], function () {
     Route::get('farm/{farm}', [App\Http\Controllers\FarmController::class, 'show']);
+    Route::get('farm/{farm}/FarmYears', [App\Http\Controllers\FarmController::class,'getFarmYears']);
     Route::get('farm/{farm}/FarmMap/{year}', [App\Http\Controllers\FarmController::class,'getFarmCoords']);
     Route::get('farm/{farm}/FarmArea/{year}', [App\Http\Controllers\FarmController::class,'getFarmArea']);
     Route::get('farm/{farm}/FarmCosts/{year}', [App\Http\Controllers\FarmController::class,'getFarmCosts']);

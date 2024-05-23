@@ -16,6 +16,21 @@ class FarmController extends Controller
         return view('farms.show', ['farm' => $farm]);
     }
 
+    public static function getFarmYears(Farm $farm)
+    {
+        $fieldYears = $farm->fields()->pluck('year')->unique()->toArray();
+        $interestPointYears = $farm->interestPoints()->pluck('year')->unique()->toArray();
+        $plantingYears = $farm->plantings()->pluck('year')->unique()->toArray();
+        $postPlantingYears = $farm->postPlantings()->pluck('year')->unique()->toArray();
+        $harvestYears = $farm->harvests()->pluck('year')->unique()->toArray();
+
+        $years = array_unique(array_merge($fieldYears, $interestPointYears, $plantingYears, $postPlantingYears, $harvestYears));
+
+        rsort($years);
+
+        return $years;
+    }
+
 
     public static function getFarmCoords(Farm $farm,$year)
     {
