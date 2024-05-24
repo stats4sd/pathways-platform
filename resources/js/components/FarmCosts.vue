@@ -54,7 +54,6 @@
 
 <script setup>
 import { ref, defineProps, defineEmits, watch } from 'vue';
-import axios from 'axios';
 
 const props = defineProps({
     farmTotalCost: Number,
@@ -68,17 +67,13 @@ let selectedCrop = ref()
 const emit = defineEmits(['updateYear']);
 const localSelectedYear = ref(props.selectedYear);
 
-const selectYear = async (year) => {
+const selectYear = (year) => {
     localSelectedYear.value = year;
     emit('updateYear', year);
 };
 
 watch(() => props.selectedYear, (newYear) => {
     localSelectedYear.value = newYear;
-});
-
-watch(() => props.farmYield, (newData) => {
-    console.log('Updated farm yield data:', newData);
 });
 
 </script>

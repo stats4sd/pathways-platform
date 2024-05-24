@@ -1,18 +1,17 @@
 <template>
     <div>
         <div class="row mb-5">
-      <div class="col-12 d-flex justify-content-between align-items-center mt-4">
-        <div>
-          <button class="btn btn-info dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="la la-calendar"></i> {{ localSelectedYear }}
-          </button>
-          <div class="dropdown-menu" aria-labelledby="yearDropdown">
-            <a class="dropdown-item" v-for="year in years" :key="year" @click="selectYear(year)">{{ year }}</a>
-          </div>
+            <div class="col-12 d-flex justify-content-between align-items-center mt-4">
+                <div>
+                    <button class="btn btn-info dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="la la-calendar"></i> {{ localSelectedYear }}
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="yearDropdown">
+                        <a class="dropdown-item" v-for="year in years" :key="year" @click="selectYear(year)">{{ year }}</a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-</div>
-
 
         <div v-if="farmTotalArea" class="card-header shadow mb-4">
             <div class="row my-4">
@@ -61,7 +60,6 @@
 
 <script setup>
 import { ref, defineProps, defineEmits, watch, computed } from 'vue';
-import axios from 'axios';
 
 const props = defineProps({
     farmTotalArea: Number,
