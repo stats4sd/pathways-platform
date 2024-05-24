@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="row mb-5">
-      <div class="col-12 d-flex justify-content-between align-items-center mt-4">
+    <div class="row mb-5 pt-3">
+      <div class="col-12 d-flex justify-content-center align-items-center">
         <div>
-          <button class="btn btn-info dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn btn-success dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="la la-calendar"></i> {{ localSelectedYear }}
           </button>
           <div class="dropdown-menu" aria-labelledby="yearDropdown">
@@ -11,7 +11,7 @@
           </div>
         </div>
       </div>
-      <div class="d-flex col mt-4" v-for="crop in farmProduction.cropProductions" :key="crop.id">
+      <div class="d-flex col mt-5" v-for="crop in farmProduction.cropProductions" :key="crop.id">
         <div>
           <img :src="`/images/${crop.nom_fichier_image}`" width="70" class="mb-4 pr-2 ml-2" />
         </div>
