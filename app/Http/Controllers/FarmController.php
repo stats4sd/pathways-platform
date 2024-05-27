@@ -16,14 +16,29 @@ class FarmController extends Controller
         return view('farms.show', ['farm' => $farm]);
     }
 
+    public static function getFarmYears(Farm $farm)
+    {
+        $fieldYears = $farm->fields()->pluck('year')->unique()->toArray();
+        $interestPointYears = $farm->interestPoints()->pluck('year')->unique()->toArray();
+        $plantingYears = $farm->plantings()->pluck('year')->unique()->toArray();
+        $postPlantingYears = $farm->postPlantings()->pluck('year')->unique()->toArray();
+        $harvestYears = $farm->harvests()->pluck('year')->unique()->toArray();
 
-    public static function getFarmCoords(Farm $farm)
+        $years = array_unique(array_merge($fieldYears, $interestPointYears, $plantingYears, $postPlantingYears, $harvestYears));
+
+        rsort($years);
+
+        return $years;
+    }
+
+
+    public static function getFarmCoords(Farm $farm,$year)
     {
         # FARM CENTER
 
         $coords = [];
 
-        foreach($farm->fields as $field){
+        foreach($farm->fields()->where('year', $year)->get() as $field){
             foreach($field->plots as $plot) {
                 foreach($plot->trace_superficie as $point){
                     $coords[]=['lat' => $point[1], 'lng' => $point[0]];
@@ -31,7 +46,7 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->interestPoints as $interestPoint) {
+        foreach($farm->interestPoints()->where('year', $year)->get() as $interestPoint) {
             $coords[]=['lat' => floatval($interestPoint->latitude), 'lng' => floatval($interestPoint->longitude)];
         }
 
@@ -75,7 +90,7 @@ class FarmController extends Controller
         
         # PLOTS
         
-        $field_ids = $farm->fields()->pluck('id');
+        $field_ids = $farm->fields->pluck('id');
 
         $plots = Plot::whereIn('field_id', $field_ids)->get();
         
@@ -159,6 +174,7 @@ class FarmController extends Controller
         # INTEREST POINTS
         $interestPointCoords = $farm
                                 ->interestPoints()
+                                ->where('year', $year)
                                 ->select('id', 'nom', 'longitude', 'latitude')
                                 ->get();
 
@@ -181,14 +197,14 @@ class FarmController extends Controller
 
     }
 
-    public static function getFarmArea(Farm $farm)
+    public static function getFarmArea(Farm $farm, $year)
     {
-        $field_ids = $farm->fields()->pluck('id');
+        $field_ids = $farm->fields()->where('year', $year)->pluck('id');
         $plots = Plot::whereIn('field_id', $field_ids)->get();
         
         # TOTAL AREA (SUPERFICIE) ALL CROPS
 
-        $totalArea = $farm->fields->sum('superficie_total');
+        $totalArea = $farm->fields->where('year', $year)->sum('superficie_total');
 
         # AREA PER PRIMARY CROP
 
@@ -246,12 +262,12 @@ class FarmController extends Controller
 
     }
     
-    public static function getFarmCosts(Farm $farm)
+    public static function getFarmCosts(Farm $farm, $year)
     {
         # TOTAL COST
-        $plantingTotalCost = $farm->plantings->sum('cout_total');
-        $postPlantingTotalCost = $farm->postPlantings->sum('cout_total');
-        $harvestTotalCost = $farm->harvests->sum('cout_total');
+        $plantingTotalCost = $farm->plantings()->where('year', $year)->sum('cout_total');
+        $postPlantingTotalCost = $farm->postPlantings()->where('year', $year)->sum('cout_total');
+        $harvestTotalCost = $farm->harvests()->where('year', $year)->sum('cout_total');
 
         $totalCost = $plantingTotalCost + $postPlantingTotalCost + $harvestTotalCost;
 
@@ -263,7 +279,7 @@ class FarmController extends Controller
 
         $cropCosts = [];
 
-        foreach($farm->plantings as $planting){
+        foreach($farm->plantings()->where('year', $year)->get() as $planting){
             foreach($planting->plantingDetails as $plantingDetail){
                 if(in_array($plantingDetail['crop_id'], $primaryCropIds)) {
                     $cropCosts[$plantingDetail['crop_id']][]= $plantingDetail['cout'];
@@ -271,7 +287,7 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->postPlantings as $postPlanting){
+        foreach($farm->postPlantings()->where('year', $year)->get() as $postPlanting){
             foreach($postPlanting->postPlantingDetails as $postPlantingDetail){
                 if(in_array($postPlantingDetail['crop_id'], $primaryCropIds)) {
                     $cropCosts[$postPlantingDetail['crop_id']][] = $postPlantingDetail['cout'];
@@ -279,7 +295,7 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->harvests as $harvest){
+        foreach($farm->harvests()->where('year', $year)->get() as $harvest){
             foreach($harvest->harvestDetails as $harvestDetail){
                 if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
                     $cropCosts[$harvestDetail['crop_id']][]= $harvestDetail['cout'];
@@ -303,7 +319,7 @@ class FarmController extends Controller
 
         $cropIndividualCosts = [];
 
-        foreach($farm->plantings as $planting){
+        foreach($farm->plantings()->where('year', $year)->get() as $planting){
             foreach($planting->plantingDetails as $plantingDetail){
                 if(in_array($plantingDetail['crop_id'], $primaryCropIds)) {
                     $cropIndividualCosts[$plantingDetail['crop_id']]['Tolinɔgɔ donisara'][] = $plantingDetail['cout_transport'];
@@ -316,7 +332,7 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->postPlantings as $postPlanting){
+        foreach($farm->postPlantings()->where('year', $year)->get() as $postPlanting){
             foreach($postPlanting->postPlantingDetails as $postPlantingDetail){
                 if(in_array($postPlantingDetail['crop_id'], $primaryCropIds)) {
                     $cropIndividualCosts[$postPlantingDetail['crop_id']]['Coût total prestation sarclage'][] = $postPlantingDetail['cout_sarclage'];
@@ -330,7 +346,7 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->harvests as $harvest){
+        foreach($farm->harvests()->where('year', $year)->get() as $harvest){
             foreach($harvest->harvestDetails as $harvestDetail){
                 if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
                     $cropIndividualCosts[$harvestDetail['crop_id']]['Bɔli wali tigɛli sara sɔngɔ'][]= $harvestDetail['cout_total_prestation_recolte'];
@@ -362,7 +378,7 @@ class FarmController extends Controller
 
     }
 
-    public static function getFarmProduction(Farm $farm)
+    public static function getFarmProduction(Farm $farm, $year)
     {
         # PRODUCTION PER CROP
 
@@ -371,7 +387,7 @@ class FarmController extends Controller
 
         $cropProductions = [];
 
-        foreach($farm->harvests as $harvest){
+        foreach($farm->harvests()->where('year', $year)->get() as $harvest){
             foreach($harvest->harvestDetails as $harvestDetail){
                 if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
                     $cropProductions[$harvestDetail['crop_id']][]= $harvestDetail['production'];
@@ -394,7 +410,7 @@ class FarmController extends Controller
         
     }
 
-    public static function getFarmYield(Farm $farm)
+    public static function getFarmYield(Farm $farm, $year)
     {
         # PRODUCTION
 
@@ -403,7 +419,7 @@ class FarmController extends Controller
 
         $cropProductions = [];
 
-        foreach($farm->harvests as $harvest){
+        foreach($farm->harvests()->where('year', $year)->get() as $harvest){
             foreach($harvest->harvestDetails as $harvestDetail){
                 if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
                     $cropProductions[$harvestDetail['crop_id']][]= $harvestDetail['production'];
@@ -423,7 +439,7 @@ class FarmController extends Controller
 
         # AREA
 
-        $field_ids = $farm->fields()->pluck('id');
+        $field_ids = $farm->fields()->where('year', $year)->pluck('id');
         $plots = Plot::whereIn('field_id', $field_ids)->get();
 
         $primaryCropIds = $primaryCrops->pluck('id')->toArray();
