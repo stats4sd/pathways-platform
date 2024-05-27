@@ -33,11 +33,11 @@ class FarmController extends Controller
 
 
     public static function getFarmCoords(Farm $farm,$year)
-    {
-        # FARM CENTER
-
+    {        
         $coords = [];
+        $noCoords = 0;
 
+        # Get coords for fields and interest pts
         foreach($farm->fields()->where('year', $year)->get() as $field){
             foreach($field->plots as $plot) {
                 foreach($plot->trace_superficie as $point){
@@ -50,105 +50,74 @@ class FarmController extends Controller
             $coords[]=['lat' => floatval($interestPoint->latitude), 'lng' => floatval($interestPoint->longitude)];
         }
 
+        # Calculate farm center if coordinates are available
+        if(!empty($coords)) {
+            // Calculate center coordinates
+            $latitudes = array_column($coords, 'lat');
+            $longitudes = array_column($coords, 'lng');
 
-        $count_coords = count($coords);
-        $xcos=0.0;
-        $ycos=0.0;
-        $zsin=0.0;
-        
-        if($count_coords>0) {
-            foreach ($coords as $lnglat)
-            {
-                $lat = $lnglat['lat'] * pi() / 180;
-                $lon = $lnglat['lng'] * pi() / 180;
-                
-                $acos = cos($lat) * cos($lon);
-                $bcos = cos($lat) * sin($lon);
-                $csin = sin($lat);
-                $xcos += $acos;
-                $ycos += $bcos;
-                $zsin += $csin;
-            }
-            
-            $xcos /= $count_coords;
-            $ycos /= $count_coords;
-            $zsin /= $count_coords;
-            $lon = atan2($ycos, $xcos);
-            $sqrt = sqrt($xcos * $xcos + $ycos * $ycos);
-            $lat = atan2($zsin, $sqrt);
-            
-            $farmCenter = array($lat * 180 / pi(), $lon * 180 / pi());
-            $noCoords = 0;
+            $avgLat = array_sum($latitudes) / count($latitudes);
+            $avgLng = array_sum($longitudes) / count($longitudes);
 
-        }
-        
-        else {
+            $farmCenter = [$avgLat, $avgLng];
+        } else {
+            // Set default farm center coordinates
             $farmCenter = [17.5739347, -3.9861092];
             $noCoords = 1;
         }
-        
-        
-        # PLOTS
-        
+
+
+        # Get plots
         $field_ids = $farm->fields->pluck('id');
+        $plots = Plot::whereIn('field_id', $field_ids)->with('field')->get();
 
-        $plots = Plot::whereIn('field_id', $field_ids)->get();
-        
         $plotCoords = $plots->map(function($plot) {
-
             $latlngs = [];
 
             foreach($plot->trace_superficie as $point){
                 $latlngs[]=[$point[1], $point[0]];
             }
 
-            // remove duplicate points
-            $latlngs_plot_unique = array_unique($latlngs, SORT_REGULAR);
+            // Remove duplicate points
+            $latlngs = collect($latlngs)->unique()->values()->toArray();
 
-            $plot->latlngs = $latlngs_plot_unique;
-            
-            // include field details
-            $plot->load('field');
+            $plot->latlngs = $latlngs;
 
-            // include main crop details
-            $plot->main_crop_image = Crop::where('id', $plot->crop_id)->pluck('nom_fichier_image')->first();
-            $plot->main_crop_bm = Crop::where('id', $plot->crop_id)->pluck('label_bm')->first();
-            $plot->main_crop_fr = Crop::where('id', $plot->crop_id)->pluck('label_fr')->first();
-
-            // include associated crop details
-            $associated_crops = explode(' ', $plot->cultures_associations);
-            $associated_crops_details = [];
-
-            foreach($associated_crops as $associated_crop) {
-                $crop_image = Crop::where('id', $associated_crop)->pluck('nom_fichier_image')->first();
-                $crop_bm = Crop::where('id', $associated_crop)->pluck('label_bm')->first();
-                $crop_fr = Crop::where('id', $associated_crop)->pluck('label_fr')->first();
-
-                $associated_crops_details[]=['crop_image' => $crop_image, 'label_bm' => $crop_bm, 'label_fr' => $crop_fr];
+            // Include main crop details
+            if($plot->crop) {
+                $plot->main_crop_image = $plot->crop->nom_fichier_image;
+                $plot->main_crop_bm = $plot->crop->label_bm;
+                $plot->main_crop_fr = $plot->crop->label_fr;
             }
 
+            // Include associated crop details
+            $associated_crops = explode(' ', $plot->cultures_associations);
+            $associated_crops_details = [];
+            foreach($associated_crops as $associated_crop) {
+                $crop = Crop::find($associated_crop);
+                if ($crop) {
+                    $associated_crops_details[] = [
+                        'crop_image' => $crop->nom_fichier_image,
+                        'crop_bm' => $crop->label_bm,
+                        'crop_fr' => $crop->label_fr,
+                    ];
+                }
+            }
             $plot->associated_crops = $associated_crops_details;
 
-            // inlcude plot fertility bm label
-            if($plot->fertilite === 'pauvre') {$plot->fertilite_bm = 'Sɛngɛlen';}
-            elseif($plot->fertilite === 'moyen') {$plot->fertilite_bm = 'Camancɛ';}
-            elseif($plot->fertilite === 'fertile') {$plot->fertilite_bm = 'Fangama';}
-            else {$plot->fertilite_bm = $plot->fertilite;}
+            // Include plot fertility bm label
+            $fertilityLabels = ['pauvre' => 'Sɛngɛlen', 'moyen' => 'Camancɛ', 'fertile' => 'Fangama'];
+            $plot->fertilite_bm = $fertilityLabels[$plot->fertilite] ?? $plot->fertilite;
 
-            // inlcude field soil type bm label
-            if($plot->field->type_sol === 'sable') {$plot->field->type_sol_bm = 'Cɛncɛn';}
-            elseif($plot->field->type_sol === 'gravillon') {$plot->field->type_sol_bm = 'Bɛlɛ';}
-            elseif($plot->field->type_sol === 'argile') {$plot->field->type_sol_bm = 'Bɔgɔ';}
-            else {$plot->field->type_sol_bm = $plot->field->type_sol;}
-            
-            // inlcude field slope bm label
-            if($plot->field->pente === 'plat') {$plot->field->pente_bm = 'Dalen';}
-            elseif($plot->field->pente === 'incline') {$plot->field->pente_bm = 'Jɛgɛlen';}
-            elseif($plot->field->pente === 'escarpe') {$plot->field->pente_bm = 'Jɔlen';}
-            else {$plot->field->pente_bm = $plot->field->pente;}
+            // Include field soil type bm label
+            $soilTypeLabels = ['sable' => 'Cɛncɛn', 'gravillon' => 'Bɛlɛ', 'argile' => 'Bɔgɔ'];
+            $plot->field->type_sol_bm = $soilTypeLabels[$plot->field->type_sol] ?? $plot->field->type_sol;
 
+            // Include field slope bm label
+            $slopeLabels = ['plat' => 'Dalen', 'incline' => 'Jɛgɛlen', 'escarpe' => 'Jɔlen'];
+            $plot->field->pente_bm = $slopeLabels[$plot->field->pente] ?? $plot->field->pente;
 
-            // add rounding to area
+            // Round area values
             $plot->superficie_measuree = round(floatval($plot->superficie_measuree),1);
             $plot->field->superficie_total = round(floatval($plot->field->superficie_total),1);
 
@@ -156,8 +125,8 @@ class FarmController extends Controller
         });
 
 
-        // incldue field color
-        $colors = ["#b877e6", "#41b782", '#77dbe6', '#e6ba77', '#8077e6', '#77e6cc', 
+        // Include field color
+        $colors = ["#b877e6", "#41b782", '#77dbe6', '#e6ba77', '#8077e6', '#77e6cc',
                     '#d9e677', '#e67777', '#7be677', '#e677dd', '#77b8e6', '#e67d77'];
         $field_colors = [];
 
@@ -169,9 +138,7 @@ class FarmController extends Controller
             $plot->field_color = $field_colors[$plot->field_id];
         }
 
-
-
-        # INTEREST POINTS
+        # Get interest points
         $interestPointCoords = $farm
                                 ->interestPoints()
                                 ->where('year', $year)
@@ -180,10 +147,10 @@ class FarmController extends Controller
 
         $interestPointCoords = $interestPointCoords->map(function($point) {
             $point->latlng = ['lat' => $point->latitude, 'lng' => $point->longitude];
-            
+
             // include icon
             $point->icon = Storage::disk('public')->URL('images/'.strtolower(str_replace(' ', '_', $point->nom)).'.png');
-            
+
             return $point;
 
         });
