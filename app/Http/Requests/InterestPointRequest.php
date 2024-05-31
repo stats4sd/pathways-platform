@@ -27,6 +27,7 @@ class InterestPointRequest extends FormRequest
         return [
             'id' => 'nullable|integer',
             'farm_id' => 'required',
+            'year' => 'nullable',
             'nom' => 'nullable',
             'longitude' => 'nullable',
             'latitude' => 'nullable',

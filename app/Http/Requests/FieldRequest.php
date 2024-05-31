@@ -27,6 +27,7 @@ class FieldRequest extends FormRequest
         return [
             'id' => 'nullable|integer',
             'farm_id' => 'required',
+            'year' => 'nullable',
             'nom' => 'nullable',
             'type_sol' => 'nullable',
             'pente' => 'nullable',
