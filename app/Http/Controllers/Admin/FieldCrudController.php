@@ -20,7 +20,7 @@ class FieldCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -32,7 +32,7 @@ class FieldCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -41,6 +41,7 @@ class FieldCrudController extends CrudController
 
         CRUD::column('id')->label('ID');
         CRUD::column('farm_id')->label('UPA');
+        CRUD::column('year');
         CRUD::column('nom');
         CRUD::column('type_sol');
         CRUD::column('pente');
@@ -49,7 +50,7 @@ class FieldCrudController extends CrudController
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
