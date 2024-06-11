@@ -32,26 +32,26 @@ class FarmController extends Controller
     }
 
 
-    public static function getFarmCoords(Farm $farm,$year)
-    {        
+    public static function getFarmCoords(Farm $farm, $year)
+    {
         $coords = [];
         $noCoords = 0;
 
         # Get coords for fields and interest pts
-        foreach($farm->fields()->where('year', $year)->get() as $field){
-            foreach($field->plots as $plot) {
-                foreach($plot->trace_superficie as $point){
-                    $coords[]=['lat' => $point[1], 'lng' => $point[0]];
+        foreach ($farm->fields()->where('year', $year)->get() as $field) {
+            foreach ($field->plots as $plot) {
+                foreach ($plot->trace_superficie as $point) {
+                    $coords[] = ['lat' => $point[1], 'lng' => $point[0]];
                 }
             }
         }
 
-        foreach($farm->interestPoints()->where('year', $year)->get() as $interestPoint) {
-            $coords[]=['lat' => floatval($interestPoint->latitude), 'lng' => floatval($interestPoint->longitude)];
+        foreach ($farm->interestPoints()->where('year', $year)->get() as $interestPoint) {
+            $coords[] = ['lat' => floatval($interestPoint->latitude), 'lng' => floatval($interestPoint->longitude)];
         }
 
         # Calculate farm center if coordinates are available
-        if(!empty($coords)) {
+        if (!empty($coords)) {
             // Calculate center coordinates
             $latitudes = array_column($coords, 'lat');
             $longitudes = array_column($coords, 'lng');
@@ -71,11 +71,11 @@ class FarmController extends Controller
         $field_ids = $farm->fields->pluck('id');
         $plots = Plot::whereIn('field_id', $field_ids)->with('field')->get();
 
-        $plotCoords = $plots->map(function($plot) {
+        $plotCoords = $plots->map(function ($plot) {
             $latlngs = [];
 
-            foreach($plot->trace_superficie as $point){
-                $latlngs[]=[$point[1], $point[0]];
+            foreach ($plot->trace_superficie as $point) {
+                $latlngs[] = [$point[1], $point[0]];
             }
 
             // Remove duplicate points
@@ -83,17 +83,14 @@ class FarmController extends Controller
 
             $plot->latlngs = $latlngs;
 
-            // Include main crop details
-            if($plot->crop) {
-                $plot->main_crop_image = $plot->crop->nom_fichier_image;
-                $plot->main_crop_bm = $plot->crop->label_bm;
-                $plot->main_crop_fr = $plot->crop->label_fr;
-            }
+            $plot->main_crop_image = Crop::where('id', $plot->crop_id)->pluck('nom_fichier_image')->first();
+            $plot->main_crop_bm = Crop::where('id', $plot->crop_id)->pluck('label_bm')->first();
+            $plot->main_crop_fr = Crop::where('id', $plot->crop_id)->pluck('label_fr')->first();
 
             // Include associated crop details
             $associated_crops = explode(' ', $plot->cultures_associations);
             $associated_crops_details = [];
-            foreach($associated_crops as $associated_crop) {
+            foreach ($associated_crops as $associated_crop) {
                 $crop = Crop::find($associated_crop);
                 if ($crop) {
                     $associated_crops_details[] = [
@@ -118,8 +115,8 @@ class FarmController extends Controller
             $plot->field->pente_bm = $slopeLabels[$plot->field->pente] ?? $plot->field->pente;
 
             // Round area values
-            $plot->superficie_measuree = round(floatval($plot->superficie_measuree),1);
-            $plot->field->superficie_total = round(floatval($plot->field->superficie_total),1);
+            $plot->superficie_measuree = round(floatval($plot->superficie_measuree), 1);
+            $plot->field->superficie_total = round(floatval($plot->field->superficie_total), 1);
 
             return $plot;
         });
@@ -127,35 +124,35 @@ class FarmController extends Controller
 
         // Include field color
         $colors = ["#b877e6", "#41b782", '#77dbe6', '#e6ba77', '#8077e6', '#77e6cc',
-                    '#d9e677', '#e67777', '#7be677', '#e677dd', '#77b8e6', '#e67d77'];
+            '#d9e677', '#e67777', '#7be677', '#e677dd', '#77b8e6', '#e67d77'];
         $field_colors = [];
 
-        foreach($field_ids as $field_id=>$index) {
+        foreach ($field_ids as $field_id => $index) {
             $field_colors[$field_ids[$field_id]] = $colors[$field_id];
         }
 
-        foreach($plotCoords as $plot) {
+        foreach ($plotCoords as $plot) {
             $plot->field_color = $field_colors[$plot->field_id];
         }
 
         # Get interest points
         $interestPointCoords = $farm
-                                ->interestPoints()
-                                ->where('year', $year)
-                                ->select('id', 'nom', 'longitude', 'latitude')
-                                ->get();
+            ->interestPoints()
+            ->where('year', $year)
+            ->select('id', 'nom', 'longitude', 'latitude')
+            ->get();
 
-        $interestPointCoords = $interestPointCoords->map(function($point) {
+        $interestPointCoords = $interestPointCoords->map(function ($point) {
             $point->latlng = ['lat' => $point->latitude, 'lng' => $point->longitude];
 
             // include icon
-            $point->icon = Storage::disk('public')->URL('images/'.strtolower(str_replace(' ', '_', $point->nom)).'.png');
+            $point->icon = Storage::disk('public')->URL('images/' . strtolower(str_replace(' ', '_', $point->nom)) . '.png');
 
             return $point;
 
         });
 
-        return[
+        return [
             "plotCoords" => $plotCoords,
             "interestPointCoords" => $interestPointCoords,
             "farmCenter" => $farmCenter,
