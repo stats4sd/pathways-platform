@@ -385,7 +385,7 @@ const getData = async () => {
     const yearsResponse = await axios.get(`/farm/${props.farm.id}/FarmYears`);
     years.value = yearsResponse.data;
 
-    selectedYear.value = years.value.length > 0 ? parseInt(years.value[0]) : null;
+    selectedYear.value = years.value.length > 0 ? years.value[0] : null;
 
     if (selectedYear.value) {
         await fetchData(selectedYear.value);

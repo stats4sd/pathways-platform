@@ -123,7 +123,7 @@ const props = defineProps({
     plantingObservations: Object,
     postPlantingObservations: Object,
     harvestObservations: Object,
-    selectedYear: Number,
+    selectedYear: String,
     years: Array,
     isVisible: Boolean,
     content: String,

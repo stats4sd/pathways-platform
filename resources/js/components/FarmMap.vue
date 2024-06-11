@@ -143,7 +143,7 @@
     plotCoords: Array,
     farmCenter: Array,
     noCoords: Boolean,
-    selectedYear: Number,
+    selectedYear: String,
     years: Array
   })
 

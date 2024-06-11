@@ -35,7 +35,7 @@
                     <div v-for="(cost, name) in crop.individual_costs" :key="cost">
                         <div class="row">
                             <div class="col-7 text-left ml-4">
-                                {{ name }} 
+                                {{ name }}
                             </div>
                             <div class="col text-left pl-2">
                                 <b>{{ cost }} drm</b>
@@ -55,7 +55,7 @@ import { ref, defineProps, defineEmits, watch } from 'vue';
 const props = defineProps({
     farmTotalCost: Number,
     farmCropCosts: Object,
-    selectedYear: Number,
+    selectedYear: String,
     years: Array
 });
 

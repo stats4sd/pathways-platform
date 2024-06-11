@@ -29,7 +29,7 @@ import { ref, defineProps, defineEmits, watch } from 'vue';
 
 const props = defineProps({
     farmYield: Object,
-    selectedYear: Number,
+    selectedYear: String,
     years: Array
 });
 

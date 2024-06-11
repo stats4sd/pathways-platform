@@ -64,7 +64,7 @@ const props = defineProps({
     farmTotalArea: Number,
     farmPrimaryArea: Object,
     farmSecondaryArea: Object,
-    selectedYear: Number,
+    selectedYear: String,
     years: Array
 });
 

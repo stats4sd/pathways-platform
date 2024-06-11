@@ -28,7 +28,7 @@ import {ref, defineProps, defineEmits, watch} from 'vue';
 
 const props = defineProps({
     farmProduction: Object,
-    selectedYear: Number,
+    selectedYear: String,
     years: Array
 });
 
