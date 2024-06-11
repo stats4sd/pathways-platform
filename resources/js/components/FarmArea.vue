@@ -30,12 +30,12 @@
                     </div>
                     <div class="text-left">
                         <b>{{ crop.label_bm }}<br>
-                            {{ crop.area }} ha</b>
+                            {{ crop.area.toFixed(2) }} ha</b>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <br>
         <div v-if="hasSecondaryArea" class="mt-3">
             <b>Sɛnɛfen wɛrɛw kelen-kelen kɛnɛ</b>
@@ -48,7 +48,7 @@
                     </div>
                     <div class="text-left">
                         <b>{{ crop.label_bm }}<br>
-                            {{ crop.area }} ha</b>
+                            {{ crop.area.toFixed(2) }} ha</b>
                     </div>
                 </div>
             </div>
