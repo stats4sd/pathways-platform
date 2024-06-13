@@ -7,7 +7,9 @@
           :cropName="modalCropName"
           :seasonPhase="modalSeasonPhase"
           @closeModal="closeModal"/>
+
     <div class="row mb-5 pt-3">
+
       <div class="col-12 d-flex justify-content-center align-items-center">
         <div>
           <button class="btn bg-orange text-light dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -18,100 +20,87 @@
           </div>
         </div>
       </div>
-        <div v-if="plantingObservations && plantingObservations.length > 0" class="mt-5">
-                    <b>DANNI WATI</b>
-                <div>
-                    <div class="row">
-                        <div class="d-flex col-12 mt-4" v-for="crop in plantingObservations" :key="crop.id">
-                            <div class="d-flex">
-                                <div class="ml-3">
-                                    <img :src="`/images/${crop.nom_fichier_image}`" width="70" class="mb-4 pr-2 ml-2" />
-                                </div>
-                                <div class="text-left">
-                                    <b>{{ crop.label_bm }}</b>
-                                </div>
-                                <div class="ml-5">
-                                    <div v-if="crop.observation_texte" class="icon-wrapper" @click="openObservationModal(crop.observation_texte, 'text', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-file-alt la-2x mr-2" title="Text Icon"></i>
-                                    </div>
-                                    <div v-if="crop.observation_image" class="icon-wrapper" @click="openObservationModal(crop.observation_image, 'image', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-camera la-2x mr-2" title="Image Icon"></i>
-                                    </div>
-                                    <div v-if="crop.observation_audio" class="icon-wrapper" @click="openObservationModal(crop.observation_audio, 'audio', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-volume-up la-2x mr-2" title="Audio Icon"></i>
-                                    </div>
-                                    <div v-if="crop.observation_video" class="icon-wrapper" @click="openObservationModal(crop.observation_video, 'video', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-video la-2x mr-2" title="Video Icon"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+        <div v-if="plantingObservations && plantingObservations.length > 0" class="col-12 mt-5">
+            <b>DANNI WATI</b>
         </div>
-        <div v-if="postPlantingObservations && postPlantingObservations.length > 0" class="mt-5">
+        <div class="d-flex col mt-4" v-for="crop in plantingObservations" :key="crop.id">
+            <div>
+                <img :src="`/images/${crop.nom_fichier_image}`" width="70" class="mb-4 pr-2 ml-2" />
+            </div>
+            <div class="text-left">
+                <b>{{ crop.label_bm }}</b>
+                <div class="d-flex mt-1">
+                    <div v-if="crop.observation_audio" class="icon-wrapper" @click="openObservationModal(crop.observation_audio, 'audio', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-volume-up la-2x mr-2" title="Audio Icon"></i>
+                      </div>
+                      <div v-if="crop.observation_image" class="icon-wrapper" @click="openObservationModal(crop.observation_image, 'image', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-camera la-2x mr-2" title="Image Icon"></i>
+                      </div>
+                      <div v-if="crop.observation_texte" class="icon-wrapper" @click="openObservationModal(crop.observation_texte, 'text', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-file-alt la-2x mr-2" title="Text Icon"></i>
+                      </div>
+                      <div v-if="crop.observation_video" class="icon-wrapper" @click="openObservationModal(crop.observation_video, 'video', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-video la-2x mr-2" title="Video Icon"></i>
+                      </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="postPlantingObservations && postPlantingObservations.length > 0" class="col-12 mt-5">
             <b>DANNI KOFƐ</b>
+        </div>
+        <div class="d-flex col mt-4" v-for="crop in postPlantingObservations" :key="crop.id">
             <div>
-                <div class="row">
-                    <div class="col-12 mt-4" v-for="crop in postPlantingObservations" :key="crop.id">
-                        <div class="d-flex">
-                            <div class="ml-3">
-                                <img :src="`/images/${crop.nom_fichier_image}`" width="70" class="mb-4 pr-2 ml-2" />
-                            </div>
-                            <div class="text-left">
-                                <b>{{ crop.label_bm }}</b>
-                            </div>
-                            <div class="ml-5">
-                                    <div v-if="crop.observation_texte" class="icon-wrapper" @click="openObservationModal(crop.observation_texte, 'text', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-file-alt la-2x mr-2" title="Text Icon"></i>
-                                    </div>
-                                    <div v-if="crop.observation_image" class="icon-wrapper" @click="openObservationModal(crop.observation_image, 'image', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-camera la-2x mr-2" title="Image Icon"></i>
-                                    </div>
-                                    <div v-if="crop.observation_audio" class="icon-wrapper" @click="openObservationModal(crop.observation_audio, 'audio', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-volume-up la-2x mr-2" title="Audio Icon"></i>
-                                    </div>
-                                    <div v-if="crop.observation_video" class="icon-wrapper" @click="openObservationModal(crop.observation_video, 'video', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-video la-2x mr-2" title="Video Icon"></i>
-                                    </div>
-                            </div>
-                        </div>
+                <img :src="`/images/${crop.nom_fichier_image}`" width="70" class="mb-4 pr-2 ml-2" />
+            </div>
+            <div class="text-left">
+                <b>{{ crop.label_bm }}</b>
+                <div class="d-flex mt-1">
+                    <div v-if="crop.observation_audio" class="icon-wrapper" @click="openObservationModal(crop.observation_audio, 'audio', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-volume-up la-2x mr-2" title="Audio Icon"></i>
+                    </div>
+                    <div v-if="crop.observation_image" class="icon-wrapper" @click="openObservationModal(crop.observation_image, 'image', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-camera la-2x mr-2" title="Image Icon"></i>
+                    </div>
+                    <div v-if="crop.observation_texte" class="icon-wrapper" @click="openObservationModal(crop.observation_texte, 'text', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-file-alt la-2x mr-2" title="Text Icon"></i>
+                    </div>
+                    <div v-if="crop.observation_video" class="icon-wrapper" @click="openObservationModal(crop.observation_video, 'video', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-video la-2x mr-2" title="Video Icon"></i>
                     </div>
                 </div>
             </div>
         </div>
-        <div v-if="harvestObservations && harvestObservations.length > 0" class="mt-5">
+
+        <div v-if="harvestObservations && harvestObservations.length > 0" class="col-12 mt-5">
             <b>KƆƆRIBƆ NI ƝƆTIGƐ</b>
+        </div>
+        <div class="d-flex col mt-4" v-for="crop in harvestObservations" :key="crop.id">
             <div>
-                <div class="row">
-                    <div class="col-12 mt-4" v-for="crop in harvestObservations" :key="crop.id">
-                        <div class="d-flex">
-                            <div class="ml-3">
-                                <img :src="`/images/${crop.nom_fichier_image}`" width="70" class="mb-4 pr-2 ml-2" />
-                            </div>
-                            <div class="text-left">
-                                <b>{{ crop.label_bm }}</b>
-                            </div>
-                            <div class="ml-5">
-                                  <div v-if="crop.observation_texte" class="icon-wrapper" @click="openObservationModal(crop.observation_texte, 'text', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-file-alt la-2x mr-2" title="Text Icon"></i>
-                                    </div>
-                                    <div v-if="crop.observation_image" class="icon-wrapper" @click="openObservationModal(crop.observation_image, 'image', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-camera la-2x mr-2" title="Image Icon"></i>
-                                    </div>
-                                    <div v-if="crop.observation_audio" class="icon-wrapper" @click="openObservationModal(crop.observation_audio, 'audio', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-volume-up la-2x mr-2" title="Audio Icon"></i>
-                                    </div>
-                                    <div v-if="crop.observation_video" class="icon-wrapper" @click="openObservationModal(crop.observation_video, 'video', crop.label_bm, 'DANNI WATI')">
-                                        <i class="las la-video la-2x mr-2" title="Video Icon"></i>
-                                    </div>
-                            </div>
-                        </div>
+                <img :src="`/images/${crop.nom_fichier_image}`" width="70" class="mb-4 pr-2 ml-2" />
+            </div>
+            <div class="text-left">
+                <b>{{ crop.label_bm }}</b>
+                <div class="d-flex mt-1">
+                    <div v-if="crop.observation_audio" class="icon-wrapper" @click="openObservationModal(crop.observation_audio, 'audio', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-volume-up la-2x mr-2" title="Audio Icon"></i>
+                    </div>
+                    <div v-if="crop.observation_image" class="icon-wrapper" @click="openObservationModal(crop.observation_image, 'image', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-camera la-2x mr-2" title="Image Icon"></i>
+                    </div>
+                    <div v-if="crop.observation_texte" class="icon-wrapper" @click="openObservationModal(crop.observation_texte, 'text', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-file-alt la-2x mr-2" title="Text Icon"></i>
+                    </div>
+                    <div v-if="crop.observation_video" class="icon-wrapper" @click="openObservationModal(crop.observation_video, 'video', crop.label_bm, 'DANNI WATI')">
+                        <i class="las la-video la-2x mr-2" title="Video Icon"></i>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
+
   </div>
 </template>
 
