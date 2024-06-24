@@ -1,5 +1,5 @@
 <template>
-    
+
     <div class="card justify-content-center text-center" style="min-width: 300px">
 
         <div v-if="showDashboard">
@@ -24,7 +24,7 @@
             <div class="center" style="width:90%; padding:4px; margin:auto">
                 <a href="#area">
                     <button type="button" class="btn bg-cyan text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
-                        @click="showArea=true; showDashboard=false"> 
+                        @click="showArea=true; showDashboard=false">
                         <div class="row">
                             <div class="col">
                                 <img :src="`/images/area_icon.png`" height="60"/>
@@ -68,7 +68,7 @@
             </div>
             <div class="center" style="width:90%; padding:4px; margin:auto">
                 <a href="#yield">
-                    <button type="button" class="btn btn-primary text-light text-center w-100 py-2 mb-5" style="border-radius: 20px"
+                    <button type="button" class="btn btn-primary text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
                         @click="showYield=true; showDashboard=false">
                         <div class="row">
                             <div class="col">
@@ -76,6 +76,22 @@
                             </div>
                             <div class="col text-left pt-3">
                                 <h5>SƆRƆ LAKIKA</h5>
+                            </div>
+                        </div>
+                    </button>
+                </a>
+            </div>
+
+            <div class="center" style="width:90%; padding:4px; margin:auto">
+                <a href="#observations">
+                    <button type="button" class="btn bg-orange text-light text-center w-100 py-2 mb-5" style="border-radius: 20px"
+                        @click="showObservations=true; showDashboard=false">
+                        <div class="row">
+                            <div class="col">
+                                <img :src="`/images/observation_icon.png`" height="60"/>
+                            </div>
+                            <div class="col text-left pt-3">
+                                <h5>KƆLƆSILIW</h5>
                             </div>
                         </div>
                     </button>
@@ -101,7 +117,7 @@
         </div>
 
         <div v-if="showMap">
-            
+
             <div class="card-header bg-danger mb-4">
                 <div class="row">
                     <div class="col-5 pl-5">
@@ -113,7 +129,8 @@
                 </div>
             </div>
 
-            <FarmMap :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter" :no-coords="noCoords"/>
+            <FarmMap :plot-coords="plotCoords" :interest-point-coords="interestPointCoords" :farm-center="farmCenter" :no-coords="!!noCoords"
+                :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -134,7 +151,7 @@
         </div>
 
         <div v-if="showArea">
-            
+
             <div class="card-header bg-cyan text-light">
                 <div class="row">
                     <div class="col pl-5">
@@ -145,8 +162,9 @@
                     </div>
                 </div>
             </div>
-            
-            <FarmArea :farm-total-area="farmTotalArea" :farm-primary-area="farmPrimaryArea" :farm-secondary-area="farmSecondaryArea" />
+
+            <FarmArea :farm-total-area="farmTotalArea" :farm-primary-area="farmPrimaryArea" :farm-secondary-area="farmSecondaryArea"
+                :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -178,8 +196,9 @@
                     </div>
                 </div>
             </div>
-    
-            <FarmCosts :farm-total-cost="farmTotalCost" :farm-crop-costs="farmCropCosts" />
+
+            <FarmCosts :farm-total-cost="farmTotalCost" :farm-crop-costs="farmCropCosts" :years="years"
+                :selected-year="selectedYear" @updateYear="updateYear" />
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -200,7 +219,7 @@
         </div>
 
         <div v-if="showProduction">
-            
+
             <div class="card-header bg-success mb-4">
                 <div class="row">
                     <div class="col-5 pl-5">
@@ -212,7 +231,7 @@
                 </div>
             </div>
 
-            <FarmProduction :farm-production="farmProduction" />
+            <FarmProduction :farm-production="farmProduction" :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -233,7 +252,7 @@
         </div>
 
         <div v-if="showYield">
-            
+
             <div class="card-header bg-primary mb-4">
                 <div class="row">
                     <div class="col-5">
@@ -245,7 +264,7 @@
                 </div>
             </div>
 
-            <FarmYield :farm-yield="farmYield" />
+            <FarmYield :farm-yield="farmYield" :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -254,6 +273,40 @@
                     </button>
                 </a>
                 <button class="btn btn-info mr-2 my-2" type="button" @click="yield_audio.play()">
+                    <i class="la la-volume-up"></i>
+                </button>
+                <form method="POST" :action="logoutRoute" class="btn">
+                    <input type="hidden" name="_token" :value="csrf">
+                    <button class="btn btn-info my-2" type="submit"><i class="la la-lock"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+        <div v-if="showObservations">
+
+            <div class="card-header bg-orange mb-4">
+                <div class="row">
+                    <div class="col-4">
+                        <img :src="`/images/observation_icon.png`" height="55"/>
+                    </div>
+                    <div class="col text-left text-light pt-3">
+                        <h3>KƆLƆSILIW</h3>
+                    </div>
+                </div>
+            </div>
+
+            <FarmObservations :planting-observations="plantingObservations" :post-planting-observations="postPlantingObservations" :harvest-observations="harvestObservations"
+                              :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
+
+            <div class="card-footer fixed-bottom bg-secondary mt-5">
+                <a href="#dashboard">
+                    <button class="btn btn-info mr-4 my-2" type="button" @click="showObservations=false; showDashboard=true">
+                        <i class="la la-home"></i>
+                    </button>
+                </a>
+                <button class="btn btn-info mr-2 my-2" type="button" @click="observations_audio.play()">
                     <i class="la la-volume-up"></i>
                 </button>
                 <form method="POST" :action="logoutRoute" class="btn">
@@ -277,6 +330,7 @@ import FarmArea from "./FarmArea.vue";
 import FarmCosts from "./FarmCosts.vue";
 import FarmProduction from "./FarmProduction.vue";
 import FarmYield from "./FarmYield.vue";
+import FarmObservations from "./FarmObservations.vue";
 
 const props = defineProps({
     farm: Object,
@@ -291,6 +345,7 @@ let showArea = ref(false)
 let showCosts = ref(false)
 let showProduction = ref(false)
 let showYield = ref(false)
+let showObservations = ref(false)
 
 let plotCoords = ref([])
 let interestPointCoords = ref([])
@@ -304,6 +359,11 @@ let farmTotalCost = ref([])
 let farmCropCosts = ref([])
 let farmProduction = ref([])
 let farmYield = ref([])
+let plantingObservations = ref([])
+let postPlantingObservations = ref([])
+let harvestObservations = ref([])
+let selectedYear = ref(null);
+let years = ref([]);
 
 let dashboard_audio = new Audio('/audio/dashboard_bm.mp3')
 let map_audio = new Audio('/audio/map_bm.mp3')
@@ -311,40 +371,64 @@ let area_audio = new Audio('/audio/area_bm.mp3')
 let costs_audio = new Audio('/audio/costs_bm.mp3')
 let production_audio = new Audio('/audio/production_bm.mp3')
 let yield_audio = new Audio('/audio/yield_bm.mp3')
+let observations_audio = new Audio('/audio/observations_bm.mp3')
+
 
 onMounted(() => {
+    getData();
     console.log('Mounted Farm Page');
-    getData()
 })
 
 const getData = async () => {
     console.log('Getting data from server and/or local storage');
 
-    const coords = await axios
-        .get("/farm/"+ props.farm.id + "/FarmMap")
-        plotCoords.value = coords.data.plotCoords
-        interestPointCoords.value = coords.data.interestPointCoords
-        farmCenter.value = coords.data.farmCenter
-        noCoords.value = coords.data.noCoords
+    const yearsResponse = await axios.get(`/farm/${props.farm.id}/FarmYears`);
+    years.value = yearsResponse.data;
 
-    const area = await axios
-        .get("/farm/"+ props.farm.id + "/FarmArea")
-        farmTotalArea.value = area.data.totalArea
-        farmPrimaryArea.value = area.data.primaryArea
-        farmSecondaryArea.value = area.data.secondaryArea
+    selectedYear.value = years.value.length > 0 ? years.value[0] : null;
 
-    const costs = await axios
-        .get("/farm/"+ props.farm.id + "/FarmCosts")
-        farmTotalCost.value = costs.data.totalCost
-        farmCropCosts.value = costs.data.cropCosts
-
-    const production = await axios
-        .get("/farm/"+ props.farm.id + "/FarmProduction")
-        farmProduction.value = production.data
-        
-        const fyield = await axios
-        .get("/farm/"+ props.farm.id + "/FarmYield")
-        farmYield.value = fyield.data
+    if (selectedYear.value) {
+        await fetchData(selectedYear.value);
+    }
 }
+
+const fetchData = async (year) => {
+    const coordsResponse = await axios.get(`/farm/${props.farm.id}/FarmMap/${year}`)
+        console.log('API Map Response:', coordsResponse.data);
+        plotCoords.value = coordsResponse.data.plotCoords
+        interestPointCoords.value = coordsResponse.data.interestPointCoords
+        farmCenter.value = coordsResponse.data.farmCenter
+        noCoords.value = coordsResponse.data.noCoords
+
+    const areaResponse = await axios.get(`/farm/${props.farm.id}/FarmArea/${year}`);
+        console.log('API Area Response:', areaResponse.data);
+        farmTotalArea.value = areaResponse.data.totalArea
+        farmPrimaryArea.value = areaResponse.data.primaryArea
+        farmSecondaryArea.value = areaResponse.data.secondaryArea
+
+    const costsResponse = await axios.get(`/farm/${props.farm.id}/FarmCosts/${year}`);
+        console.log('API Costs Response:', costsResponse.data);
+        farmTotalCost.value = costsResponse.data.totalCost;
+        farmCropCosts.value = costsResponse.data.cropCosts;
+
+    const productionResponse = await axios.get(`/farm/${props.farm.id}/FarmProduction/${year}`);
+        console.log('API Production Response:', productionResponse.data);
+        farmProduction.value = productionResponse.data;
+
+    const yieldResponse = await axios.get(`/farm/${props.farm.id}/FarmYield/${year}`);
+        console.log('API Yield Response:', yieldResponse.data);
+        farmYield.value = yieldResponse.data;
+
+    const observationsResponse = await axios.get(`/farm/${props.farm.id}/FarmObservations/${year}`);
+        console.log('API Observations Response:', observationsResponse.data);
+        plantingObservations.value = observationsResponse.data.plantingObservations;
+        postPlantingObservations.value = observationsResponse.data.postPlantingObservations;
+        harvestObservations.value = observationsResponse.data.harvestObservations;
+}
+
+const updateYear = async (year) => {
+    selectedYear.value = year;
+    await fetchData(year);
+};
 
 </script>

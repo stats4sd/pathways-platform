@@ -16,163 +16,143 @@ class FarmController extends Controller
         return view('farms.show', ['farm' => $farm]);
     }
 
-
-    public static function getFarmCoords(Farm $farm)
+    public static function getFarmYears(Farm $farm)
     {
-        # FARM CENTER
+        $fieldYears = $farm->fields()->pluck('year')->unique()->toArray();
+        $interestPointYears = $farm->interestPoints()->pluck('year')->unique()->toArray();
+        $plantingYears = $farm->plantings()->pluck('year')->unique()->toArray();
+        $postPlantingYears = $farm->postPlantings()->pluck('year')->unique()->toArray();
+        $harvestYears = $farm->harvests()->pluck('year')->unique()->toArray();
 
+        $years = array_unique(array_merge($fieldYears, $interestPointYears, $plantingYears, $postPlantingYears, $harvestYears));
+
+        rsort($years);
+
+        return $years;
+    }
+
+
+    public static function getFarmCoords(Farm $farm, $year)
+    {
         $coords = [];
+        $noCoords = 0;
 
-        foreach($farm->fields as $field){
-            foreach($field->plots as $plot) {
-                foreach($plot->trace_superficie as $point){
-                    $coords[]=['lat' => $point[1], 'lng' => $point[0]];
+        # Get coords for fields and interest pts
+        foreach ($farm->fields()->where('year', $year)->get() as $field) {
+            foreach ($field->plots as $plot) {
+                foreach ($plot->trace_superficie as $point) {
+                    $coords[] = ['lat' => $point[1], 'lng' => $point[0]];
                 }
             }
         }
 
-        foreach($farm->interestPoints as $interestPoint) {
-            $coords[]=['lat' => floatval($interestPoint->latitude), 'lng' => floatval($interestPoint->longitude)];
+        foreach ($farm->interestPoints()->where('year', $year)->get() as $interestPoint) {
+            $coords[] = ['lat' => floatval($interestPoint->latitude), 'lng' => floatval($interestPoint->longitude)];
         }
 
+        # Calculate farm center if coordinates are available
+        if (!empty($coords)) {
+            // Calculate center coordinates
+            $latitudes = array_column($coords, 'lat');
+            $longitudes = array_column($coords, 'lng');
 
-        $count_coords = count($coords);
-        $xcos=0.0;
-        $ycos=0.0;
-        $zsin=0.0;
-        
-        if($count_coords>0) {
-            foreach ($coords as $lnglat)
-            {
-                $lat = $lnglat['lat'] * pi() / 180;
-                $lon = $lnglat['lng'] * pi() / 180;
-                
-                $acos = cos($lat) * cos($lon);
-                $bcos = cos($lat) * sin($lon);
-                $csin = sin($lat);
-                $xcos += $acos;
-                $ycos += $bcos;
-                $zsin += $csin;
-            }
-            
-            $xcos /= $count_coords;
-            $ycos /= $count_coords;
-            $zsin /= $count_coords;
-            $lon = atan2($ycos, $xcos);
-            $sqrt = sqrt($xcos * $xcos + $ycos * $ycos);
-            $lat = atan2($zsin, $sqrt);
-            
-            $farmCenter = array($lat * 180 / pi(), $lon * 180 / pi());
-            $noCoords = 0;
+            $avgLat = array_sum($latitudes) / count($latitudes);
+            $avgLng = array_sum($longitudes) / count($longitudes);
 
-        }
-        
-        else {
+            $farmCenter = [$avgLat, $avgLng];
+        } else {
+            // Set default farm center coordinates
             $farmCenter = [17.5739347, -3.9861092];
             $noCoords = 1;
         }
-        
-        
-        # PLOTS
-        
-        $field_ids = $farm->fields()->pluck('id');
 
-        $plots = Plot::whereIn('field_id', $field_ids)->get();
-        
-        $plotCoords = $plots->map(function($plot) {
 
+        # Get plots
+        $field_ids = $farm->fields->pluck('id');
+        $plots = Plot::whereIn('field_id', $field_ids)->with('field')->get();
+
+        $plotCoords = $plots->map(function ($plot) {
             $latlngs = [];
 
-            foreach($plot->trace_superficie as $point){
-                $latlngs[]=[$point[1], $point[0]];
+            foreach ($plot->trace_superficie as $point) {
+                $latlngs[] = [$point[1], $point[0]];
             }
 
-            // remove duplicate points
-            $latlngs_plot_unique = array_unique($latlngs, SORT_REGULAR);
+            // Remove duplicate points
+            $latlngs = collect($latlngs)->unique()->values()->toArray();
 
-            $plot->latlngs = $latlngs_plot_unique;
-            
-            // include field details
-            $plot->load('field');
+            $plot->latlngs = $latlngs;
 
-            // include main crop details
             $plot->main_crop_image = Crop::where('id', $plot->crop_id)->pluck('nom_fichier_image')->first();
             $plot->main_crop_bm = Crop::where('id', $plot->crop_id)->pluck('label_bm')->first();
             $plot->main_crop_fr = Crop::where('id', $plot->crop_id)->pluck('label_fr')->first();
 
-            // include associated crop details
+            // Include associated crop details
             $associated_crops = explode(' ', $plot->cultures_associations);
             $associated_crops_details = [];
-
-            foreach($associated_crops as $associated_crop) {
-                $crop_image = Crop::where('id', $associated_crop)->pluck('nom_fichier_image')->first();
-                $crop_bm = Crop::where('id', $associated_crop)->pluck('label_bm')->first();
-                $crop_fr = Crop::where('id', $associated_crop)->pluck('label_fr')->first();
-
-                $associated_crops_details[]=['crop_image' => $crop_image, 'label_bm' => $crop_bm, 'label_fr' => $crop_fr];
+            foreach ($associated_crops as $associated_crop) {
+                $crop = Crop::find($associated_crop);
+                if ($crop) {
+                    $associated_crops_details[] = [
+                        'crop_image' => $crop->nom_fichier_image,
+                        'crop_bm' => $crop->label_bm,
+                        'crop_fr' => $crop->label_fr,
+                    ];
+                }
             }
-
             $plot->associated_crops = $associated_crops_details;
 
-            // inlcude plot fertility bm label
-            if($plot->fertilite === 'pauvre') {$plot->fertilite_bm = 'Sɛngɛlen';}
-            elseif($plot->fertilite === 'moyen') {$plot->fertilite_bm = 'Camancɛ';}
-            elseif($plot->fertilite === 'fertile') {$plot->fertilite_bm = 'Fangama';}
-            else {$plot->fertilite_bm = $plot->fertilite;}
+            // Include plot fertility bm label
+            $fertilityLabels = ['pauvre' => 'Sɛngɛlen', 'moyen' => 'Camancɛ', 'fertile' => 'Fangama'];
+            $plot->fertilite_bm = $fertilityLabels[$plot->fertilite] ?? $plot->fertilite;
 
-            // inlcude field soil type bm label
-            if($plot->field->type_sol === 'sable') {$plot->field->type_sol_bm = 'Cɛncɛn';}
-            elseif($plot->field->type_sol === 'gravillon') {$plot->field->type_sol_bm = 'Bɛlɛ';}
-            elseif($plot->field->type_sol === 'argile') {$plot->field->type_sol_bm = 'Bɔgɔ';}
-            else {$plot->field->type_sol_bm = $plot->field->type_sol;}
-            
-            // inlcude field slope bm label
-            if($plot->field->pente === 'plat') {$plot->field->pente_bm = 'Dalen';}
-            elseif($plot->field->pente === 'incline') {$plot->field->pente_bm = 'Jɛgɛlen';}
-            elseif($plot->field->pente === 'escarpe') {$plot->field->pente_bm = 'Jɔlen';}
-            else {$plot->field->pente_bm = $plot->field->pente;}
+            // Include field soil type bm label
+            $soilTypeLabels = ['sable' => 'Cɛncɛn', 'gravillon' => 'Bɛlɛ', 'argile' => 'Bɔgɔ'];
+            $plot->field->type_sol_bm = $soilTypeLabels[$plot->field->type_sol] ?? $plot->field->type_sol;
 
+            // Include field slope bm label
+            $slopeLabels = ['plat' => 'Dalen', 'incline' => 'Jɛgɛlen', 'escarpe' => 'Jɔlen'];
+            $plot->field->pente_bm = $slopeLabels[$plot->field->pente] ?? $plot->field->pente;
 
-            // add rounding to area
-            $plot->superficie_measuree = round(floatval($plot->superficie_measuree),1);
-            $plot->field->superficie_total = round(floatval($plot->field->superficie_total),1);
+            // Round area values
+            $plot->superficie_measuree = round(floatval($plot->superficie_measuree), 1);
+            $plot->field->superficie_total = round(floatval($plot->field->superficie_total), 1);
 
             return $plot;
         });
 
 
-        // incldue field color
-        $colors = ["#b877e6", "#41b782", '#77dbe6', '#e6ba77', '#8077e6', '#77e6cc', 
-                    '#d9e677', '#e67777', '#7be677', '#e677dd', '#77b8e6', '#e67d77'];
+        // Include field color
+        $colors = ["#b877e6", "#41b782", '#77dbe6', '#e6ba77', '#8077e6', '#77e6cc',
+            '#d9e677', '#e67777', '#7be677', '#e677dd', '#77b8e6', '#e67d77'];
         $field_colors = [];
 
-        foreach($field_ids as $field_id=>$index) {
+        foreach ($field_ids as $field_id => $index) {
             $field_colors[$field_ids[$field_id]] = $colors[$field_id];
         }
 
-        foreach($plotCoords as $plot) {
+        foreach ($plotCoords as $plot) {
             $plot->field_color = $field_colors[$plot->field_id];
         }
 
-
-
-        # INTEREST POINTS
+        # Get interest points
         $interestPointCoords = $farm
-                                ->interestPoints()
-                                ->select('id', 'nom', 'longitude', 'latitude')
-                                ->get();
+            ->interestPoints()
+            ->where('year', $year)
+            ->select('id', 'nom', 'longitude', 'latitude')
+            ->get();
 
-        $interestPointCoords = $interestPointCoords->map(function($point) {
+        $interestPointCoords = $interestPointCoords->map(function ($point) {
             $point->latlng = ['lat' => $point->latitude, 'lng' => $point->longitude];
-            
+
             // include icon
-            $point->icon = Storage::disk('public')->URL('images/'.strtolower(str_replace(' ', '_', $point->nom)).'.png');
-            
+            $point->icon = Storage::disk('public')->URL('images/' . strtolower(str_replace(' ', '_', $point->nom)) . '.png');
+
             return $point;
 
         });
 
-        return[
+        return [
             "plotCoords" => $plotCoords,
             "interestPointCoords" => $interestPointCoords,
             "farmCenter" => $farmCenter,
@@ -181,14 +161,14 @@ class FarmController extends Controller
 
     }
 
-    public static function getFarmArea(Farm $farm)
+    public static function getFarmArea(Farm $farm, $year)
     {
-        $field_ids = $farm->fields()->pluck('id');
+        $field_ids = $farm->fields()->where('year', $year)->pluck('id');
         $plots = Plot::whereIn('field_id', $field_ids)->get();
-        
+
         # TOTAL AREA (SUPERFICIE) ALL CROPS
 
-        $totalArea = $farm->fields->sum('superficie_total');
+        $totalArea = $farm->fields->where('year', $year)->sum('superficie_total');
 
         # AREA PER PRIMARY CROP
 
@@ -198,18 +178,17 @@ class FarmController extends Controller
         $plotAreas = [];
 
         foreach ($plots as $plot) {
-            if(in_array($plot['crop_id'], $primaryCropIds)) {
-                $plotAreas[$plot['crop_id']][]= $plot['superficie_measuree'];
+            if (in_array($plot['crop_id'], $primaryCropIds)) {
+                $plotAreas[$plot['crop_id']][] = $plot['superficie_measuree'];
             }
         }
 
         $plotAreas = array_map('array_sum', $plotAreas);
 
-        foreach($primaryCrops as $key => $primaryCrop){
-            if(in_array($primaryCrop->id, array_keys($plotAreas))) {
+        foreach ($primaryCrops as $key => $primaryCrop) {
+            if (in_array($primaryCrop->id, array_keys($plotAreas))) {
                 $primaryCrop->area = $plotAreas[$primaryCrop->id];
-            }
-            else {
+            } else {
                 unset($primaryCrops[$key]);
             }
         }
@@ -222,36 +201,35 @@ class FarmController extends Controller
         $plotAreas = [];
 
         foreach ($plots as $plot) {
-            if(in_array($plot['crop_id'], $secondaryCropIds)) {
-                $plotAreas[$plot['crop_id']][]= $plot['superficie_measuree'];
+            if (in_array($plot['crop_id'], $secondaryCropIds)) {
+                $plotAreas[$plot['crop_id']][] = $plot['superficie_measuree'];
             }
         }
 
         $plotAreas = array_map('array_sum', $plotAreas);
 
-        foreach($secondaryCrops as $key => $secondaryCrop){
-            if(in_array($secondaryCrop->id, array_keys($plotAreas))) {
+        foreach ($secondaryCrops as $key => $secondaryCrop) {
+            if (in_array($secondaryCrop->id, array_keys($plotAreas))) {
                 $secondaryCrop->area = $plotAreas[$secondaryCrop->id];
-            }
-            else {
+            } else {
                 unset($secondaryCrops[$key]);
             }
         }
 
-        return[
+        return [
             "totalArea" => $totalArea,
             "primaryArea" => $primaryCrops,
             "secondaryArea" => $secondaryCrops,
         ];
 
     }
-    
-    public static function getFarmCosts(Farm $farm)
+
+    public static function getFarmCosts(Farm $farm, $year)
     {
         # TOTAL COST
-        $plantingTotalCost = $farm->plantings->sum('cout_total');
-        $postPlantingTotalCost = $farm->postPlantings->sum('cout_total');
-        $harvestTotalCost = $farm->harvests->sum('cout_total');
+        $plantingTotalCost = $farm->plantings()->where('year', $year)->sum('cout_total');
+        $postPlantingTotalCost = $farm->postPlantings()->where('year', $year)->sum('cout_total');
+        $harvestTotalCost = $farm->harvests()->where('year', $year)->sum('cout_total');
 
         $totalCost = $plantingTotalCost + $postPlantingTotalCost + $harvestTotalCost;
 
@@ -263,37 +241,36 @@ class FarmController extends Controller
 
         $cropCosts = [];
 
-        foreach($farm->plantings as $planting){
-            foreach($planting->plantingDetails as $plantingDetail){
-                if(in_array($plantingDetail['crop_id'], $primaryCropIds)) {
-                    $cropCosts[$plantingDetail['crop_id']][]= $plantingDetail['cout'];
+        foreach ($farm->plantings()->where('year', $year)->get() as $planting) {
+            foreach ($planting->plantingDetails as $plantingDetail) {
+                if (in_array($plantingDetail['crop_id'], $primaryCropIds)) {
+                    $cropCosts[$plantingDetail['crop_id']][] = $plantingDetail['cout'];
                 }
             }
         }
 
-        foreach($farm->postPlantings as $postPlanting){
-            foreach($postPlanting->postPlantingDetails as $postPlantingDetail){
-                if(in_array($postPlantingDetail['crop_id'], $primaryCropIds)) {
+        foreach ($farm->postPlantings()->where('year', $year)->get() as $postPlanting) {
+            foreach ($postPlanting->postPlantingDetails as $postPlantingDetail) {
+                if (in_array($postPlantingDetail['crop_id'], $primaryCropIds)) {
                     $cropCosts[$postPlantingDetail['crop_id']][] = $postPlantingDetail['cout'];
                 }
             }
         }
 
-        foreach($farm->harvests as $harvest){
-            foreach($harvest->harvestDetails as $harvestDetail){
-                if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
-                    $cropCosts[$harvestDetail['crop_id']][]= $harvestDetail['cout'];
+        foreach ($farm->harvests()->where('year', $year)->get() as $harvest) {
+            foreach ($harvest->harvestDetails as $harvestDetail) {
+                if (in_array($harvestDetail['crop_id'], $primaryCropIds)) {
+                    $cropCosts[$harvestDetail['crop_id']][] = $harvestDetail['cout'];
                 }
             }
         }
 
         $cropCosts = array_map('array_sum', $cropCosts);
-        
-        foreach($primaryCrops as $key => $primaryCrop){
-            if(in_array($primaryCrop->id, array_keys($cropCosts))) {
+
+        foreach ($primaryCrops as $key => $primaryCrop) {
+            if (in_array($primaryCrop->id, array_keys($cropCosts))) {
                 $primaryCrop->cost = $cropCosts[$primaryCrop->id];
-            }
-            else {
+            } else {
                 unset($primaryCrops[$key]);
             }
         }
@@ -303,9 +280,9 @@ class FarmController extends Controller
 
         $cropIndividualCosts = [];
 
-        foreach($farm->plantings as $planting){
-            foreach($planting->plantingDetails as $plantingDetail){
-                if(in_array($plantingDetail['crop_id'], $primaryCropIds)) {
+        foreach ($farm->plantings()->where('year', $year)->get() as $planting) {
+            foreach ($planting->plantingDetails as $plantingDetail) {
+                if (in_array($plantingDetail['crop_id'], $primaryCropIds)) {
                     $cropIndividualCosts[$plantingDetail['crop_id']]['Tolinɔgɔ donisara'][] = $plantingDetail['cout_transport'];
                     $cropIndividualCosts[$plantingDetail['crop_id']]['Faranɔgɔ sɔngɔ'][] = $plantingDetail['cout_chaux_agricole'];
                     $cropIndividualCosts[$plantingDetail['crop_id']]['Burɛmunɔgɔ sɔngɔ'][] = $plantingDetail['cout_pnt_png'];
@@ -316,9 +293,9 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->postPlantings as $postPlanting){
-            foreach($postPlanting->postPlantingDetails as $postPlantingDetail){
-                if(in_array($postPlantingDetail['crop_id'], $primaryCropIds)) {
+        foreach ($farm->postPlantings()->where('year', $year)->get() as $postPlanting) {
+            foreach ($postPlanting->postPlantingDetails as $postPlantingDetail) {
+                if (in_array($postPlantingDetail['crop_id'], $primaryCropIds)) {
                     $cropIndividualCosts[$postPlantingDetail['crop_id']]['Coût total prestation sarclage'][] = $postPlantingDetail['cout_sarclage'];
                     $cropIndividualCosts[$postPlantingDetail['crop_id']]['Siɲɛli sarala sɔngɔ'][] = $postPlantingDetail['cout_desherbage'];
                     $cropIndividualCosts[$postPlantingDetail['crop_id']]['Nɔgɔfin mɔninkuru sɔngɔ'][] = $postPlantingDetail['cout_npk'];
@@ -330,39 +307,38 @@ class FarmController extends Controller
             }
         }
 
-        foreach($farm->harvests as $harvest){
-            foreach($harvest->harvestDetails as $harvestDetail){
-                if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
-                    $cropIndividualCosts[$harvestDetail['crop_id']]['Bɔli wali tigɛli sara sɔngɔ'][]= $harvestDetail['cout_total_prestation_recolte'];
-                    $cropIndividualCosts[$harvestDetail['crop_id']]['Ɲɔ gosi sara sɔngɔ'][]= $harvestDetail['cout_total_battage'];
+        foreach ($farm->harvests()->where('year', $year)->get() as $harvest) {
+            foreach ($harvest->harvestDetails as $harvestDetail) {
+                if (in_array($harvestDetail['crop_id'], $primaryCropIds)) {
+                    $cropIndividualCosts[$harvestDetail['crop_id']]['Bɔli wali tigɛli sara sɔngɔ'][] = $harvestDetail['cout_total_prestation_recolte'];
+                    $cropIndividualCosts[$harvestDetail['crop_id']]['Ɲɔ gosi sara sɔngɔ'][] = $harvestDetail['cout_total_battage'];
                 }
             }
         }
 
-        $cropIndividualCostsSummed=[];
+        $cropIndividualCostsSummed = [];
 
-        foreach($cropIndividualCosts as $key => $crop) {
-                $cost = array_map('array_sum', $crop);
-                $cropIndividualCostsSummed[$key] = $cost;
+        foreach ($cropIndividualCosts as $key => $crop) {
+            $cost = array_map('array_sum', $crop);
+            $cropIndividualCostsSummed[$key] = $cost;
         }
 
-        foreach($primaryCrops as $key => $primaryCrop){
-            if(in_array($primaryCrop->id, array_keys($cropIndividualCostsSummed))) {
+        foreach ($primaryCrops as $key => $primaryCrop) {
+            if (in_array($primaryCrop->id, array_keys($cropIndividualCostsSummed))) {
                 $primaryCrop->individual_costs = $cropIndividualCostsSummed[$primaryCrop->id];
-            }
-            else {
+            } else {
                 unset($primaryCrops[$key]);
             }
         }
 
-        return[
+        return [
             "totalCost" => $totalCost,
             "cropCosts" => $primaryCrops
         ];
 
     }
 
-    public static function getFarmProduction(Farm $farm)
+    public static function getFarmProduction(Farm $farm, $year)
     {
         # PRODUCTION PER CROP
 
@@ -371,30 +347,29 @@ class FarmController extends Controller
 
         $cropProductions = [];
 
-        foreach($farm->harvests as $harvest){
-            foreach($harvest->harvestDetails as $harvestDetail){
-                if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
-                    $cropProductions[$harvestDetail['crop_id']][]= $harvestDetail['production'];
+        foreach ($farm->harvests()->where('year', $year)->get() as $harvest) {
+            foreach ($harvest->harvestDetails as $harvestDetail) {
+                if (in_array($harvestDetail['crop_id'], $primaryCropIds)) {
+                    $cropProductions[$harvestDetail['crop_id']][] = $harvestDetail['production'];
                 }
             }
         }
 
-        foreach($primaryCrops as $key => $primaryCrop){
-            if(in_array($primaryCrop->id, array_keys($cropProductions))) {
-                $primaryCrop->production = round($cropProductions[$primaryCrop->id][0],1);
-            }
-            else {
+        foreach ($primaryCrops as $key => $primaryCrop) {
+            if (in_array($primaryCrop->id, array_keys($cropProductions))) {
+                $primaryCrop->production = round($cropProductions[$primaryCrop->id][0], 1);
+            } else {
                 unset($primaryCrops[$key]);
             }
         }
 
-        return[
+        return [
             "cropProductions" => $primaryCrops
         ];
-        
+
     }
 
-    public static function getFarmYield(Farm $farm)
+    public static function getFarmYield(Farm $farm, $year)
     {
         # PRODUCTION
 
@@ -403,19 +378,18 @@ class FarmController extends Controller
 
         $cropProductions = [];
 
-        foreach($farm->harvests as $harvest){
-            foreach($harvest->harvestDetails as $harvestDetail){
-                if(in_array($harvestDetail['crop_id'], $primaryCropIds)) {
-                    $cropProductions[$harvestDetail['crop_id']][]= $harvestDetail['production'];
+        foreach ($farm->harvests()->where('year', $year)->get() as $harvest) {
+            foreach ($harvest->harvestDetails as $harvestDetail) {
+                if (in_array($harvestDetail['crop_id'], $primaryCropIds)) {
+                    $cropProductions[$harvestDetail['crop_id']][] = $harvestDetail['production'];
                 }
             }
         }
 
-        foreach($primaryCrops as $key => $primaryCrop){
-            if(in_array($primaryCrop->id, array_keys($cropProductions))) {
+        foreach ($primaryCrops as $key => $primaryCrop) {
+            if (in_array($primaryCrop->id, array_keys($cropProductions))) {
                 $primaryCrop->production = floatval($cropProductions[$primaryCrop->id][0]);
-            }
-            else {
+            } else {
                 unset($primaryCrops[$key]);
             }
         }
@@ -423,7 +397,7 @@ class FarmController extends Controller
 
         # AREA
 
-        $field_ids = $farm->fields()->pluck('id');
+        $field_ids = $farm->fields()->where('year', $year)->pluck('id');
         $plots = Plot::whereIn('field_id', $field_ids)->get();
 
         $primaryCropIds = $primaryCrops->pluck('id')->toArray();
@@ -431,27 +405,153 @@ class FarmController extends Controller
         $plotAreas = [];
 
         foreach ($plots as $plot) {
-            if(in_array($plot['crop_id'], $primaryCropIds)) {
-                $plotAreas[$plot['crop_id']][]= $plot['superficie_measuree'];
+            if (in_array($plot['crop_id'], $primaryCropIds)) {
+                $plotAreas[$plot['crop_id']][] = $plot['superficie_measuree'];
             }
         }
 
         $plotAreas = array_map('array_sum', $plotAreas);
 
-        foreach($primaryCrops as $key => $primaryCrop){
-            if(in_array($primaryCrop->id, array_keys($plotAreas))) {
+        foreach ($primaryCrops as $key => $primaryCrop) {
+            if (in_array($primaryCrop->id, array_keys($plotAreas))) {
                 $primaryCrop->area = $plotAreas[$primaryCrop->id];
-                $primaryCrop->yield = round($primaryCrop->production/$primaryCrop->area,1);
-            }
-            else {
+                $primaryCrop->yield = round($primaryCrop->production / $primaryCrop->area, 1);
+            } else {
                 unset($primaryCrops[$key]);
             }
         }
 
-        return[
+        return [
             "cropYields" => $primaryCrops
         ];
     }
 
+    public static function getFarmObservations(Farm $farm, $year)
+    {
+        #Planting
+        $plantingObs = [];
 
+        $plantings = $farm->plantings()->where('year', $year)->with('plantingDetails')->get();
+
+        if ($plantings->isNotEmpty()) {
+            $cropIds = $plantings->flatMap(function ($planting) {
+                return $planting->plantingDetails->pluck('crop_id');
+            })->unique();
+
+            $crops = Crop::whereIn('id', $cropIds)->get()->keyBy('id');
+
+            foreach ($plantings as $planting) {
+                foreach ($planting->plantingDetails as $plantingDetail) {
+                    $crop = $crops->get($plantingDetail['crop_id']);
+                    if ($crop) {
+                        if ($plantingDetail->observation_audio !== null ||
+                            $plantingDetail->observation_videos !== null ||
+                            $plantingDetail->observation_texte !== null ||
+                            $plantingDetail->observation_image !== null) {
+
+                            $plantingObs[] = [
+                                'id' => $crop->id,
+                                'label_bm' => $crop->label_bm,
+                                'nom_fichier_image' => $crop->nom_fichier_image,
+                                'order' => $crop->order,
+                                'observation_audio' => $plantingDetail->observation_audio ?
+                                                        $plantingDetail->getMedia()->where('file_name', $plantingDetail->observation_audio)->first()->getUrl() : null,
+                                'observation_image' => $plantingDetail->observation_image ?
+                                                        $plantingDetail->getMedia()->where('file_name', $plantingDetail->observation_image)->first()->getUrl() : null,
+                                'observation_video' => $plantingDetail->observation_videos ?
+                                                        $plantingDetail->getMedia()->where('file_name', $plantingDetail->observation_videos)->first()->getUrl() : null,
+                                'observation_texte' => $plantingDetail->observation_texte
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        #Post Planting
+        $postPlantingObs = [];
+
+        $postPlantings = $farm->postPlantings()->where('year', $year)->with('postPlantingDetails')->get();
+
+        if ($postPlantings->isNotEmpty()) {
+            $cropIds = $postPlantings->flatMap(function ($postPlanting) {
+                return $postPlanting->postPlantingDetails->pluck('crop_id');
+            })->unique();
+
+            $crops = Crop::whereIn('id', $cropIds)->get()->keyBy('id');
+
+            foreach ($postPlantings as $postPlanting) {
+                foreach ($postPlanting->postPlantingDetails as $postPlantingDetail) {
+                    $crop = $crops->get($postPlantingDetail['crop_id']);
+                    if ($crop) {
+                        if ($postPlantingDetail->observation_audio !== null ||
+                            $postPlantingDetail->observation_videos !== null ||
+                            $postPlantingDetail->observation_texte !== null ||
+                            $postPlantingDetail->observation_image !== null) {
+
+                            $postPlantingObs[] = [
+                                'id' => $crop->id,
+                                'label_bm' => $crop->label_bm,
+                                'nom_fichier_image' => $crop->nom_fichier_image,
+                                'order' => $crop->order,
+                                'observation_audio' => $postPlantingDetail->observation_audio ?
+                                                        $postPlantingDetail->getMedia()->where('file_name', $postPlantingDetail->observation_audio)->first()->getUrl() : null,
+                                'observation_image' => $postPlantingDetail->observation_image ?
+                                                        $postPlantingDetail->getMedia()->where('file_name', $postPlantingDetail->observation_image)->first()->getUrl() : null,
+                                'observation_video' => $postPlantingDetail->observation_videos ?
+                                                        $postPlantingDetail->getMedia()->where('file_name', $postPlantingDetail->observation_videos)->first()->getUrl() : null,
+                                'observation_texte' => $postPlantingDetail->observation_texte,
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        # Harvest
+        $harvestObs = [];
+
+        $harvests = $farm->harvests()->where('year', $year)->with('harvestDetails')->get();
+
+        if ($harvests->isNotEmpty()) {
+            $cropIds = $harvests->flatMap(function ($harvest) {
+                return $harvest->harvestDetails->pluck('crop_id');
+            })->unique();
+
+            $crops = Crop::whereIn('id', $cropIds)->get()->keyBy('id');
+
+            foreach ($harvests as $harvest) {
+                foreach ($harvest->harvestDetails as $harvestDetail) {
+                    $crop = $crops->get($harvestDetail['crop_id']);
+                    if ($crop) {
+                        if ($harvestDetail->observation_audio !== null ||
+                            $harvestDetail->observation_videos !== null ||
+                            $harvestDetail->observation_texte !== null ||
+                            $harvestDetail->observation_image !== null) {
+
+                            $harvestObs[] = [
+                                'id' => $crop->id,
+                                'label_bm' => $crop->label_bm,
+                                'nom_fichier_image' => $crop->nom_fichier_image,
+                                'order' => $crop->order,
+                                'observation_audio' => $harvestDetail->observation_audio ?
+                                                        $harvestDetail->getMedia()->where('file_name', $harvestDetail->observation_audio)->first()->getUrl() : null,
+                                'observation_image' => $harvestDetail->observation_image ?
+                                                        $harvestDetail->getMedia()->where('file_name', $harvestDetail->observation_image)->first()->getUrl() : null,
+                                'observation_video' => $harvestDetail->observation_videos ?
+                                                        $harvestDetail->getMedia()->where('file_name', $harvestDetail->observation_videos)->first()->getUrl() : null,
+                                'observation_texte' => $harvestDetail->observation_texte,
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        return [
+            "plantingObservations" => $plantingObs,
+            "postPlantingObservations" => $postPlantingObs,
+            "harvestObservations" => $harvestObs,
+        ];
+    }
 }
