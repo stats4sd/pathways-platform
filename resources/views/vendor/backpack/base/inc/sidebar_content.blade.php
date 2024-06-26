@@ -1,5 +1,8 @@
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("village") }}"><i class="las la-map-marker nav-icon"></i>Villages</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("commune") }}"><i class="las la-map-marker nav-icon"></i>Communes</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url("crop") }}"><i class="las la-leaf nav-icon"></i>Cultures</a></li>
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url("farm") }}"><i class="las la-seedling nav-icon"></i>UPAs</a></li>
+
+<li class="mt-3 nav-item"><a class="nav-link" href="{{ backpack_url("farm") }}"><i class="las la-seedling nav-icon"></i>UPAs</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url("field") }}"><i class="las la-seedling nav-icon"></i>Champs</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url("plot") }}"><i class="las la-seedling nav-icon"></i>Parcelles</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url("interest_point") }}"><i class="las la-map-marker nav-icon"></i>Points d'intérêt</a></li>
