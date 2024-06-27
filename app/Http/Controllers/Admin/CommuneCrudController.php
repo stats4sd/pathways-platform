@@ -29,7 +29,7 @@ class CommuneCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        CRUD::column('village_id');
+        CRUD::column('cercle_id');
         CRUD::column('nom');
 
     }
@@ -40,7 +40,7 @@ class CommuneCrudController extends CrudController
         CRUD::setValidation(CommuneRequest::class);
 
         CRUD::field('nom');
-        CRUD::field('village_id')->type('select');
+        CRUD::field('cercle_id')->type('select');
 
     }
 

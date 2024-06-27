@@ -72,9 +72,9 @@ class Farm extends Model
         return $this->hasMany(InterestPoint::class);
     }
 
-    public function communes(): BelongsToMany
+    public function villages(): BelongsToMany
     {
-        return $this->belongsToMany(Commune::class);
+        return $this->belongsToMany(Village::class);
     }
 
 }
