@@ -31,6 +31,9 @@ Route::group([
     Route::crud('plot', 'PlotCrudController');
     Route::crud('field', 'FieldCrudController');
     Route::crud('interest_point', 'InterestPointCrudController');
-    Route::crud('village', 'VillageCrudController');
+    Route::crud('region', 'RegionCrudController');
+    Route::crud('cercle', 'CercleCrudController');
     Route::crud('commune', 'CommuneCrudController');
+    Route::crud('village', 'VillageCrudController');
+
 }); // this should be the absolute last line of this file

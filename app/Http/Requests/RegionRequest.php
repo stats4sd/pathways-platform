@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class VillageRequest extends FormRequest
+class RegionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,6 @@ class VillageRequest extends FormRequest
     {
         return [
             'id' => 'nullable|integer',
-            'commune_id' => 'required',
             'nom' => 'required',
         ];
     }

@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('commune_farm', function (Blueprint $table) {
+        Schema::create('villages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('commune_id')->constrained('communes')->onDelete('cascade');
-            $table->foreignId('farm_id')->constrained('farms')->onDelete('cascade');
+            $table->foreignId('commune_id')->constrained('communes');
+            $table->string('nom');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('commune_farm');
+        Schema::dropIfExists('villages');
     }
 };

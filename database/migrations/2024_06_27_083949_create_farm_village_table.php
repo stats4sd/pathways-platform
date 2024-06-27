@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('communes', function (Blueprint $table) {
+        Schema::create('farm_village', function (Blueprint $table) {
             $table->id();
-            $table->string('village_id')->constrained('villages');
-            $table->string('nom');
+            $table->foreignId('village_id')->constrained('villages')->onDelete('cascade');
+            $table->foreignId('farm_id')->constrained('farms')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('communes');
+        Schema::dropIfExists('farm_village');
     }
 };

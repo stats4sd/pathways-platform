@@ -26,7 +26,7 @@ class CommuneRequest extends FormRequest
     {
         return [
             'id' => 'nullable|integer',
-            'village_id' => 'required',
+            'cercle_id' => 'required',
             'nom' => 'required',
         ];
     }
