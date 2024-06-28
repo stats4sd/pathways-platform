@@ -51,7 +51,8 @@ class FarmCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        CRUD::setFromDb();
+        CRUD::column('code');
+        CRUD::column('phone_number');
 
         CRUD::button('map')
         ->stack('line')
@@ -71,18 +72,8 @@ class FarmCrudController extends CrudController
         CRUD::setValidation(FarmRequest::class);
 
         CRUD::field('code');
-        CRUD::field('year');
         CRUD::field('phone_number');
-        CRUD::field('chef_upa');
-        CRUD::field('chef_travaux');
-        CRUD::field('neo_alphabete');
-        CRUD::field('activite_primaire');
-        CRUD::field('activite_secondaire');
-        CRUD::field('cereales_favoris_1');
-        CRUD::field('cereales_favoris_2');
-        CRUD::field('cereales_favoris_3');
-        CRUD::field('superficie_possede_upa');
-        CRUD::field('superficie_cultive_upa');
+
     }
 
     public function export() 
