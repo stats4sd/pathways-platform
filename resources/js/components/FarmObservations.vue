@@ -57,16 +57,16 @@
             <div class="text-left">
                 <b>{{ crop.label_bm }}</b>
                 <div class="d-flex mt-1">
-                    <div v-if="crop.observation_audio" class="icon-wrapper" @click="openObservationModal(crop.observation_audio, 'audio', crop.label_bm, 'DANNI WATI')">
+                    <div v-if="crop.observation_audio" class="icon-wrapper" @click="openObservationModal(crop.observation_audio, 'audio', crop.label_bm, 'DANNI KOFƐ')">
                         <i class="las la-volume-up la-2x mr-2" title="Audio Icon"></i>
                     </div>
-                    <div v-if="crop.observation_image" class="icon-wrapper" @click="openObservationModal(crop.observation_image, 'image', crop.label_bm, 'DANNI WATI')">
+                    <div v-if="crop.observation_image" class="icon-wrapper" @click="openObservationModal(crop.observation_image, 'image', crop.label_bm, 'DANNI KOFƐ')">
                         <i class="las la-camera la-2x mr-2" title="Image Icon"></i>
                     </div>
-                    <div v-if="crop.observation_texte" class="icon-wrapper" @click="openObservationModal(crop.observation_texte, 'text', crop.label_bm, 'DANNI WATI')">
+                    <div v-if="crop.observation_texte" class="icon-wrapper" @click="openObservationModal(crop.observation_texte, 'text', crop.label_bm, 'DANNI KOFƐ')">
                         <i class="las la-file-alt la-2x mr-2" title="Text Icon"></i>
                     </div>
-                    <div v-if="crop.observation_video" class="icon-wrapper" @click="openObservationModal(crop.observation_video, 'video', crop.label_bm, 'DANNI WATI')">
+                    <div v-if="crop.observation_video" class="icon-wrapper" @click="openObservationModal(crop.observation_video, 'video', crop.label_bm, 'DANNI KOFƐ')">
                         <i class="las la-video la-2x mr-2" title="Video Icon"></i>
                     </div>
                 </div>
@@ -83,16 +83,16 @@
             <div class="text-left">
                 <b>{{ crop.label_bm }}</b>
                 <div class="d-flex mt-1">
-                    <div v-if="crop.observation_audio" class="icon-wrapper" @click="openObservationModal(crop.observation_audio, 'audio', crop.label_bm, 'DANNI WATI')">
+                    <div v-if="crop.observation_audio" class="icon-wrapper" @click="openObservationModal(crop.observation_audio, 'audio', crop.label_bm, 'KƆƆRIBƆ NI ƝƆTIGƐ')">
                         <i class="las la-volume-up la-2x mr-2" title="Audio Icon"></i>
                     </div>
-                    <div v-if="crop.observation_image" class="icon-wrapper" @click="openObservationModal(crop.observation_image, 'image', crop.label_bm, 'DANNI WATI')">
+                    <div v-if="crop.observation_image" class="icon-wrapper" @click="openObservationModal(crop.observation_image, 'image', crop.label_bm, 'KƆƆRIBƆ NI ƝƆTIGƐ')">
                         <i class="las la-camera la-2x mr-2" title="Image Icon"></i>
                     </div>
-                    <div v-if="crop.observation_texte" class="icon-wrapper" @click="openObservationModal(crop.observation_texte, 'text', crop.label_bm, 'DANNI WATI')">
+                    <div v-if="crop.observation_texte" class="icon-wrapper" @click="openObservationModal(crop.observation_texte, 'text', crop.label_bm, 'KƆƆRIBƆ NI ƝƆTIGƐ')">
                         <i class="las la-file-alt la-2x mr-2" title="Text Icon"></i>
                     </div>
-                    <div v-if="crop.observation_video" class="icon-wrapper" @click="openObservationModal(crop.observation_video, 'video', crop.label_bm, 'DANNI WATI')">
+                    <div v-if="crop.observation_video" class="icon-wrapper" @click="openObservationModal(crop.observation_video, 'video', crop.label_bm, 'KƆƆRIBƆ NI ƝƆTIGƐ')">
                         <i class="las la-video la-2x mr-2" title="Video Icon"></i>
                     </div>
                 </div>
