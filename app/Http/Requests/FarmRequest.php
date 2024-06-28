@@ -27,18 +27,7 @@ class FarmRequest extends FormRequest
         return [
             'id' => 'nullable|integer',
             'code' => 'nullable',
-            'year' => 'nullable',
             'phone_number' => 'nullable',
-            'chef_upa' => 'nullable',
-            'chef_travaux' => 'nullable',
-            'neo_alphabete' => 'nullable',
-            'activite_primaire' => 'nullable',
-            'activite_secondaire' => 'nullable',
-            'cereales_favoris_1' => 'nullable',
-            'cereales_favoris_2' => 'nullable',
-            'cereales_favoris_3' => 'nullable',
-            'superficie_possede_upa' => 'nullable',
-            'superficie_cultive_upa' => 'nullable'
         ];
     }
 
