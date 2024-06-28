@@ -32,7 +32,6 @@ return new class extends Migration
 
         Schema::table('farms', function (Blueprint $table) {
             $table->dropColumn(['year',
-                                'chef_upa',
                                 'chef_travaux',
                                 'neo_alphabete',
                                 'activite_primaire',
