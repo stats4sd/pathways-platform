@@ -77,4 +77,8 @@ class Farm extends Model
         return $this->belongsToMany(Village::class);
     }
 
+    public function farmDetails(): HasMany
+    {
+        return $this->hasMany(FarmDetail::class);
+    }
 }

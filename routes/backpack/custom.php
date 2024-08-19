@@ -21,6 +21,7 @@ Route::group([
 ], function () { // custom admin routes
     Route::crud('crop', 'CropCrudController');
     Route::crud('farm', 'FarmCrudController');
+    Route::crud('farm_detail', 'FarmDetailCrudController');
     Route::get('farm/{farm}/map', [FarmCrudController::class, 'renderMap']);
     Route::crud('planting', 'PlantingCrudController');
     Route::crud('planting_detail', 'PlantingDetailCrudController');
