@@ -76,9 +76,11 @@ class DatamapService
 
                 $validatedFarm = $this->getValidated($data, $submission, (new FarmRequest));
                 $farm = Farm::updateOrCreate(['code' => $data['code']], $validatedFarm);
+                $data['farm_id'] = $farm->id;
 
                 $validatedFarmDetail = $this->getValidated($data, $submission, (new FarmDetailRequest));
-                $farmDetail = FarmDetail::updateOrCreate(['code' => $data['code']], $validatedFarmDetail);
+                $farmDetail = FarmDetail::create($validatedFarmDetail);
+                $entries[FarmDetail::class] = [$farmDetail->id];
 
                 /* At the end, you should update the $submission entry: */
                 $submission->consent = 1;
