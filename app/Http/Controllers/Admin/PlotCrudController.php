@@ -39,21 +39,43 @@ class PlotCrudController extends CrudController
     protected function setupListOperation()
     {
 
+        CRUD::column('field.farm.code')->label('UPA');
         CRUD::column('id')->label('ID');
         CRUD::column('field.id')->label('Champ ID');
         CRUD::column('numero_parcelle');
-        CRUD::column('nombre_arbre');
+        CRUD::column('fertilite');
+        CRUD::column('prev_crop_id')->label('Culture Prev');
         CRUD::column('crop_id')->label('Culture');
+        CRUD::column('nom_variete_culture');
+        CRUD::column('type_variete_culture');
+        CRUD::column('nombre_arbre');
+        CRUD::column('nom_arbres');
         CRUD::column('cultures_associations');
+        CRUD::column('quantite_fumure_organique');
+        CRUD::column('type_fumure_organique');
+        CRUD::column('autre_type_fumure_organique');
+        CRUD::column('quantite_npk');
+        CRUD::column('quantite_uree');
+        CRUD::column('nom_autre_engrais');
         CRUD::column('superficie_estimee');
         CRUD::column('superficie_measuree');
         CRUD::column('trace_superficie')->type('text')->limit(1000);
-
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
-         */
+        CRUD::column('observation_audio')
+                ->type('url')
+                ->wrapper(['href'=>function($crud, $column, $entry) {
+                    if(!empty($entry->observation_audio)) {
+                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->observation_audio)->first()->getUrl();
+                        return $mediaUrl;
+                    }
+                }]);
+        CRUD::column('observation_image')
+                ->type('url')
+                ->wrapper(['href'=>function($crud, $column, $entry) {
+                    if(!empty($entry->observation_image)) {
+                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->observation_image)->first()->getUrl();
+                        return $mediaUrl;
+                    }
+                }]);
     }
 
     protected function setupShowOperation()
