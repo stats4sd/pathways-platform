@@ -396,183 +396,183 @@ class DatamapService
         }
     }
 
-        public function superficieChamps(Submission $submission) : bool
-        {
-            try {
+    public function superficieChamps(Submission $submission) : bool
+    {
+        try {
 
-                $data = $this->prepareDataArray($submission);
-                $data = $this->removeGroupNames($data);
+            $data = $this->prepareDataArray($submission);
+            $data = $this->removeGroupNames($data);
 
-                $entries = [];
+            $entries = [];
 
-                if(!isset($data['farm_id'])) {
+            if(!isset($data['farm_id'])) {
 
-                    $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
-
-                    if(!isset($data['farm_id'])) {
-
-                        $newFarm = [];
-                        $newFarm['code'] = $data['camera_scane'];
-
-                        $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
-                        $farm = Farm::create($validatedFarm);
-                        $data['farm_id'] = $farm->id;
-
-                    }
-
-                }
-
-                $data['nom'] = $data['champ'];
-                $data['superficie_total'] = $data['superf_total'];
-
-                $validatedField = $this->getValidated($data, $submission, (new FieldRequest));
-                $field = Field::create($validatedField);
-                $entries[Field::class] = [$field->id];
-
-                if (isset($data['parcelles'])) {
-
-                    foreach ($data['parcelles'] as $plotData) {
-
-                        if($plotData['culture']=='999') {
-
-                            $newCrop = [];
-                            $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $plotData['culture_label']));
-                            $newCrop['label_fr'] = $plotData['culture_label'];
-                            $newCrop['label_bm'] =$plotData['culture_label'];
-                            $newCrop['order'] = '999';
-                            $newCrop['type'] = 'autre';
-                            $newCrop['farm_id'] = $data['farm_id'];
-
-                            $validatedOperation = $this->getValidated($newCrop, $submission, (new CropRequest));
-
-                            Crop::create($validatedOperation);
-                            $crops[] = $newCrop['id'];
-
-                            $plotData['field_id'] = $field->id;
-                            $plotData['crop_id'] = $newCrop['id'];
-                            $plotData['superficie_estimee'] = $plotData['superficie'];
-                            $plotData['superficie_measuree'] = $plotData['surface_h'];
-                            $plotData['trace_superficie'] = $plotData['trace_superficie']['coordinates'][0];
-
-                            if(isset($plotData['autre_cult_associe_1'])) {
-
-                                $plotData['cultures_associations'] = str_replace('997', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
-
-                            }
-
-                            if(isset($plotData['autre_cult_associe_2'])) {
-
-                                $plotData['cultures_associations'] = str_replace('998', $plotData['autre_cult_associe_2'], $plotData['cultures_associations']);
-
-                            }
-
-                            $validatedOperation = $this->getValidated($plotData, $submission, (new PlotRequest));
-
-                            $plot = Plot::create($validatedOperation);
-                            $plots[] = $plot->id;
-
-                        }
-                        else {
-
-                                $plotData['field_id'] = $field->id;
-                                $plotData['crop_id'] = $plotData['culture'];
-                                $plotData['superficie_estimee'] = $plotData['superficie'];
-                                $plotData['superficie_measuree'] = $plotData['surface_h'];
-                                $plotData['trace_superficie'] = $plotData['trace_superficie']['coordinates'][0];
-
-                                if(isset($plotData['autre_cult_associe_1'])) {
-
-                                    $plotData['cultures_associations'] = str_replace('997', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
-
-                                }
-
-                                if(isset($plotData['autre_cult_associe_2'])) {
-
-                                    $plotData['cultures_associations'] = str_replace('998', $plotData['autre_cult_associe_2'], $plotData['cultures_associations']);
-
-                                }
-
-                                $validatedOperation = $this->getValidated($plotData, $submission, (new PlotRequest));
-
-                                $plot = Plot::create($validatedOperation);
-                                $plots[] = $plot->id;
-
-                        }
-
-                    }
-
-                    $entries[Plot::class] = $plots;
-                    if (!empty($crops)) {
-                        $entries[Crop::class] = $crops;
-                    }
-
-                }
-
-            /* At the end, you should update the $submission entry: */
-            $submission->processed = 1;
-            $submission->entries = $entries;
-            $submission->save();
-
-            return true;
-
-            } catch (\JsonException|ValidationException $e) {
-                return false;
-            }
-        }
-
-        public function pointDinteret(Submission $submission) : bool
-        {
-            try {
-
-                $data = $this->prepareDataArray($submission);
-                $data = $this->removeGroupNames($data);
-
-                $entries = [];
+                $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
 
                 if(!isset($data['farm_id'])) {
 
-                    $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
+                    $newFarm = [];
+                    $newFarm['code'] = $data['camera_scane'];
 
-                    if(!isset($data['farm_id'])) {
-
-                        $newFarm = [];
-                        $newFarm['code'] = $data['camera_scane'];
-
-                        $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
-                        $farm = Farm::create($validatedFarm);
-
-                        $data['farm_id'] = $farm->id;
-
-                    }
-
-                    if (isset($data['gps'])) {
-                        $data = array_merge($data, $this->splitGps($data, 'gps'));
-                    }
+                    $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
+                    $farm = Farm::create($validatedFarm);
+                    $data['farm_id'] = $farm->id;
 
                 }
 
-                $validatedInterestPoint = $this->getValidated($data, $submission, (new InterestPointRequest));
-                $interestPoint = InterestPoint::create($validatedInterestPoint);
-                $entries[InterestPoint::class] = [$interestPoint->id];
-
-                $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
-                ->where('model_id', $submission->id)
-                ->get();
-                foreach($mediaEntries as $mediaEntry) {
-                    $mediaEntry->copy($interestPoint, 'default', 'local');
-                }
-
-            /* At the end, you should update the $submission entry: */
-            $submission->processed = 1;
-            $submission->entries = $entries;
-            $submission->save();
-
-            return true;
-
-            } catch (\JsonException|ValidationException $e) {
-                return false;
             }
+
+            $data['nom'] = $data['champ'];
+            $data['superficie_total'] = $data['superf_total'];
+
+            $validatedField = $this->getValidated($data, $submission, (new FieldRequest));
+            $field = Field::create($validatedField);
+            $entries[Field::class] = [$field->id];
+
+            if (isset($data['parcelles'])) {
+
+                foreach ($data['parcelles'] as $plotData) {
+
+                    if($plotData['culture']=='999') {
+
+                        $newCrop = [];
+                        $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $plotData['culture_label']));
+                        $newCrop['label_fr'] = $plotData['culture_label'];
+                        $newCrop['label_bm'] =$plotData['culture_label'];
+                        $newCrop['order'] = '999';
+                        $newCrop['type'] = 'autre';
+                        $newCrop['farm_id'] = $data['farm_id'];
+
+                        $validatedOperation = $this->getValidated($newCrop, $submission, (new CropRequest));
+
+                        Crop::create($validatedOperation);
+                        $crops[] = $newCrop['id'];
+
+                        $plotData['crop_id'] = $newCrop['id'];
+
+                    }
+                    else {
+                        $plotData['crop_id'] = $plotData['culture'];
+                    }
+
+                    if($plotData['culture_prev']=='999') {
+
+                        $newCrop = [];
+                        $newCrop['id'] = Str::snake(preg_replace('/[\d\.-]/', '', $plotData['autre_culture_prev']));
+                        $newCrop['label_fr'] = $plotData['autre_culture_prev'];
+                        $newCrop['label_bm'] =$plotData['autre_culture_prev'];
+                        $newCrop['order'] = '999';
+                        $newCrop['type'] = 'autre';
+                        $newCrop['farm_id'] = $data['farm_id'];
+
+                        $validatedOperation = $this->getValidated($newCrop, $submission, (new CropRequest));
+
+                        Crop::create($validatedOperation);
+                        $crops[] = $newCrop['id'];
+
+                        $plotData['prev_crop_id'] = $newCrop['id'];
+
+                    }
+                    else {
+                        $plotData['prev_crop_id'] = $plotData['culture_prev'];
+                    }
+
+                    $plotData['field_id'] = $field->id;
+                    $plotData['superficie_estimee'] = $plotData['superficie'];
+                    $plotData['superficie_measuree'] = $plotData['surface_h'];
+                    $plotData['trace_superficie'] = $plotData['trace_superficie']['coordinates'][0];
+
+                    if(isset($plotData['autre_cult_associe_1'])) {
+
+                        $plotData['cultures_associations'] = str_replace('997', $plotData['autre_cult_associe_1'], $plotData['cultures_associations']);
+
+                    }
+
+                    if(isset($plotData['autre_cult_associe_2'])) {
+
+                        $plotData['cultures_associations'] = str_replace('998', $plotData['autre_cult_associe_2'], $plotData['cultures_associations']);
+
+                    }
+
+                    $validatedOperation = $this->getValidated($plotData, $submission, (new PlotRequest));
+
+                    $plot = Plot::create($validatedOperation);
+                    $plots[] = $plot->id;
+
+                }
+
+            }
+
+            $entries[Plot::class] = $plots;
+            if (!empty($crops)) {
+                $entries[Crop::class] = $crops;
+            }
+
+        /* At the end, you should update the $submission entry: */
+        $submission->processed = 1;
+        $submission->entries = $entries;
+        $submission->save();
+
+        return true;
+
+        } catch (\JsonException|ValidationException $e) {
+            return false;
         }
+    }
+
+    public function pointDinteret(Submission $submission) : bool
+    {
+        try {
+
+            $data = $this->prepareDataArray($submission);
+            $data = $this->removeGroupNames($data);
+
+            $entries = [];
+
+            if(!isset($data['farm_id'])) {
+
+                $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
+
+                if(!isset($data['farm_id'])) {
+
+                    $newFarm = [];
+                    $newFarm['code'] = $data['camera_scane'];
+
+                    $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
+                    $farm = Farm::create($validatedFarm);
+
+                    $data['farm_id'] = $farm->id;
+
+                }
+
+                if (isset($data['gps'])) {
+                    $data = array_merge($data, $this->splitGps($data, 'gps'));
+                }
+
+            }
+
+            $validatedInterestPoint = $this->getValidated($data, $submission, (new InterestPointRequest));
+            $interestPoint = InterestPoint::create($validatedInterestPoint);
+            $entries[InterestPoint::class] = [$interestPoint->id];
+
+            $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+            ->where('model_id', $submission->id)
+            ->get();
+            foreach($mediaEntries as $mediaEntry) {
+                $mediaEntry->copy($interestPoint, 'default', 'local');
+            }
+
+        /* At the end, you should update the $submission entry: */
+        $submission->processed = 1;
+        $submission->entries = $entries;
+        $submission->save();
+
+        return true;
+
+        } catch (\JsonException|ValidationException $e) {
+            return false;
+        }
+    }
 
 
     /*****************************************************************************/
