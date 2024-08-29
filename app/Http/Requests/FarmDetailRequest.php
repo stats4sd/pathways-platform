@@ -29,7 +29,12 @@ class FarmDetailRequest extends FormRequest
             'farm_id' => 'required',
             'year' => 'nullable',
             'phone_number' => 'nullable',
+            
             'type_upa' => 'nullable',
+            'ratio_membre_terre' => 'nullable',
+            'ratio_actif_terre' => 'nullable',
+            'ratio_boeuflabour_terre' => 'nullable',
+
             'village_id' => 'nullable',
             'longitude' => 'nullable',
             'latitude' => 'nullable',
@@ -40,6 +45,7 @@ class FarmDetailRequest extends FormRequest
             'age_chef' => 'nullable',
             'chef_travaux' => 'nullable',
             'neo_alphabete' => 'nullable',
+
             'activite_primaire' => 'nullable',
             'activite_secondaire' => 'nullable',
             'cereales_favoris_1' => 'nullable',
