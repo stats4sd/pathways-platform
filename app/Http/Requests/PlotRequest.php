@@ -34,7 +34,19 @@ class PlotRequest extends FormRequest
             'cultures_associations' => 'nullable',
             'superficie_estimee' => 'nullable',
             'superficie_measuree' => 'nullable',
-            'trace_superficie' => 'nullable'
+            'trace_superficie' => 'nullable',
+            'prev_crop_id' => 'nullable',
+            'nom_variete_culture' => 'nullable',
+            'type_variete_culture' => 'nullable',
+            'nom_arbres' => 'nullable',
+            'quantite_fumure_organique' => 'nullable',
+            'type_fumure_organique' => 'nullable',
+            'autre_type_fumure_organique' => 'nullable',
+            'quantite_npk' => 'nullable',
+            'quantite_uree' => 'nullable',
+            'nom_autre_engrais' => 'nullable',
+            'observation_audio' => 'nullable',
+            'observation_image' => 'nullable'
         ];
     }
 
