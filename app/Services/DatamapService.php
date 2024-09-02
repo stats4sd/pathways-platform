@@ -499,6 +499,12 @@ class DatamapService
                     $plot = Plot::create($validatedOperation);
                     $plots[] = $plot->id;
 
+                    $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+                                        ->where('model_id', $submission->id)
+                                        ->get();
+                    foreach($mediaEntries as $mediaEntry) {
+                        $mediaEntry->copy($plot, 'default', 'local');
+                    }
                 }
 
             }
