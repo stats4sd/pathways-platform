@@ -63,18 +63,28 @@ class PlotCrudController extends CrudController
         CRUD::column('observation_audio')
                 ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
-                    if(!empty($entry->observation_audio)) {
-                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->observation_audio)->first()->getUrl();
-                        return $mediaUrl;
+                    if (!empty($entry->observation_audio)) {
+                        $media = $entry->getMedia()->where('file_name', $entry->observation_audio)->first();
+                        if ($media) {
+                            return $media->getUrl();
+                        } else {
+                            return '';
+                        }
                     }
+                    return null;
                 }]);
         CRUD::column('observation_image')
                 ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
                     if(!empty($entry->observation_image)) {
-                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->observation_image)->first()->getUrl();
-                        return $mediaUrl;
+                        $media = $entry->getMedia()->where('file_name', $entry->observation_image)->first();
+                        if ($media) {
+                            return $media->getUrl();
+                        } else {
+                            return '';
+                        }
                     }
+                    return null;
                 }]);
     }
 
