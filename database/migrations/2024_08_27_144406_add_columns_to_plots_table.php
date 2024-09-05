@@ -23,8 +23,7 @@ return new class extends Migration
             $table->decimal('quantite_uree')->after('quantite_npk')->nullable();
             $table->text('nom_autre_engrais')->after('quantite_uree')->nullable();
             $table->text('observation_audio')->after('trace_superficie')->nullable();
-            $table->text('observation_texte')->after('observation_audio')->nullable();
-            $table->text('observation_image')->after('observation_texte')->nullable();
+            $table->text('observation_image')->after('observation_audio')->nullable();
         });
     }
 
