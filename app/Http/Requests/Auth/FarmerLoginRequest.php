@@ -28,7 +28,7 @@ class FarmerLoginRequest extends FormRequest
     {
         return [
             'code' => ['required', 'string', 'exists:farms,code'],
-            'phone_number' => ['required', 'string', 'exists:farms,phone_number'],
+            'phone_number' => ['required', 'string'],
         ];
     }
 
@@ -37,7 +37,6 @@ class FarmerLoginRequest extends FormRequest
         return [
             'code.required' => 'Cikɛda numerɔ kunafoni ta ni kamera ye',
             'phone_number.required' => 'Cikɛda talefone numerɔ don',
-            'phone_number.exists' => "Talefone numerɔ donlenɲi ma lakodon. A sɛgɛ-sqgɛ kaɲɛ",
             'code.exists' => "Cikɛda numerɔ talenɲi ma lakodon. A sɛgɛ-sɛgɛ kaɲɛ, ni ka lajɛ tuguni",
         ];
     }
