@@ -17,16 +17,16 @@ class Farm extends Model
     protected $table = 'farms';
     protected $guarded = [];
 
-    protected static function booted()
-    {
-        static::creating(function (Farm $farm) {
-            $user = User::create(['name' => $farm->chef_upa, 'email' => 'farm_'.$farm->id, 'email_verified_at' => now(), 'password' => bcrypt(rand(10000,99999))]);
-            $user->addRole('Farmer');
+    // protected static function booted()
+    // {
+    //     static::creating(function (Farm $farm) {
+    //         $user = User::create(['name' => $farm->chef_upa, 'email' => 'farm_'.$farm->chef_upa, 'email_verified_at' => now(), 'password' => bcrypt(rand(10000,99999))]);
+    //         $user->addRole('Farmer');
 
-            $farm->user_id = $user->id;
-        });
+    //         $farm->user_id = $user->id;
+    //     });
 
-    }
+    // }
 
     /*
     |--------------------------------------------------------------------------

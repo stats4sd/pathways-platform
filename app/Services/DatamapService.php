@@ -2,37 +2,47 @@
 
 namespace App\Services;
 
-use App\Http\Requests\FarmDetailRequest;
 use App\Models\Crop;
 use App\Models\Farm;
-use App\Models\FarmDetail;
 use App\Models\Plot;
 use App\Models\Field;
 use App\Models\Harvest;
 use App\Models\Planting;
+use App\Models\AnimalFeed;
+use App\Models\FarmDetail;
 use App\Models\Submission;
+use App\Models\FarmExpense;
 use Illuminate\Support\Str;
 use App\Models\PostPlanting;
 use Illuminate\Http\Request;
 use App\Models\HarvestDetail;
 use App\Models\InterestPoint;
 use App\Models\PlantingDetail;
+use App\Models\HumanCerealNeed;
+use App\Models\OrganicFertiliser;
 use App\Http\Requests\CropRequest;
 use App\Http\Requests\FarmRequest;
 use App\Http\Requests\PlotRequest;
+use App\Models\AnimalFeedCategory;
 use App\Models\PostPlantingDetail;
 use Stats4sd\OdkLink\Models\Media;
 use App\Http\Requests\FieldRequest;
 use Stats4sd\OdkLink\Models\Xlsform;
 use App\Http\Requests\HarvestRequest;
 use App\Http\Requests\PlantingRequest;
+use App\Http\Requests\AnimalFeedRequest;
+use App\Http\Requests\FarmDetailRequest;
+use App\Http\Requests\FarmExpenseRequest;
 use App\Http\Requests\PostPlantingRequest;
 use App\Http\Requests\HarvestDetailRequest;
 use App\Http\Requests\InterestPointRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\PlantingDetailRequest;
+use App\Http\Requests\HumanCerealNeedRequest;
 use Stats4sd\OdkLink\Services\OdkLinkService;
 use Illuminate\Validation\ValidationException;
+use App\Http\Requests\OrganicFertiliserRequest;
+use App\Http\Requests\AnimalFeedCategoryRequest;
 use App\Http\Requests\PostPlantingDetailRequest;
 
 class DatamapService
@@ -218,7 +228,6 @@ class DatamapService
             return false;
         }
     }
-
 
     public function sectionPostSemis(Submission $submission) : bool
     {
@@ -580,6 +589,211 @@ class DatamapService
         }
     }
 
+    public function sectionDepenses(Submission $submission) : bool
+    {
+        try {
+
+            $data = $this->prepareDataArray($submission);
+            $data = $this->removeGroupNames($data);
+
+            $entries = [];
+
+            if(!isset($data['farm_id'])) {
+
+                $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
+
+                if(!isset($data['farm_id'])) {
+
+                    $newFarm = [];
+                    $newFarm['code'] = $data['camera_scane'];
+
+                    $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
+                    $farm = Farm::create($validatedFarm);
+
+                    $data['farm_id'] = $farm->id;
+
+                }
+
+            }
+
+            $validatedFarmExpense = $this->getValidated($data, $submission, (new FarmExpenseRequest));
+            $farmExpense = FarmExpense::create($validatedFarmExpense);
+            $entries[FarmExpense::class] = [$farmExpense->id];
+
+        /* At the end, you should update the $submission entry: */
+        $submission->processed = 1;
+        $submission->entries = $entries;
+        $submission->save();
+
+        return true;
+
+        } catch (\JsonException|ValidationException $e) {
+            return false;
+        }
+    }
+
+    public function sectionFumureOrganique(Submission $submission) : bool
+    {
+        try {
+
+            $data = $this->prepareDataArray($submission);
+            $data = $this->removeGroupNames($data);
+
+            $entries = [];
+
+            if(!isset($data['farm_id'])) {
+
+                $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
+
+                if(!isset($data['farm_id'])) {
+
+                    $newFarm = [];
+                    $newFarm['code'] = $data['camera_scane'];
+
+                    $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
+                    $farm = Farm::create($validatedFarm);
+
+                    $data['farm_id'] = $farm->id;
+
+                }
+
+            }
+
+            $validatedOrganicFertiliser = $this->getValidated($data, $submission, (new OrganicFertiliserRequest));
+            $organicFertiliser = OrganicFertiliser::create($validatedOrganicFertiliser);
+            $entries[OrganicFertiliser::class] = [$organicFertiliser->id];
+
+        /* At the end, you should update the $submission entry: */
+        $submission->processed = 1;
+        $submission->entries = $entries;
+        $submission->save();
+
+        return true;
+
+        } catch (\JsonException|ValidationException $e) {
+            return false;
+        }
+    }
+    
+    public function sectionBesoinsCerealesHumain(Submission $submission) : bool
+    {
+        try {
+
+            $data = $this->prepareDataArray($submission);
+            $data = $this->removeGroupNames($data);
+
+            $entries = [];
+
+            if(!isset($data['farm_id'])) {
+
+                $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
+
+                if(!isset($data['farm_id'])) {
+
+                    $newFarm = [];
+                    $newFarm['code'] = $data['camera_scane'];
+
+                    $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
+                    $farm = Farm::create($validatedFarm);
+
+                    $data['farm_id'] = $farm->id;
+
+                }
+
+
+            }
+
+            $validatedHumanCerealNeed = $this->getValidated($data, $submission, (new HumanCerealNeedRequest));
+            $humanCerealNeed = HumanCerealNeed::create($validatedHumanCerealNeed);
+            $entries[HumanCerealNeed::class] = [$humanCerealNeed->id];
+
+            $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+                ->where('model_id', $submission->id)
+                ->get();
+            foreach($mediaEntries as $mediaEntry) {
+                $mediaEntry->copy($humanCerealNeed, 'default', 'local');
+            }
+
+        /* At the end, you should update the $submission entry: */
+        $submission->processed = 1;
+        $submission->entries = $entries;
+        $submission->save();
+
+        return true;
+
+        } catch (\JsonException|ValidationException $e) {
+            return false;
+        }
+    }
+
+    public function sectionAlimentationAnimaux(Submission $submission) : bool
+    {
+        try {
+
+            $data = $this->prepareDataArray($submission);
+            $data = $this->removeGroupNames($data);
+
+            $entries = [];
+
+            if(!isset($data['farm_id'])) {
+
+                $data['farm_id'] = Farm::where('code', $data['camera_scane'])->pluck('id')->first();
+
+                if(!isset($data['farm_id'])) {
+
+                    $newFarm = [];
+                    $newFarm['code'] = $data['camera_scane'];
+
+                    $validatedFarm = $this->getValidated($newFarm, $submission, (new FarmRequest));
+                    $farm = Farm::create($validatedFarm);
+
+                    $data['farm_id'] = $farm->id;
+                }
+            }
+
+            $validatedAnimalFeed = $this->getValidated($data, $submission, (new AnimalFeedRequest));
+            $animalFeed = AnimalFeed::create($validatedAnimalFeed);
+            $entries[AnimalFeed::class] = [$animalFeed->id];
+
+            if (isset($data['categorie'])) {
+
+                $categories = [];
+
+                foreach ($data['categorie'] as $categorieData) {
+
+                    $categorieData = $this->removeGroupNames($categorieData);
+                    $categorieData['animal_feed_id'] = $animalFeed->id;
+                    $categorieData['categorie'] = $categorieData['cat_value'];
+
+                    $validatedOperation = $this->getValidated($categorieData, $submission, (new AnimalFeedCategoryRequest));
+
+                    $animalFeedCategory = AnimalFeedCategory::create($validatedOperation);
+                    $animalFeedCategories[] = $animalFeedCategory->id;
+ 
+                }
+
+                $entries[AnimalFeedCategory::class] = $plantingDetails;
+
+            }
+
+            $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+                ->where('model_id', $submission->id)
+                ->get();
+            foreach($mediaEntries as $mediaEntry) {
+                $mediaEntry->copy($animalFeed, 'default', 'local');
+            }
+
+        /* At the end, you should update the $submission entry: */
+        $submission->processed = 1;
+        $submission->entries = $entries;
+        $submission->save();
+
+        return true;
+
+        } catch (\JsonException|ValidationException $e) {
+            return false;
+        }
+    }
 
     /*****************************************************************************/
     /******************************** HELPER METHODS *****************************/

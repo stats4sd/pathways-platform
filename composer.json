@@ -17,6 +17,7 @@
         "orangehill/iseed": "^3.0",
         "sentry/sentry-laravel": "^4.7",
         "spatie/laravel-medialibrary": "^10.11",
+        "spatie/laravel-ray": "^1.39",
         "stats4sd/laravel-file-util": "dev-main",
         "stats4sd/laravel-odk-link": "v1.0",
         "stats4sd/laravel-sql-views": "*",

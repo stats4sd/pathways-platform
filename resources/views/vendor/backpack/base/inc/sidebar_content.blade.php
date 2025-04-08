@@ -12,6 +12,12 @@
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url("harvest") }}"><i class="las la-poll-h nav-icon"></i>Récolte</a></li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url("harvest_detail") }}"><i class="las la-poll nav-icon"></i>Récolte - Culture</a></li>
 
+<li class="mt-3 nav-item"><a class="nav-link" href="{{ backpack_url("farm_expense") }}"><i class="las la-poll-h nav-icon"></i>Depenses UPA</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("organic_fertiliser") }}"><i class="las la-poll-h nav-icon"></i>Fumure Organique</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("human_cereal_need") }}"><i class="las la-poll nav-icon"></i>Besoins Cereales Humain</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("animal_feed") }}"><i class="las la-poll-h nav-icon"></i>Alimentation Animaux</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url("animal_feed_category") }}"><i class="las la-poll nav-icon"></i>Alimentation Animaux - Categorie</a></li>
+
 <li class="mt-3 mb-1 nav-item nav-dropdown">
     <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-map"></i>Lieux</a>
     <ul class="nav-dropdown-items">
