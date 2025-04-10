@@ -36,5 +36,10 @@ Route::group([
     Route::crud('cercle', 'CercleCrudController');
     Route::crud('commune', 'CommuneCrudController');
     Route::crud('village', 'VillageCrudController');
+    Route::crud('farm_expense', 'FarmExpenseCrudController');
+    Route::crud('organic_fertiliser', 'OrganicFertiliserCrudController');
+    Route::crud('human_cereal_need', 'HumanCerealNeedCrudController');
+    Route::crud('animal_feed', 'AnimalFeedCrudController');
+    Route::crud('animal_feed_category', 'AnimalFeedCategoryCrudController');
 
 }); // this should be the absolute last line of this file
