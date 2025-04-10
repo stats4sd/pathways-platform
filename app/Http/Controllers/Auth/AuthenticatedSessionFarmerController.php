@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\FarmerLoginRequest;
 use App\Models\Farm;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\FarmDetail;
 use Prologue\Alerts\Facades\Alert;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
+use App\Http\Requests\Auth\FarmerLoginRequest;
 
 class AuthenticatedSessionFarmerController extends Controller
 {
@@ -21,17 +22,33 @@ class AuthenticatedSessionFarmerController extends Controller
     {
         $validated = $request->validated();
 
-        $farm = Farm::where('code', $validated['code'])
-            ->where('phone_number', $validated['phone_number'])
-            ->first();
+        // 1. Check farm code
+        $farm = Farm::where('code', $validated['code'])->first();
 
-        if($farm) {
-            Auth::login($farm->user);
-        } else {
-            Alert::add('danger', "Le code scanné n'a pas été reconnu. Veuillez réessayer ou vérifier que vous utilisez le bon code QR.")->flash();
+        if (!$farm) {
+            Alert::add('danger', "Aucun élevage trouvé avec ce code. Veuillez vérifier le code QR.")->flash();
             return back();
         }
 
-        return redirect('farm/' . $farm->id);
+        // 2. Check if phone number matches current farm phone number
+        if ($farm->phone_number === $validated['phone_number']) {
+            Auth::login($farm->user);
+            return redirect('farm/' . $farm->id);
+        }
+
+        // 3. Check if phone number matches any historical number for the farm in farm details
+        $matchInDetails = FarmDetail::where('farm_id', $farm->id)
+            ->where('phone_number', $validated['phone_number'])
+            ->exists();
+
+        if ($matchInDetails) {
+            Auth::login($farm->user);
+            return redirect('farm/' . $farm->id);
+        }
+
+        // 4. If no match found
+        Alert::add('danger', "Le code ou le numéro de téléphone est incorrect. Veuillez réessayer.")->flash();
+        return back();
+
     }
 }
