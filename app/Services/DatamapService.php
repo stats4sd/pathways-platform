@@ -700,8 +700,9 @@ class DatamapService
 
                 }
 
-
             }
+
+            $data['type_menage'] = $data['type_menage_id'];
 
             $validatedHumanCerealNeed = $this->getValidated($data, $submission, (new HumanCerealNeedRequest));
             $humanCerealNeed = HumanCerealNeed::create($validatedHumanCerealNeed);
@@ -755,11 +756,11 @@ class DatamapService
             $animalFeed = AnimalFeed::create($validatedAnimalFeed);
             $entries[AnimalFeed::class] = [$animalFeed->id];
 
-            if (isset($data['categorie'])) {
+            if (isset($data['categories'])) {
 
                 $categories = [];
 
-                foreach ($data['categorie'] as $categorieData) {
+                foreach ($data['categories'] as $categorieData) {
 
                     $categorieData = $this->removeGroupNames($categorieData);
                     $categorieData['animal_feed_id'] = $animalFeed->id;
