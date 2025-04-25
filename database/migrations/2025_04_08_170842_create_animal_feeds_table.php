@@ -15,18 +15,27 @@ return new class extends Migration
             $table->id();
             $table->foreignId('farm_id')->constrained('farms');
             $table->string('year', 4)->nullable();
+
+            $table->decimal('total_concentre')->nullable();
+            $table->decimal('total_residu')->nullable();
+            $table->decimal('total_fane')->nullable();
+            $table->text('liste_cat_animales')->nullable();
+            $table->decimal('quantite_son')->nullable();
+            $table->decimal('quantite_tourteau')->nullable();
             $table->integer('concentre_produit')->nullable();
-            $table->integer('achat_sac_con_quanti')->nullable();
-            $table->decimal('note_quant_achat')->nullable();
-            $table->integer('achat_sac_con_son')->nullable();
-            $table->integer('quantite_stourteau')->nullable();
-            $table->decimal('quantite_sac_tourteau')->nullable();
+            $table->decimal('achat_son_quantite')->nullable();
             $table->integer('prix_sac_son')->nullable();
             $table->integer('cal_depense_son')->nullable();
-            $table->integer('prix_sac_tourteau')->nullable();
-            $table->integer('cal_depense_tour')->nullable();
+            $table->decimal('prix_sac_tourteau')->nullable();
+            $table->decimal('cal_depense_tourteau')->nullable();
             $table->decimal('cal_superficie')->nullable();
-            $table->integer('cal_depense_total')->nullable();
+            $table->decimal('cal_depense_total')->nullable();
+            $table->decimal('cal_depense_soins')->nullable();
+
+            $table->text('observation_vocal')->nullable();
+            $table->text('observation_video')->nullable();
+            $table->text('observation_text')->nullable();
+            $table->text('observation_image')->nullable();
             $table->text('appreciation_observation')->nullable();
             $table->timestamps();
         });

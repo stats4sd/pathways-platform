@@ -30,6 +30,15 @@ class AnimalFeedCategoryRequest extends FormRequest
             'categorie' => 'nullable',
             'nb_animaux' => 'nullable',
             'type_regime' => 'nullable',
+            'comp_faible_con' => 'nullable',
+            'comp_faible_resid' => 'nullable',
+            'comp_faible_fane' => 'nullable',
+            'comp_ameli_con' => 'nullable',
+            'comp_ameli_resid' => 'nullable',
+            'comp_ameli_fane' => 'nullable',
+            'stabulation_con' => 'nullable',
+            'stabulation_resid' => 'nullable',
+            'stabulation_fane' => 'nullable',
         ];
     }
 

@@ -620,6 +620,13 @@ class DatamapService
             $farmExpense = FarmExpense::create($validatedFarmExpense);
             $entries[FarmExpense::class] = [$farmExpense->id];
 
+            $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+            ->where('model_id', $submission->id)
+            ->get();
+            foreach($mediaEntries as $mediaEntry) {
+                $mediaEntry->copy($farmExpense, 'default', 'local');
+            }
+
         /* At the end, you should update the $submission entry: */
         $submission->processed = 1;
         $submission->entries = $entries;
@@ -662,6 +669,13 @@ class DatamapService
             $validatedOrganicFertiliser = $this->getValidated($data, $submission, (new OrganicFertiliserRequest));
             $organicFertiliser = OrganicFertiliser::create($validatedOrganicFertiliser);
             $entries[OrganicFertiliser::class] = [$organicFertiliser->id];
+
+            $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+            ->where('model_id', $submission->id)
+            ->get();
+            foreach($mediaEntries as $mediaEntry) {
+                $mediaEntry->copy($organicFertiliser, 'default', 'local');
+            }
 
         /* At the end, you should update the $submission entry: */
         $submission->processed = 1;
@@ -773,7 +787,7 @@ class DatamapService
  
                 }
 
-                $entries[AnimalFeedCategory::class] = $plantingDetails;
+                $entries[AnimalFeedCategory::class] = $animalFeedCategory;
 
             }
 

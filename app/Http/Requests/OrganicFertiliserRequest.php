@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrgnaicFertiliserRequest extends FormRequest
+class OrganicFertiliserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,22 @@ class OrgnaicFertiliserRequest extends FormRequest
     {
         return [
             'id' => 'nullable|integer',
-            'planting_id' => 'required',
-            'crop_id' => 'required',
-            'superficie_ha' => 'nullable',
+            'farm_id' => 'required',
+            'year' => 'nullable',
+            'quantite_fumure_organique' => 'nullable',
+            'superficie_exploitation' => 'nullable',
+            'protion_fertilisable' => 'nullable',
+            'superficie_rotation' => 'nullable',
+            'superficie_cycle' => 'nullable',
+            'gap_annuel' => 'nullable',
+            'gap_cycle' => 'nullable',
+            'gap_cycle_pour100' => 'nullable',
+            'nb_annee' => 'nullable',
+            'observation_vocal' => 'nullable',
+            'observation_video' => 'nullable',
+            'observation_text' => 'nullable',
+            'observation_image' => 'nullable',
+            'appreciation_observation' => 'nullable',
         ];
     }
 

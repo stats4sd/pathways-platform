@@ -32,6 +32,15 @@ class AnimalFeedCategoryCrudController extends CrudController
         CRUD::column('categorie');
         CRUD::column('nb_animaux');
         CRUD::column('type_regime');
+        CRUD::column('comp_faible_con');
+        CRUD::column('comp_faible_resid');
+        CRUD::column('comp_faible_fane');
+        CRUD::column('comp_ameli_con');
+        CRUD::column('comp_ameli_resid');
+        CRUD::column('comp_ameli_fane');
+        CRUD::column('stabulation_con');
+        CRUD::column('stabulation_resid');
+        CRUD::column('stabulation_fane');
     }
 
 }

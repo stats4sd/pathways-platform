@@ -15,14 +15,27 @@ return new class extends Migration
             $table->id();
             $table->foreignId('farm_id')->constrained('farms');
             $table->string('year', 4)->nullable();
+
             $table->string('type_menage')->nullable();
-            $table->integer('personnes_nourri')->nullable();
+            $table->integer('personnes_nourrir')->nullable();
             $table->integer('besoin_cereale_exploitation')->nullable();
             $table->integer('sac_mais')->nullable();
             $table->integer('sac_mil')->nullable();
             $table->integer('sac_sorgho')->nullable();
             $table->integer('sac_cereales')->nullable();
             $table->integer('sac_cereales_diff')->nullable();
+            $table->integer('rend_moyen_mais')->nullable();
+            $table->integer('rend_moyen_mil')->nullable();
+            $table->integer('rend_moyen_sorgho')->nullable();
+            $table->integer('superficie_mais')->nullable();
+            $table->integer('superficie_mil')->nullable();
+            $table->integer('superficie_sorgho')->nullable();
+            $table->integer('superficie_totale')->nullable();
+            
+            $table->text('observation_vocal')->nullable();
+            $table->text('observation_video')->nullable();
+            $table->text('observation_text')->nullable();
+            $table->text('observation_image')->nullable();
             $table->text('appreciation_observation')->nullable();
             $table->timestamps();
         });
