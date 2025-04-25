@@ -15,20 +15,28 @@ return new class extends Migration
             $table->id();
             $table->foreignId('farm_id')->constrained('farms');
             $table->string('year', 4)->nullable();
+
+            $table->decimal('frais_condiment_jour')->nullable();
             $table->decimal('frais_condiment_annuel')->nullable();
+            $table->decimal('nombre_personne_upa')->nullable();
             $table->decimal('frais_sante_annuel')->nullable();
             $table->decimal('frais_education_annuel')->nullable();
-            $table->decimal('frais_aliment_betail')->nullable();
-            $table->decimal('frais_veterinaire')->nullable();
-            $table->text('autre_frais')->nullable();
+            $table->text('nom_autre_frais')->nullable();
             $table->decimal('montant_autre_frais')->nullable();
             $table->decimal('invest_maison')->nullable();
             $table->decimal('invest_mariage')->nullable();
+            $table->decimal('invest_equipment')->nullable();
             $table->text('autre_invest')->nullable();
             $table->decimal('montant_autre_invest')->nullable();
             $table->decimal('depenses_recurrentes')->nullable();
             $table->decimal('depenses_investissements')->nullable();
             $table->decimal('depenes_total')->nullable();
+
+            $table->text('observation_vocal')->nullable();
+            $table->text('observation_video')->nullable();
+            $table->text('observation_text')->nullable();
+            $table->text('observation_image')->nullable();
+            $table->text('appreciation_observation')->nullable();
             $table->timestamps();
         });
     }

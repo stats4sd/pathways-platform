@@ -17,6 +17,15 @@ return new class extends Migration
             $table->string('categorie')->nullable();
             $table->integer('nb_animaux')->nullable();
             $table->string('type_regime')->nullable();
+            $table->decimal('comp_faible_con')->nullable();
+            $table->decimal('comp_faible_resid')->nullable();
+            $table->decimal('comp_faible_fane')->nullable();
+            $table->decimal('comp_ameli_con')->nullable();
+            $table->decimal('comp_ameli_resid')->nullable();
+            $table->decimal('comp_ameli_fane')->nullable();
+            $table->decimal('stabulation_con')->nullable();
+            $table->decimal('stabulation_resid')->nullable();
+            $table->decimal('stabulation_fane')->nullable();
             $table->timestamps();
         });
     }
