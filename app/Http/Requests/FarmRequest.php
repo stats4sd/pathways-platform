@@ -29,6 +29,7 @@ class FarmRequest extends FormRequest
             'code' => 'nullable',
             'phone_number' => 'nullable',
             'chef_upa' => 'nullable',
+            'type_upa' => 'nullable',
         ];
     }
 
