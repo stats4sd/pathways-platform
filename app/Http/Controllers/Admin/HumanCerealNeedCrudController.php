@@ -44,11 +44,11 @@ class HumanCerealNeedCrudController extends CrudController
         CRUD::column('superficie_mil');
         CRUD::column('superficie_sorgho');
         CRUD::column('superficie_totale');
-        CRUD::column('observation_text');
-        CRUD::column('observation_vocal')->type('url')
+        CRUD::column('observation_texte');
+        CRUD::column('observation_audio')->type('url')
             ->wrapper(['href'=>function($crud, $column, $entry) {
-                if (!empty($entry->observation_vocal)) {
-                    $media = $entry->getMedia()->where('file_name', $entry->observation_vocal)->first();
+                if (!empty($entry->observation_audio)) {
+                    $media = $entry->getMedia()->where('file_name', $entry->observation_audio)->first();
                     if ($media) {
                         return $media->getUrl();
                     } else {
@@ -57,10 +57,10 @@ class HumanCerealNeedCrudController extends CrudController
                 }
                 return null;
             }]);
-        CRUD::column('observation_video')->type('url')
+        CRUD::column('observation_videos')->type('url')
             ->wrapper(['href'=>function($crud, $column, $entry) {
-                if (!empty($entry->observation_video)) {
-                    $media = $entry->getMedia()->where('file_name', $entry->observation_video)->first();
+                if (!empty($entry->observation_videos)) {
+                    $media = $entry->getMedia()->where('file_name', $entry->observation_videos)->first();
                     if ($media) {
                         return $media->getUrl();
                     } else {
@@ -81,10 +81,10 @@ class HumanCerealNeedCrudController extends CrudController
                 }
                 return null;
             }]);
-        CRUD::column('appreciation_observation')->type('url')
+        CRUD::column('observation_appreciation')->type('url')
             ->wrapper(['href'=>function($crud, $column, $entry) {
-                if (!empty($entry->appreciation_observation)) {
-                    $media = $entry->getMedia()->where('file_name', $entry->appreciation_observation)->first();
+                if (!empty($entry->observation_appreciation)) {
+                    $media = $entry->getMedia()->where('file_name', $entry->observation_appreciation)->first();
                     if ($media) {
                         return $media->getUrl();
                     } else {

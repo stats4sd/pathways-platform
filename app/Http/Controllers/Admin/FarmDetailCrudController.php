@@ -100,7 +100,7 @@ class FarmDetailCrudController extends CrudController
         CRUD::column('info_audio')
             ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
-                    if(!empty($entry->observation_image)) {
+                    if(!empty($entry->info_audio)) {
                         $mediaUrl = $entry->getMedia()->where('file_name', $entry->info_audio)->first()->getUrl();
                         return $mediaUrl;
                     }
@@ -108,7 +108,7 @@ class FarmDetailCrudController extends CrudController
         CRUD::column('info_image')
             ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
-                    if(!empty($entry->observation_image)) {
+                    if(!empty($entry->info_image)) {
                         $mediaUrl = $entry->getMedia()->where('file_name', $entry->info_image)->first()->getUrl();
                         return $mediaUrl;
                     }
@@ -116,11 +116,24 @@ class FarmDetailCrudController extends CrudController
         CRUD::column('info_video')
             ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
-                    if(!empty($entry->observation_image)) {
+                    if(!empty($entry->ifno_video)) {
                         $mediaUrl = $entry->getMedia()->where('file_name', $entry->info_video)->first()->getUrl();
                         return $mediaUrl;
                     }
                 }]);
+
+        CRUD::column('observation_appreciation')->type('url')
+            ->wrapper(['href'=>function($crud, $column, $entry) {
+                if (!empty($entry->observation_appreciation)) {
+                    $media = $entry->getMedia()->where('file_name', $entry->observation_appreciation)->first();
+                    if ($media) {
+                        return $media->getUrl();
+                    } else {
+                        return '';
+                    }
+                }
+                return null;
+            }]);
     }
 
     protected function setupUpdateOperation()
@@ -190,7 +203,8 @@ class FarmDetailCrudController extends CrudController
         CRUD::field('info_text');
         CRUD::field('info_audio');
         CRUD::field('info_image');
-        CRUD::field('info_video');
+        CRUD::field('info_videos');
+        CRUD::field('observation_appreciation');
     }
 
     protected function setupShowOperation()

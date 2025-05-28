@@ -79,6 +79,19 @@ class HarvestDetailCrudController extends CrudController
 
         CRUD::column('observation_texte');
 
+        CRUD::column('observation_appreciation')->type('url')
+            ->wrapper(['href'=>function($crud, $column, $entry) {
+                if (!empty($entry->observation_appreciation)) {
+                    $media = $entry->getMedia()->where('file_name', $entry->observation_appreciation)->first();
+                    if ($media) {
+                        return $media->getUrl();
+                    } else {
+                        return '';
+                    }
+                }
+                return null;
+            }]);
+
         CRUD::column('superficie_recolte_prestation');
         CRUD::column('cout_total_prestation_recolte');
         CRUD::column('production');

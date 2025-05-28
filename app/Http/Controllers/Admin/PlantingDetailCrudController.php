@@ -80,6 +80,19 @@ class PlantingDetailCrudController extends CrudController
 
         CRUD::column('observation_texte');
 
+        CRUD::column('observation_appreciation')->type('url')
+            ->wrapper(['href'=>function($crud, $column, $entry) {
+                if (!empty($entry->observation_appreciation)) {
+                    $media = $entry->getMedia()->where('file_name', $entry->observation_appreciation)->first();
+                    if ($media) {
+                        return $media->getUrl();
+                    } else {
+                        return '';
+                    }
+                }
+                return null;
+            }]);
+
         CRUD::column('superficie_ha');
         CRUD::column('culture_prev');
         CRUD::column('quantite_fumure_organique');

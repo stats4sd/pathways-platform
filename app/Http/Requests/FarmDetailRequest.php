@@ -97,6 +97,7 @@ class FarmDetailRequest extends FormRequest
             'info_audio' => 'nullable',
             'info_image' => 'nullable',
             'info_video' => 'nullable',
+            'observation_appreciation'
         ];
     }
 

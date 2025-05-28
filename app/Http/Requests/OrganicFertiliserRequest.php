@@ -37,9 +37,9 @@ class OrganicFertiliserRequest extends FormRequest
             'gap_cycle' => 'nullable',
             'gap_cycle_pour100' => 'nullable',
             'nb_annee' => 'nullable',
-            'observation_vocal' => 'nullable',
-            'observation_video' => 'nullable',
-            'observation_text' => 'nullable',
+            'observation_audio' => 'nullable',
+            'observation_videos' => 'nullable',
+            'observation_texte' => 'nullable',
             'observation_image' => 'nullable',
             'appreciation_observation' => 'nullable',
         ];

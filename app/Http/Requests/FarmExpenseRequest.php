@@ -43,11 +43,11 @@ class FarmExpenseRequest extends FormRequest
             'depenses_recurrentes' => 'nullable',
             'depenses_investissements' => 'nullable',
             'depenes_total' => 'nullable',
-            'observation_vocal' => 'nullable',
-            'observation_video' => 'nullable',
-            'observation_text' => 'nullable',
+            'observation_audio' => 'nullable',
+            'observation_videos' => 'nullable',
+            'observation_texte' => 'nullable',
             'observation_image' => 'nullable',
-            'appreciation_observation' => 'nullable'
+            'observation_appreciation' => 'nullable'
         ];
     }
 
