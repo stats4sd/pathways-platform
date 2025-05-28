@@ -100,26 +100,41 @@ class FarmDetailCrudController extends CrudController
         CRUD::column('info_audio')
             ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
-                    if(!empty($entry->info_audio)) {
-                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->info_audio)->first()->getUrl();
-                        return $mediaUrl;
+                    if (!empty($entry->info_audio)) {
+                        $media = $entry->getMedia()->where('file_name', $entry->info_audio)->first();
+                        if ($media) {
+                            return $media->getUrl();
+                        } else {
+                            return '';
+                        }
                     }
+                    return null;
                 }]);
         CRUD::column('info_image')
             ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
-                    if(!empty($entry->info_image)) {
-                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->info_image)->first()->getUrl();
-                        return $mediaUrl;
+                    if (!empty($entry->info_image)) {
+                        $media = $entry->getMedia()->where('file_name', $entry->info_image)->first();
+                        if ($media) {
+                            return $media->getUrl();
+                        } else {
+                            return '';
+                        }
                     }
+                    return null;
                 }]);
         CRUD::column('info_video')
             ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
-                    if(!empty($entry->ifno_video)) {
-                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->info_video)->first()->getUrl();
-                        return $mediaUrl;
+                    if (!empty($entry->info_video)) {
+                        $media = $entry->getMedia()->where('file_name', $entry->info_video)->first();
+                        if ($media) {
+                            return $media->getUrl();
+                        } else {
+                            return '';
+                        }
                     }
+                    return null;
                 }]);
 
         CRUD::column('observation_appreciation')->type('url')
