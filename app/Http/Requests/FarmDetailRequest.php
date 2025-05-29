@@ -30,7 +30,7 @@ class FarmDetailRequest extends FormRequest
             'year' => 'nullable',
             'phone_number' => 'nullable',
             
-            'type_upa' => 'nullable',
+            'type' => 'nullable',
             'ratio_membre_terre' => 'nullable',
             'ratio_actif_terre' => 'nullable',
             'ratio_boeuflabour_terre' => 'nullable',

@@ -3,5 +3,5 @@ select
     code,
     chef_upa,
     phone_number,
-    type_upa as type
+    type
 from farms;

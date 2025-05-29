@@ -34,7 +34,7 @@ class FarmDetailCrudController extends CrudController
         CRUD::column('year');
         CRUD::column('phone_number');
         CRUD::column('chef_upa');
-        CRUD::column('type_upa')->label('Type');
+        CRUD::column('type');
         CRUD::column('ratio_membre_terre');
         CRUD::column('ratio_actif_terre');
         CRUD::column('ratio_boeuflabour_terre');
@@ -159,7 +159,7 @@ class FarmDetailCrudController extends CrudController
         CRUD::field('year');
         CRUD::field('phone_number');
         CRUD::field('chef_upa');
-        CRUD::field('type_upa')->label('Type');
+        CRUD::field('type')->label('Type');
         CRUD::field('village_id');
         CRUD::field('longitude');
         CRUD::field('latitude');
