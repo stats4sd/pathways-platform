@@ -34,7 +34,7 @@ class FarmDetailCrudController extends CrudController
         CRUD::column('year');
         CRUD::column('phone_number');
         CRUD::column('chef_upa');
-        CRUD::column('type_upa')->label('Type');
+        CRUD::column('type');
         CRUD::column('ratio_membre_terre');
         CRUD::column('ratio_actif_terre');
         CRUD::column('ratio_boeuflabour_terre');
@@ -100,27 +100,55 @@ class FarmDetailCrudController extends CrudController
         CRUD::column('info_audio')
             ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
-                    if(!empty($entry->observation_image)) {
-                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->info_audio)->first()->getUrl();
-                        return $mediaUrl;
+                    if (!empty($entry->info_audio)) {
+                        $media = $entry->getMedia()->where('file_name', $entry->info_audio)->first();
+                        if ($media) {
+                            return $media->getUrl();
+                        } else {
+                            return '';
+                        }
                     }
+                    return null;
                 }]);
         CRUD::column('info_image')
             ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
-                    if(!empty($entry->observation_image)) {
-                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->info_image)->first()->getUrl();
-                        return $mediaUrl;
+                    if (!empty($entry->info_image)) {
+                        $media = $entry->getMedia()->where('file_name', $entry->info_image)->first();
+                        if ($media) {
+                            return $media->getUrl();
+                        } else {
+                            return '';
+                        }
                     }
+                    return null;
                 }]);
         CRUD::column('info_video')
             ->type('url')
                 ->wrapper(['href'=>function($crud, $column, $entry) {
-                    if(!empty($entry->observation_image)) {
-                        $mediaUrl = $entry->getMedia()->where('file_name', $entry->info_video)->first()->getUrl();
-                        return $mediaUrl;
+                    if (!empty($entry->info_video)) {
+                        $media = $entry->getMedia()->where('file_name', $entry->info_video)->first();
+                        if ($media) {
+                            return $media->getUrl();
+                        } else {
+                            return '';
+                        }
                     }
+                    return null;
                 }]);
+
+        CRUD::column('observation_appreciation')->type('url')
+            ->wrapper(['href'=>function($crud, $column, $entry) {
+                if (!empty($entry->observation_appreciation)) {
+                    $media = $entry->getMedia()->where('file_name', $entry->observation_appreciation)->first();
+                    if ($media) {
+                        return $media->getUrl();
+                    } else {
+                        return '';
+                    }
+                }
+                return null;
+            }]);
     }
 
     protected function setupUpdateOperation()
@@ -131,7 +159,7 @@ class FarmDetailCrudController extends CrudController
         CRUD::field('year');
         CRUD::field('phone_number');
         CRUD::field('chef_upa');
-        CRUD::field('type_upa')->label('Type');
+        CRUD::field('type')->label('Type');
         CRUD::field('village_id');
         CRUD::field('longitude');
         CRUD::field('latitude');
@@ -190,7 +218,8 @@ class FarmDetailCrudController extends CrudController
         CRUD::field('info_text');
         CRUD::field('info_audio');
         CRUD::field('info_image');
-        CRUD::field('info_video');
+        CRUD::field('info_videos');
+        CRUD::field('observation_appreciation');
     }
 
     protected function setupShowOperation()

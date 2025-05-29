@@ -52,7 +52,7 @@ class FarmCrudController extends CrudController
     {
 
         CRUD::column('code');
-        CRUD::column('type_upa');
+        CRUD::column('type');
         CRUD::column('phone_number');
         CRUD::column('chef_upa');
 

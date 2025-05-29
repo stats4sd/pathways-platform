@@ -46,6 +46,55 @@ class FieldCrudController extends CrudController
         CRUD::column('type_sol');
         CRUD::column('pente');
         CRUD::column('superficie_total');
+        CRUD::column('observation_text');
+        CRUD::column('observation_audio')->type('url')
+            ->wrapper(['href'=>function($crud, $column, $entry) {
+                if (!empty($entry->observation_audio)) {
+                    $media = $entry->getMedia()->where('file_name', $entry->observation_audio)->first();
+                    if ($media) {
+                        return $media->getUrl();
+                    } else {
+                        return '';
+                    }
+                }
+                return null;
+            }]);
+        CRUD::column('observation_videos')->type('url')
+            ->wrapper(['href'=>function($crud, $column, $entry) {
+                if (!empty($entry->observation_videos)) {
+                    $media = $entry->getMedia()->where('file_name', $entry->observation_videos)->first();
+                    if ($media) {
+                        return $media->getUrl();
+                    } else {
+                        return '';
+                    }
+                }
+                return null;
+            }]);
+        CRUD::column('observation_image')->type('url')
+            ->wrapper(['href'=>function($crud, $column, $entry) {
+                if (!empty($entry->observation_image)) {
+                    $media = $entry->getMedia()->where('file_name', $entry->observation_image)->first();
+                    if ($media) {
+                        return $media->getUrl();
+                    } else {
+                        return '';
+                    }
+                }
+                return null;
+            }]);
+        CRUD::column('observation_appreciation')->type('url')
+            ->wrapper(['href'=>function($crud, $column, $entry) {
+                if (!empty($entry->observation_appreciation)) {
+                    $media = $entry->getMedia()->where('file_name', $entry->observation_appreciation)->first();
+                    if ($media) {
+                        return $media->getUrl();
+                    } else {
+                        return '';
+                    }
+                }
+                return null;
+            }]);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:

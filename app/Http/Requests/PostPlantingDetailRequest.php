@@ -47,6 +47,7 @@ class PostPlantingDetailRequest extends FormRequest
             'observation_videos' => 'nullable',
             'observation_texte' => 'nullable',
             'observation_image' => 'nullable',
+            'observation_appreciation' => 'nullable'
         ];
     }
 

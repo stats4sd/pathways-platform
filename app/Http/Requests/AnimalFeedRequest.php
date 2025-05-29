@@ -43,11 +43,11 @@ class AnimalFeedRequest extends FormRequest
             'cal_superficie' => 'nullable',
             'cal_depense_total' => 'nullable',
             'cal_depense_soins' => 'nullable',
-            'observation_vocal' => 'nullable',
-            'observation_video' => 'nullable',
-            'observation_text' => 'nullable',
+            'observation_audio' => 'nullable',
+            'observation_videos' => 'nullable',
+            'observation_texte' => 'nullable',
             'observation_image' => 'nullable',
-            'appreciation_observation' => 'nullable',
+            'observation_appreciation' => 'nullable',
         ];
     }
 

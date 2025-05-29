@@ -92,6 +92,13 @@ class DatamapService
                 $farmDetail = FarmDetail::create($validatedFarmDetail);
                 $entries[FarmDetail::class] = [$farmDetail->id];
 
+                $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
+                    ->where('model_id', $submission->id)
+                    ->get();
+                foreach($mediaEntries as $mediaEntry) {
+                    $mediaEntry->copy($farmDetail, 'default', 'local');
+                }
+
                 /* At the end, you should update the $submission entry: */
                 $submission->consent = 1;
                 $submission->processed = 1;
@@ -571,8 +578,8 @@ class DatamapService
             $entries[InterestPoint::class] = [$interestPoint->id];
 
             $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
-            ->where('model_id', $submission->id)
-            ->get();
+                ->where('model_id', $submission->id)
+                ->get();
             foreach($mediaEntries as $mediaEntry) {
                 $mediaEntry->copy($interestPoint, 'default', 'local');
             }
@@ -621,8 +628,8 @@ class DatamapService
             $entries[FarmExpense::class] = [$farmExpense->id];
 
             $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
-            ->where('model_id', $submission->id)
-            ->get();
+                ->where('model_id', $submission->id)
+                ->get();
             foreach($mediaEntries as $mediaEntry) {
                 $mediaEntry->copy($farmExpense, 'default', 'local');
             }
@@ -671,8 +678,8 @@ class DatamapService
             $entries[OrganicFertiliser::class] = [$organicFertiliser->id];
 
             $mediaEntries = Media::where('model_type', 'Stats4sd\OdkLink\Models\Submission')
-            ->where('model_id', $submission->id)
-            ->get();
+                ->where('model_id', $submission->id)
+                ->get();
             foreach($mediaEntries as $mediaEntry) {
                 $mediaEntry->copy($organicFertiliser, 'default', 'local');
             }

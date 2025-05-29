@@ -32,6 +32,11 @@ class FieldRequest extends FormRequest
             'type_sol' => 'nullable',
             'pente' => 'nullable',
             'superficie_total' => 'nullable',
+            'observation_audio' => 'nullable',
+            'observation_videos' => 'nullable',
+            'observation_texte' => 'nullable',
+            'observation_image' => 'nullable',
+            'observation_appreciation' => 'nullable'
         ];
     }
 
