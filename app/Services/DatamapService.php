@@ -59,6 +59,10 @@ class DatamapService
             $data['code'] = $data['camera_scane'];
             $data['phone_number'] = $data['num_phone'];
 
+            if (isset($data['geopoint'])) {
+                $data = array_merge($data, $this->splitGps($data, 'geopoint'));
+            }
+
             $entries = [];
 
             if($data['consentement_question']=='non') {
