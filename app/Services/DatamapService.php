@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Crop;
 use App\Models\Farm;
 use App\Models\Plot;
+use App\Models\User;
 use App\Models\Field;
 use App\Models\Harvest;
 use App\Models\Planting;
@@ -58,6 +59,10 @@ class DatamapService
             $data['code'] = $data['camera_scane'];
             $data['phone_number'] = $data['num_phone'];
 
+            if (isset($data['geopoint'])) {
+                $data = array_merge($data, $this->splitGps($data, 'geopoint'));
+            }
+
             $entries = [];
 
             if($data['consentement_question']=='non') {
@@ -85,7 +90,27 @@ class DatamapService
                 }
 
                 $validatedFarm = $this->getValidated($data, $submission, (new FarmRequest));
-                $farm = Farm::updateOrCreate(['code' => $data['code']], $validatedFarm);
+
+                $farm = Farm::where('code', $data['code'])->first();
+                
+                if ($farm) {
+                    // if farm exists, update it
+                    $farm->update($validatedFarm);
+                } else {
+                    // else create farm & user
+                    $farm = Farm::create($validatedFarm);
+                    $entries[Farm::class] = [$farm->id];
+                    $user = User::create([
+                        'name' => $farm->chef_upa,
+                        'email' => 'farm_' . $farm->id,
+                        'email_verified_at' => now(),
+                        'password' => bcrypt(rand(10000, 99999)),
+                    ]);
+                    $user->assignRole('Farmer');
+                    $farm->user_id = $user->id;
+                    $farm->save();
+                }
+
                 $data['farm_id'] = $farm->id;
 
                 $validatedFarmDetail = $this->getValidated($data, $submission, (new FarmDetailRequest));
@@ -106,16 +131,19 @@ class DatamapService
                 $submission->save();
 
                 // Update the csvs with new data by deploying draft and publishing live
-
                 $forms = Xlsform::get();
-
                 foreach($forms as $form) {
-
                     $service = new OdkLinkService(config('odk-link.odk.base_endpoint'));
-                    $service->createDraftForm($form);
 
-                    if($form->is_active) {
-                        $service->publishForm($form);
+                    try {
+                        $service->createDraftForm($form);
+
+                        if ($form->is_active) {
+                            $service->publishForm($form);
+                        }
+                    } catch (\Exception $e) {
+                        \Log::warning("Failed to handle form ID {$form->id}: " . $e->getMessage());
+                        continue;
                     }
                 }
 
