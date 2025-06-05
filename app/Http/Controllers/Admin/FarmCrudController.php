@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use App\Models\Farm;
 use App\Http\Requests\FarmRequest;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\MonitoringWorkbookExport;
+use App\Exports\EnrolmentWorkbookExport;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
@@ -39,7 +39,7 @@ class FarmCrudController extends CrudController
         CRUD::setModel(\App\Models\Farm::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/farm');
         CRUD::setEntityNameStrings('UPA', 'UPAs');
-        CRUD::set('export.exporter', MonitoringWorkbookExport::class);
+        CRUD::set('export.exporter', EnrolmentWorkbookExport::class);
     }
 
     /**
@@ -80,7 +80,7 @@ class FarmCrudController extends CrudController
 
     public function export() 
     {
-        return Excel::download(new MonitoringWorkbookExport, 'donnees_de_suivi - '.Carbon::now()->format('Ymd_His').'.xlsx');
+        return Excel::download(new EnrolmentWorkbookExport, 'donnees_de_UPA - '.Carbon::now()->format('Ymd_His').'.xlsx');
     }
 
     public function renderMap(Farm $farm)

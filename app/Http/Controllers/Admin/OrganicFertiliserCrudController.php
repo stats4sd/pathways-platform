@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\OrganicFertiliserRequest;
+use Carbon\Carbon;
 use App\Models\OrganicFertiliser;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PlanningWorkbookExport;
+use App\Http\Requests\OrganicFertiliserRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
  * Class OrganicFertiliserCrudController
@@ -17,12 +21,14 @@ class OrganicFertiliserCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ExportOperation;
 
     public function setup()
     {
         CRUD::setModel(\App\Models\OrganicFertiliser::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/organic_fertiliser');
         CRUD::setEntityNameStrings('Fumure Organique', 'Fumure Organiques');
+        CRUD::set('export.exporter', PlanningWorkbookExport::class);
     }
 
     protected function setupListOperation()
@@ -88,6 +94,11 @@ class OrganicFertiliserCrudController extends CrudController
                 return null;
             }]);
 
+    }
+
+    public function export() 
+    {
+        return Excel::download(new PlanningWorkbookExport, 'donnees_de_planification - '.Carbon::now()->format('Ymd_His').'.xlsx');
     }
 
 }

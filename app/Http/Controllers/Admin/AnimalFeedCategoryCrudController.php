@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\AnimalFeedCategoryRequest;
 use App\Models\AnimalFeedCategory;
+use App\Exports\PlanningWorkbookExport;
+use App\Http\Requests\AnimalFeedCategoryRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
  * Class AnimalFeedCategoryCrudController
@@ -17,12 +19,14 @@ class AnimalFeedCategoryCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ExportOperation;
 
     public function setup()
     {
         CRUD::setModel(\App\Models\AnimalFeedCategory::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/animal_feed_category');
         CRUD::setEntityNameStrings('Alimentation Animaux - Categorie', 'Alimentation Animaux - Categorie');
+        CRUD::set('export.exporter', PlanningWorkbookExport::class);
     }
 
     protected function setupListOperation()
@@ -41,6 +45,11 @@ class AnimalFeedCategoryCrudController extends CrudController
         CRUD::column('stabulation_con');
         CRUD::column('stabulation_resid');
         CRUD::column('stabulation_fane');
+    }
+
+    public function export() 
+    {
+        return Excel::download(new PlanningWorkbookExport, 'donnees_de_planification - '.Carbon::now()->format('Ymd_His').'.xlsx');
     }
 
 }
