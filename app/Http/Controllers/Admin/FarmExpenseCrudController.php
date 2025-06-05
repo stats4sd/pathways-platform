@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\FarmExpenseRequest;
+use Carbon\Carbon;
 use App\Models\FarmExpense;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PlanningWorkbookExport;
+use App\Http\Requests\FarmExpenseRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
  * Class FarmExpenseCrudController
@@ -17,12 +21,14 @@ class FarmExpenseCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ExportOperation;
 
     public function setup()
     {
         CRUD::setModel(\App\Models\FarmExpense::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/farm_expense');
-        CRUD::setEntityNameStrings('Depense UPA', 'Depenses UPA');
+        CRUD::setEntityNameStrings('Dépense UPA', 'Dépenses UPA');
+        CRUD::set('export.exporter', PlanningWorkbookExport::class);
     }
 
     protected function setupListOperation()
@@ -94,6 +100,11 @@ class FarmExpenseCrudController extends CrudController
                 return null;
             }]);
 
+    }
+
+    public function export() 
+    {
+        return Excel::download(new PlanningWorkbookExport, 'donnees_de_planification - '.Carbon::now()->format('Ymd_His').'.xlsx');
     }
 
 }

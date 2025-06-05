@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\FarmDetail;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\EnrolmentWorkbookExport;
 use App\Http\Requests\FarmDetailRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
+use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
  * Class FarmDetailCrudController
@@ -20,12 +23,14 @@ class FarmDetailCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ExportOperation;
 
     public function setup()
     {
         CRUD::setModel(\App\Models\FarmDetail::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/farm_detail');
         CRUD::setEntityNameStrings('Détails UPA', 'Détails UPA');
+        CRUD::set('export.exporter', EnrolmentWorkbookExport::class);
     }
 
     protected function setupListOperation()
@@ -225,5 +230,10 @@ class FarmDetailCrudController extends CrudController
     protected function setupShowOperation()
     {
         $this->setupListOperation();
+    }
+
+    public function export() 
+    {
+        return Excel::download(new EnrolmentWorkbookExport, 'donnees_de_UPA - '.Carbon::now()->format('Ymd_His').'.xlsx');
     }
 }
