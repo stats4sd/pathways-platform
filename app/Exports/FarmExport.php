@@ -24,18 +24,9 @@ class FarmExport implements FromQuery, WithTitle, WithHeadings, WithStrictNullCo
         return [
             $farm->id,
             $farm->code,
-            $farm->year,
             $farm->phone_number,
             $farm->chef_upa,
-            $farm->chef_travaux,
-            $farm->neo_alphabete,
-            $farm->activite_primaire,
-            $farm->activite_secondaire,
-            $farm->cereales_favoris_1,
-            $farm->cereales_favoris_2,
-            $farm->cereales_favoris_3,
-            $farm->superficie_possede_upa,
-            $farm->superficie_cultive_upa,
+            $farm->type,
         ];
     }
 
@@ -70,18 +61,9 @@ class FarmExport implements FromQuery, WithTitle, WithHeadings, WithStrictNullCo
         return [
             'id',
             'code',
-            'year',
             'phone_number',
             'chef_upa',
-            'chef_travaux',
-            'neo_alphabete',
-            'activite_primaire',
-            'activite_secondaire',
-            'cereales_favoris_1',
-            'cereales_favoris_2',
-            'cereales_favoris_3',
-            'superficie_possede_upa',
-            'superficie_cultive_upa'
+            'type',
         ];
     }
 

@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\HumanCerealNeedRequest;
+use Carbon\Carbon;
 use App\Models\HumanCerealNeed;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PlanningWorkbookExport;
+use App\Http\Requests\HumanCerealNeedRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
  * Class HumanCerealNeedCrudController
@@ -17,12 +21,14 @@ class HumanCerealNeedCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use ExportOperation;
 
     public function setup()
     {
         CRUD::setModel(\App\Models\HumanCerealNeed::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/human_cereal_need');
         CRUD::setEntityNameStrings('Besoins Cereales Humain', 'Besoins Cereales Humain');
+        CRUD::set('export.exporter', PlanningWorkbookExport::class);
     }
 
     protected function setupListOperation()
@@ -94,6 +100,11 @@ class HumanCerealNeedCrudController extends CrudController
                 return null;
             }]);
 
+    }
+
+    public function export() 
+    {
+        return Excel::download(new PlanningWorkbookExport, 'donnees_de_planification - '.Carbon::now()->format('Ymd_His').'.xlsx');
     }
 
 }
