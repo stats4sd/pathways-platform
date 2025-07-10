@@ -48,6 +48,10 @@ class PlotCrudController extends CrudController
         CRUD::column('crop_id')->label('Culture');
         CRUD::column('nom_variete_culture');
         CRUD::column('type_variete_culture');
+        CRUD::column('date_semence');
+        CRUD::column('quantite_semence');
+        CRUD::column('source_semence_culture');
+        CRUD::column('autre_source_semence_cutture');
         CRUD::column('nombre_arbre');
         CRUD::column('nom_arbres');
         CRUD::column('cultures_associations');
