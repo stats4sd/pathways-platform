@@ -40,6 +40,7 @@ class PlantingDetailRequest extends FormRequest
             'cout_superficie_labouree' => 'nullable',
             'date_semence' => 'nullable',
             'quantite_semence' => 'nullable',
+            'quantite_semence_achetee' => 'nullable',
             'cout_semence_achetee' => 'nullable',
             'quantite_herbicide_prelevee' => 'nullable',
             'cout_herbicide_prelevee' => 'nullable',
