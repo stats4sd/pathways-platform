@@ -105,6 +105,7 @@ class PlantingDetailCrudController extends CrudController
         CRUD::column('cout_superficie_labouree');
         CRUD::column('date_semence');
         CRUD::column('quantite_semence');
+        CRUD::column('quantite_semence_achetee');
         CRUD::column('cout_semence_achetee');
         CRUD::column('quantite_herbicide_prelevee');
         CRUD::column('cout_herbicide_prelevee');
