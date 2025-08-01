@@ -23,7 +23,7 @@ class FieldExport implements FromQuery, WithTitle, WithHeadings, WithStrictNullC
     {
         return [
             $field->id,
-            $field->farm_id,
+            $field->farm->code,
             $field->year,
             $field->nom,
             $field->type_sol,
@@ -62,7 +62,7 @@ class FieldExport implements FromQuery, WithTitle, WithHeadings, WithStrictNullC
     {
         return [
             'id',
-            'farm_id',
+            'upa_code',
             'year',
             'nom',
             'type_sol',
