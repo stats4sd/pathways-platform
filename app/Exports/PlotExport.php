@@ -23,6 +23,7 @@ class PlotExport implements FromQuery, WithTitle, WithHeadings, WithStrictNullCo
     {
         return [
             $plot->id,
+            $plot->field_id,
             $plot->field->farm->code,
             $plot->numero_parcelle,
             $plot->nombre_arbre,
@@ -81,6 +82,7 @@ class PlotExport implements FromQuery, WithTitle, WithHeadings, WithStrictNullCo
     {
         return [
             'id',
+            'champ_id',
             'upa_code',
             'numero_parcelle',
             'nombre_arbre',
