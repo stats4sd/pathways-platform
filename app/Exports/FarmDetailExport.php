@@ -135,7 +135,7 @@ class FarmDetailExport implements FromQuery, WithTitle, WithHeadings, WithStrict
     {
         return [
             'id',
-            'code',
+            'upa_code',
             'year',
             'type',
             'phone_number',
