@@ -13,6 +13,8 @@ class EnrolmentWorkbookExport implements WithMultipleSheets
 
         $sheets[] = new FarmExport();
         $sheets[] = new FarmDetailExport();
+        $sheets[] = new FieldExport();
+        $sheets[] = new PlotExport();
 
         return $sheets;
     }

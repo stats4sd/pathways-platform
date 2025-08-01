@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\FieldRequest;
+use Carbon\Carbon;
 use App\Models\Field;
+use App\Http\Requests\FieldRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\EnrolmentWorkbookExport;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
  * Class FieldCrudController
@@ -17,6 +21,7 @@ class FieldCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    use ExportOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -28,6 +33,7 @@ class FieldCrudController extends CrudController
         CRUD::setModel(\App\Models\Field::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/field');
         CRUD::setEntityNameStrings('champ', 'champs');
+        CRUD::set('export.exporter', EnrolmentWorkbookExport::class);
     }
 
     /**
@@ -95,12 +101,11 @@ class FieldCrudController extends CrudController
                 }
                 return null;
             }]);
+    }
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
+    public function export() 
+    {
+        return Excel::download(new EnrolmentWorkbookExport, 'donnees_de_UPA - '.Carbon::now()->format('Ymd_His').'.xlsx');
     }
 
 }

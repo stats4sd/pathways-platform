@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\PlotRequest;
 use App\Models\Plot;
+use Illuminate\Support\Carbon;
+use App\Http\Requests\PlotRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\EnrolmentWorkbookExport;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
  * Class PlotCrudController
@@ -17,6 +21,7 @@ class PlotCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    use ExportOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -28,6 +33,7 @@ class PlotCrudController extends CrudController
         CRUD::setModel(\App\Models\Plot::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/plot');
         CRUD::setEntityNameStrings('parcelle', 'parcelles');
+        CRUD::set('export.exporter', EnrolmentWorkbookExport::class);
     }
 
     /**
@@ -95,6 +101,11 @@ class PlotCrudController extends CrudController
     protected function setupShowOperation()
     {
         $this->setupListOperation();
+    }
+
+    public function export() 
+    {
+        return Excel::download(new EnrolmentWorkbookExport, 'donnees_de_UPA - '.Carbon::now()->format('Ymd_His').'.xlsx');
     }
 
 }
