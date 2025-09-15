@@ -105,7 +105,7 @@
                 <l-popup>
                       <h5><b>Kɛnɛ N⁰ {{ plot.numero_parcelle }}</b></h5><br/>
 
-                      <img src="/images/fertilite.jpg" height="15"/> Jiri sun hakɛ: <b> {{ plot.fertilite_bm }}</b><br/><br/>
+                      <img src="/images/fertilite.jpg" height="15"/> Dugu kolo fanga: <b> {{ plot.fertilite_bm }}</b><br/><br/>
                       <img src="/images/arbre.jpg" height="20"/> Jiri sun hakɛ: <b> {{ plot.nombre_arbre }}</b><br/><br/>
                       <img src="/images/superf_unit.jpg" height="12"/> Fɔrɔ: <b> {{ plot.superficie_measuree}} ha</b><br/><br/><br/>
 
