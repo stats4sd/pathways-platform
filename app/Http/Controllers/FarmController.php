@@ -68,7 +68,7 @@ class FarmController extends Controller
 
 
         # Get plots
-        $field_ids = $farm->fields->pluck('id');
+        $field_ids = $farm->fields()->where('year', $year)->pluck('id');
         $plots = Plot::whereIn('field_id', $field_ids)->with('field')->get();
 
         $plotCoords = $plots->map(function ($plot) {

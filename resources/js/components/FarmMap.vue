@@ -120,7 +120,7 @@
                         </div>
                         <br/><br/>
                       </div>
-                      <div else><br/></div>
+                      <div v-else><br/></div>
 
                       <a @click="fieldLevel=true; setFarmCenter(farmCenter)" href="#"><b>Sɛkili kana kɛnɛw la</b></a>
                 </l-popup>
