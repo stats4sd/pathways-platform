@@ -12,13 +12,13 @@ This platform is built using Laravel/PHP. The front-end is written in VueJS and 
 4.	Create a local MySQL database with the same name used in the `.env` file
 5.	Run the following setup commands in the root project folder:
 ```
-composer install
-php artisan key:generate
-php artisan backpack:install
-php artisan telescope:publish
-php artisan updatesql
-npm install
-npm run dev
-cd scripts/Rscript && Rscript -e "renv::restore()"
+    composer install
+    php artisan key:generate
+    php artisan backpack:install
+    php artisan telescope:publish
+    php artisan updatesql
+    npm install
+    npm run dev
+    cd scripts/Rscript && Rscript -e "renv::restore()"
 ```
 6.	Migrate the database: `php aritsan migrate
