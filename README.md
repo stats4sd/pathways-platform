@@ -19,6 +19,5 @@ This platform is built using Laravel/PHP. The front-end is written in VueJS and 
     php artisan updatesql
     npm install
     npm run dev
-    cd scripts/Rscript && Rscript -e "renv::restore()"
 ```
 6.	Migrate the database: `php aritsan migrate`
