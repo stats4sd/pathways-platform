@@ -24,7 +24,7 @@ return [
     // ----
 
     // Project name. Shown in the window title.
-    'project_name' => 'Chemins vers l’IAE Platform',
+    'project_name' => 'CEF-M',
 
     // When clicking on the admin panel's top-left logo/name,
     // where should the user be redirected?
@@ -77,7 +77,7 @@ return [
     // ------
 
     // Menu logo. You can replace this with an <img> tag if you have a logo.
-    'project_logo'   => 'Chemins vers l’IAE',
+    'project_logo'   => 'CEF-M',
 
     // Show / hide breadcrumbs on admin panel pages.
     'breadcrumbs' => true,
