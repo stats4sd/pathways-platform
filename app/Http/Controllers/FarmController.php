@@ -169,6 +169,7 @@ class FarmController extends Controller
         # TOTAL AREA (SUPERFICIE) ALL CROPS
 
         $totalArea = $farm->fields->where('year', $year)->sum('superficie_total');
+        $totalArea = rtrim(rtrim(number_format($totalArea, 1, '.', ''), '0'), '.');
 
         # AREA PER PRIMARY CROP
 
