@@ -53,6 +53,7 @@ Route::group([
     Route::get('farm/{farm}/FarmProduction/{year}', [App\Http\Controllers\FarmController::class,'getFarmProduction']);
     Route::get('farm/{farm}/FarmYield/{year}', [App\Http\Controllers\FarmController::class,'getFarmYield']);
     Route::get('farm/{farm}/FarmObservations/{year}', [App\Http\Controllers\FarmController::class,'getFarmObservations']);
+    Route::get('farm/{farm}/FarmNeeds/{year}', [App\Http\Controllers\FarmController::class,'getFarmNeeds']);
 
 });
 

@@ -84,7 +84,7 @@
 
             <div class="center" style="width:90%; padding:4px; margin:auto">
                 <a href="#observations">
-                    <button type="button" class="btn bg-orange text-light text-center w-100 py-2 mb-5" style="border-radius: 20px"
+                    <button type="button" class="btn bg-orange text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
                         @click="showObservations=true; showDashboard=false">
                         <div class="row">
                             <div class="col">
@@ -92,6 +92,22 @@
                             </div>
                             <div class="col text-left pt-3">
                                 <h5>KƆLƆSILIW</h5>
+                            </div>
+                        </div>
+                    </button>
+                </a>
+            </div>
+
+            <div class="center" style="width:90%; padding:4px; margin:auto">
+                <a href="#needs">
+                    <button type="button" class="btn text-light text-center w-100 py-2 mb-5" style="background-color:#6B8E23; border-radius: 20px"
+                        @click="showNeeds=true; showDashboard=false">
+                        <div class="row">
+                            <div class="col">
+                                <img :src="`/images/planned_needs_icon.png`" height="60"/>
+                            </div>
+                            <div class="col text-left pt-3">
+                                <h5>ƝƐBILALEN</h5>
                             </div>
                         </div>
                     </button>
@@ -318,6 +334,39 @@
 
         </div>
 
+        <div v-if="showNeeds">
+
+            <div class="card-header mb-4" style="background-color:#6B8E23;">
+                <div class="row">
+                    <div class="col-4">
+                        <img :src="`/images/planned_needs_icon.png`" height="55"/>
+                    </div>
+                    <div class="col text-left text-light pt-3">
+                        <h3>ƝƐBILALEN</h3>
+                    </div>
+                </div>
+            </div>
+
+            <FarmNeeds :farm-needs="farmNeeds" :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
+
+            <div class="card-footer fixed-bottom bg-secondary mt-5">
+                <a href="#dashboard">
+                    <button class="btn btn-info mr-4 my-2" type="button" @click="showNeeds=false; showDashboard=true">
+                        <i class="la la-home"></i>
+                    </button>
+                </a>
+                <button class="btn btn-info mr-2 my-2" type="button" @click="needs_audio.play()">
+                    <i class="la la-volume-up"></i>
+                </button>
+                <form method="POST" :action="logoutRoute" class="btn">
+                    <input type="hidden" name="_token" :value="csrf">
+                    <button class="btn btn-info my-2" type="submit"><i class="la la-lock"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
     </div>
 
 
@@ -331,6 +380,7 @@ import FarmCosts from "./FarmCosts.vue";
 import FarmProduction from "./FarmProduction.vue";
 import FarmYield from "./FarmYield.vue";
 import FarmObservations from "./FarmObservations.vue";
+import FarmNeeds from "./FarmNeeds.vue";
 
 const props = defineProps({
     farm: Object,
@@ -362,6 +412,7 @@ let farmYield = ref([])
 let plantingObservations = ref([])
 let postPlantingObservations = ref([])
 let harvestObservations = ref([])
+let farmNeeds = ref({})
 let selectedYear = ref(null);
 let years = ref([]);
 
@@ -372,6 +423,7 @@ let costs_audio = new Audio('/audio/costs_bm.mp3')
 let production_audio = new Audio('/audio/production_bm.mp3')
 let yield_audio = new Audio('/audio/yield_bm.mp3')
 let observations_audio = new Audio('/audio/observations_bm.mp3')
+let needs_audio = new Audio('/audio/planned_needs_bm.mp3')
 
 
 onMounted(() => {
@@ -424,6 +476,10 @@ const fetchData = async (year) => {
         plantingObservations.value = observationsResponse.data.plantingObservations;
         postPlantingObservations.value = observationsResponse.data.postPlantingObservations;
         harvestObservations.value = observationsResponse.data.harvestObservations;
+
+    const needsResponse = await axios.get(`/farm/${props.farm.id}/FarmNeeds/${year}`);
+        console.log('API Needs Response:', needsResponse.data);
+        farmNeeds.value = needsResponse.data;
 }
 
 const updateYear = async (year) => {
