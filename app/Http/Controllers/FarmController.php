@@ -554,4 +554,61 @@ class FarmController extends Controller
             "harvestObservations" => $harvestObs,
         ];
     }
+
+    public static function getFarmNeeds(Farm $farm, $year)
+    {
+        // HUMAN CEREAL NEEDS
+        $humanNeeds = $farm->humanCerealNeeds()
+            ->where('year', $year)
+            ->first();
+        
+        // ANIMAL FEED NEEDS
+        $animalFeed = $farm->animalFeeds()
+            ->where('year', $year)
+            ->with('animalFeedCategories')
+            ->first();
+
+        // ANIMAL CATEGORIES
+        $animalCategories = [];
+
+        $bambaraLabels = [
+            'boeufs_labour' => 'Cikɛ turaw',
+            'embouche_bovine' => 'Anbusi misiw',
+            'vache_laitiere' => 'Nɔnɔ bɔ missiw',
+            'autres_bovins' => 'Misi tɔw',
+            'assins' => 'Faliw',
+            'embouche_ovine' => 'Anbusi sakaw',
+            'reste_ovins' => 'Saka tɔw',
+            'caprins' => 'Baw',
+        ];
+
+        if ($animalFeed) {
+            $animalFeed->load('animalFeedCategories');
+
+            foreach ($animalFeed->animalFeedCategories ?? [] as $cat) {
+                $animalCategories[] = [
+                    'id' => $cat->id,
+                    'label' => $bambaraLabels[$cat->categorie] ?? $cat->categorie,
+                    'total' => $cat->nb_animaux ?? 0,
+                ];
+            }
+        }
+
+
+        return [
+            "personnes_nourrir" => $humanNeeds?->personnes_nourrir,
+            "besoin_cereale_exploitation" => $humanNeeds?->besoin_cereale_exploitation,
+
+            "liste_cat_animales" => $animalCategories,
+
+            "total_concentre" => $animalFeed?->total_concentre,
+            "quantite_son" => $animalFeed?->quantite_son,
+            "quantite_tourteau" => $animalFeed?->quantite_tourteau,
+            "total_residu" => $animalFeed?->total_residu,
+            "total_fane" => $animalFeed?->total_fane,
+
+            "cal_depense_total" => $animalFeed?->cal_depense_total,
+            "cal_depense_soins" => $animalFeed?->cal_depense_soins,
+        ];
+    }
 }
