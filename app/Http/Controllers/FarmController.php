@@ -24,7 +24,17 @@ class FarmController extends Controller
         $postPlantingYears = $farm->postPlantings()->pluck('year')->unique()->toArray();
         $harvestYears = $farm->harvests()->pluck('year')->unique()->toArray();
 
-        $years = array_unique(array_merge($fieldYears, $interestPointYears, $plantingYears, $postPlantingYears, $harvestYears));
+        $humanNeedsYears = $farm->humanCerealNeeds()
+            ->pluck('year')
+            ->unique()
+            ->toArray();
+        $animalFeedYears = $farm->animalFeeds()
+            ->pluck('year')
+            ->unique()
+            ->toArray();
+        $needsYears = array_unique(array_merge($humanNeedsYears, $animalFeedYears));
+
+        $years = array_unique(array_merge($fieldYears, $interestPointYears, $plantingYears, $postPlantingYears, $harvestYears, $needsYears));
 
         rsort($years);
 
@@ -568,6 +578,10 @@ class FarmController extends Controller
             ->where('year', $year)
             ->with('animalFeedCategories')
             ->first();
+
+        if (!$humanNeeds && !$animalFeed) {
+            return null;
+        }
 
         // ANIMAL CATEGORIES
         $animalCategories = [];
