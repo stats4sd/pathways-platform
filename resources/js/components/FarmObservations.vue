@@ -12,7 +12,7 @@
 
       <div class="col-12 d-flex justify-content-center align-items-center">
         <div>
-          <button class="btn bg-orange text-light dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn text-light dropdown-toggle" style="background-color:#d5befa;" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="la la-calendar"></i> {{ localSelectedYear }}
           </button>
           <div class="dropdown-menu" aria-labelledby="yearDropdown">

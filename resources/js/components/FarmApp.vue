@@ -4,7 +4,24 @@
 
         <div v-if="showDashboard">
             <div class="card-header bg-secondary mb-4">
+                
                 <h1 justify-content-center>{{ farm.chef_upa }}</h1>
+
+            </div>
+            <div class="center" style="width:90%; margin:auto">
+                <a href="#characteristics">
+                    <button type="button" class="btn btn-warning text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
+                        @click="showCharacteristics=true; showDashboard=false">
+                        <div class="row">
+                            <div class="col">
+                                <img :src="`/images/characteristics_icon.png`" height="60"/>
+                            </div>
+                            <div class="col text-left pt-3">
+                                <h5>CIKƐDA FƐNW</h5>
+                            </div>
+                        </div>
+                    </button>
+                </a>
             </div>
             <div class="center" style="width:90%; margin:auto">
                 <a href="#map">
@@ -23,7 +40,7 @@
             </div>
             <div class="center" style="width:90%; padding:4px; margin:auto">
                 <a href="#area">
-                    <button type="button" class="btn bg-cyan text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
+                    <button type="button" class="btn bg-cyan text-light text-center w-100 py-2 mb-5" style="border-radius: 20px"
                         @click="showArea=true; showDashboard=false">
                         <div class="row">
                             <div class="col">
@@ -37,8 +54,23 @@
                 </a>
             </div>
             <div class="center" style="width:90%; padding:4px; margin:auto">
+                <a href="#needs">
+                    <button type="button" class="btn btn-success text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
+                        @click="showNeeds=true; showDashboard=false">
+                        <div class="row">
+                            <div class="col">
+                                <img :src="`/images/planned_needs_icon.png`" height="60"/>
+                            </div>
+                            <div class="col text-left pt-3">
+                                <h5>ƝƐBILALEN</h5>
+                            </div>
+                        </div>
+                    </button>
+                </a>
+            </div>
+            <div class="center" style="width:90%; padding:4px; margin:auto">
                 <a href="#costs">
-                    <button type="button" class="btn btn-warning text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
+                    <button type="button" class="btn btn-primary text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
                         @click="showCosts=true; showDashboard=false">
                         <div class="row">
                             <div class="col">
@@ -53,7 +85,7 @@
             </div>
             <div class="center" style="width:90%; padding:4px; margin:auto">
                 <a href="#production">
-                    <button type="button" class="btn btn-success text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
+                    <button type="button" class="btn bg-orange text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
                         @click="showProduction=true; showDashboard=false">
                         <div class="row">
                             <div class="col">
@@ -68,7 +100,7 @@
             </div>
             <div class="center" style="width:90%; padding:4px; margin:auto">
                 <a href="#yield">
-                    <button type="button" class="btn btn-primary text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
+                    <button type="button" class="btn text-light text-center w-100 py-2 mb-5" style="background-color:#6B8E23; border-radius: 20px"
                         @click="showYield=true; showDashboard=false">
                         <div class="row">
                             <div class="col">
@@ -84,7 +116,7 @@
 
             <div class="center" style="width:90%; padding:4px; margin:auto">
                 <a href="#observations">
-                    <button type="button" class="btn bg-orange text-light text-center w-100 py-2 mb-3" style="border-radius: 20px"
+                    <button type="button" class="btn text-light text-center w-100 py-2 mb-5" style="background-color:#d5befa; border-radius: 20px"
                         @click="showObservations=true; showDashboard=false">
                         <div class="row">
                             <div class="col">
@@ -98,22 +130,6 @@
                 </a>
             </div>
 
-            <div class="center" style="width:90%; padding:4px; margin:auto">
-                <a href="#needs">
-                    <button type="button" class="btn text-light text-center w-100 py-2 mb-5" style="background-color:#6B8E23; border-radius: 20px"
-                        @click="showNeeds=true; showDashboard=false">
-                        <div class="row">
-                            <div class="col">
-                                <img :src="`/images/planned_needs_icon.png`" height="60"/>
-                            </div>
-                            <div class="col text-left pt-3">
-                                <h5>ƝƐBILALEN</h5>
-                            </div>
-                        </div>
-                    </button>
-                </a>
-            </div>
-
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
                     <button class="btn btn-info mr-4 my-2" type="button" @click="showDashboard=true">
@@ -121,6 +137,39 @@
                     </button>
                 </a>
                 <button class="btn btn-info mr-2 my-2" type="button" @click="dashboard_audio.play()">
+                    <i class="la la-volume-up"></i>
+                </button>
+                <form method="POST" :action="logoutRoute" class="btn">
+                    <input type="hidden" name="_token" :value="csrf">
+                    <button class="btn btn-info my-2" type="submit"><i class="la la-lock"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+        <div v-if="showCharacteristics">
+
+            <div class="card-header bg-warning mb-4">
+                <div class="row">
+                    <div class="col-5 pl-5">
+                        <img :src="`/images/characteristics_icon.png`" height="60"/>
+                    </div>
+                    <div class="col text-left pt-3">
+                        <h3>CIKƐDA FƐNW</h3>
+                    </div>
+                </div>
+            </div>
+
+            <FarmCharacteristics :farm-characteristics="farmCharacteristics"/>
+
+            <div class="card-footer fixed-bottom bg-secondary mt-5">
+                <a href="#dashboard">
+                    <button class="btn btn-info mr-4 my-2" type="button" @click="showCharacteristics=false; showDashboard=true">
+                        <i class="la la-home"></i>
+                    </button>
+                </a>
+                <button class="btn btn-info mr-2 my-2" type="button" @click="map_audio.play()">
                     <i class="la la-volume-up"></i>
                 </button>
                 <form method="POST" :action="logoutRoute" class="btn">
@@ -202,7 +251,7 @@
 
         <div v-if="showCosts">
 
-            <div class="card-header bg-warning">
+            <div class="card-header bg-primary">
                 <div class="row">
                     <div class="col-5 pl-5">
                         <img :src="`/images/costs_icon.png`" height="60"/>
@@ -236,7 +285,7 @@
 
         <div v-if="showProduction">
 
-            <div class="card-header bg-success mb-4">
+            <div class="card-header bg-orange text-light mb-4">
                 <div class="row">
                     <div class="col-5 pl-5">
                         <img :src="`/images/production_icon.png`" height="60"/>
@@ -302,7 +351,7 @@
 
         <div v-if="showObservations">
 
-            <div class="card-header bg-orange mb-4">
+            <div class="card-header mb-4" style="background-color:#d5befa;">
                 <div class="row">
                     <div class="col-4">
                         <img :src="`/images/observation_icon.png`" height="55"/>
@@ -336,7 +385,7 @@
 
         <div v-if="showNeeds">
 
-            <div class="card-header mb-4" style="background-color:#6B8E23;">
+            <div class="card-header bg-success mb-4">
                 <div class="row">
                     <div class="col-4">
                         <img :src="`/images/planned_needs_icon.png`" height="55"/>
@@ -381,6 +430,7 @@ import FarmProduction from "./FarmProduction.vue";
 import FarmYield from "./FarmYield.vue";
 import FarmObservations from "./FarmObservations.vue";
 import FarmNeeds from "./FarmNeeds.vue";
+import FarmCharacteristics from "./FarmCharacteristics.vue";
 
 const props = defineProps({
     farm: Object,
@@ -390,6 +440,7 @@ const props = defineProps({
 const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 
 let showDashboard = ref(true)
+let showCharacteristics = ref(false)
 let showMap = ref(false)
 let showArea = ref(false)
 let showCosts = ref(false)
@@ -413,6 +464,7 @@ let plantingObservations = ref([])
 let postPlantingObservations = ref([])
 let harvestObservations = ref([])
 let farmNeeds = ref({})
+let farmCharacteristics = ref({})
 let selectedYear = ref(null);
 let years = ref([]);
 
@@ -480,6 +532,10 @@ const fetchData = async (year) => {
     const needsResponse = await axios.get(`/farm/${props.farm.id}/FarmNeeds/${year}`);
         console.log('API Needs Response:', needsResponse.data);
         farmNeeds.value = needsResponse.data;
+    
+    const characteristicsResponse = await axios.get(`/farm/${props.farm.id}/FarmCharacteristics`);
+        console.log('API Characteristics Response:', characteristicsResponse.data);
+        farmCharacteristics.value = characteristicsResponse.data;
 }
 
 const updateYear = async (year) => {

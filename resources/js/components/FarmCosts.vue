@@ -3,7 +3,7 @@
         <div class="row mb-5"
             :class="{ 'card-header shadow': farmCropCosts && Object.keys(farmCropCosts).length > 0 }">
             <div class="col-12 d-flex justify-content-center align-items-center mt-4">
-                <button class="btn btn-warning text-light dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn btn-primary text-light dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="la la-calendar"></i> {{ localSelectedYear }}
                 </button>
                 <div class="dropdown-menu" aria-labelledby="yearDropdown">

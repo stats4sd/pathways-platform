@@ -626,4 +626,31 @@ class FarmController extends Controller
             "cal_depense_soins" => $animalFeed?->cal_depense_soins,
         ];
     }
+
+    public static function getFarmCharacteristics(Farm $farm)
+    {
+        $details = $farm->farmDetails()
+            ->latest('year')
+            ->first();
+
+        if (!$details) {
+            return null;
+        }
+
+        return [
+            "chef_upa" => $details->chef_upa,
+            "village_id" => $details->village_id,
+            "superficie_cultive_upa" => $details->superficie_cultive_upa,
+            "upa_membres" => $details->upa_membres,
+            "nombre_charrues" => $details->nombre_charrues,
+            "nombre_tracteur" => $details->nombre_tracteur,
+            "type" => $details->type,
+
+            "ratio_membre_terre" => $details->ratio_membre_terre,
+            "ratio_actif_terre" => $details->ratio_actif_terre,
+            "ratio_boeuflabour_terre" => $details->ratio_boeuflabour_terre,
+
+            "year" => $details->year,
+        ];
+    }
 }
