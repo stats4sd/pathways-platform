@@ -7,7 +7,6 @@ use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Farm extends Model
 {
@@ -59,11 +58,6 @@ class Farm extends Model
     public function interestPoints(): HasMany
     {
         return $this->hasMany(InterestPoint::class);
-    }
-
-    public function villages(): BelongsToMany
-    {
-        return $this->belongsToMany(Village::class);
     }
 
     public function farmDetails(): HasMany
