@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row mb-5">
             <div class="col-12 d-flex justify-content-center align-items-center mt-4">
-                <button class="btn bg-success text-light dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn bg-primary text-light dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="la la-calendar"></i> {{ localSelectedYear }}
                 </button>
                 <div class="dropdown-menu" aria-labelledby="yearDropdown">
