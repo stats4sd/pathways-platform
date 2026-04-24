@@ -53,10 +53,17 @@
                 </div>
 
                 <div class="icon-item" @click="showYield=true; showDashboard=false">
-                    <div class="icon-tile" style="background:#6B8E23;">
+                    <div class="icon-tile" style="background:#d9777d;">
                     <img src="/images/yield_icon.png" />
                     </div>
                     <div class="icon-label">SƆRƆ LAKIKA</div>
+                </div>
+
+                <div class="icon-item" @click="showSoilNutrients=true; showDashboard=false">
+                    <div class="icon-tile" style="background:#6B8E23;">
+                    <img src="/images/soil_nutrients_icon.png" />
+                    </div>
+                    <div class="icon-label">DƆGƆ</div>
                 </div>
 
                 <div class="icon-item" @click="showObservations=true; showDashboard=false">
@@ -289,7 +296,7 @@
 
         <div v-if="showYield" class="d-flex flex-column flex-grow-1">
 
-            <div class="card-header mb-4 text-light" style="background:#6B8E23;">
+            <div class="card-header mb-4 text-light" style="background:#d9777d;">
                 <div class="row">
                     <div class="col-5">
                         <img :src="`/images/yield_icon.png`" height="60"/>
@@ -309,6 +316,39 @@
                     </button>
                 </a>
                 <button class="btn btn-info mr-2 my-2" type="button" @click="yield_audio.play()">
+                    <i class="la la-volume-up"></i>
+                </button>
+                <form method="POST" :action="logoutRoute" class="btn">
+                    <input type="hidden" name="_token" :value="csrf">
+                    <button class="btn btn-info my-2" type="submit"><i class="la la-lock"></i>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+        <div v-if="showSoilNutrients" class="d-flex flex-column flex-grow-1">
+
+            <div class="card-header mb-4" style="background:#6B8E23;">
+                <div class="row">
+                    <div class="col-4">
+                        <img :src="`/images/soil_nutrients_icon.png`" height="55"/>
+                    </div>
+                    <div class="col text-left text-light pt-3">
+                        <h3>DƆGƆ</h3>
+                    </div>
+                </div>
+            </div>
+
+            <FarmSoilNutrients :farm-soil-nutrients="farmSoilNutrients" :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
+
+            <div class="card-footer fixed-bottom bg-secondary mt-5">
+                <a href="#dashboard">
+                    <button class="btn btn-info mr-4 my-2" type="button" @click="showSoilNutrients=false; showDashboard=true">
+                        <i class="la la-home"></i>
+                    </button>
+                </a>
+                <button class="btn btn-info mr-2 my-2" type="button" @click="map_audio.play()">
                     <i class="la la-volume-up"></i>
                 </button>
                 <form method="POST" :action="logoutRoute" class="btn">
@@ -369,6 +409,7 @@
     import FarmObservations from "./FarmObservations.vue";
     import FarmNeeds from "./FarmNeeds.vue";
     import FarmCharacteristics from "./FarmCharacteristics.vue";
+    import FarmSoilNutrients from "./FarmSoilNutrients.vue";
 
     const props = defineProps({
         farm: Object,
@@ -385,6 +426,7 @@
     let showProduction = ref(false)
     let showYield = ref(false)
     let showObservations = ref(false)
+    let showSoilNutrients = ref(false)
 
     let plotCoords = ref([])
     let interestPointCoords = ref([])
@@ -403,6 +445,7 @@
     let harvestObservations = ref([])
     let farmNeeds = ref({})
     let farmCharacteristics = ref({})
+    let farmSoilNutrients = ref({})
     let selectedYear = ref(null);
     let years = ref([]);
 
@@ -414,7 +457,6 @@
     let yield_audio = new Audio('/audio/yield_bm.mp3')
     let observations_audio = new Audio('/audio/observations_bm.mp3')
     let needs_audio = new Audio('/audio/planned_needs_bm.mp3')
-
 
     onMounted(() => {
         getData();
@@ -474,6 +516,10 @@
         const characteristicsResponse = await axios.get(`/farm/${props.farm.id}/FarmCharacteristics`);
             console.log('API Characteristics Response:', characteristicsResponse.data);
             farmCharacteristics.value = characteristicsResponse.data;
+
+        const soilNutrientsResponse = await axios.get(`/farm/${props.farm.id}/FarmSoilNutrients/${year}`);
+            console.log('API Soil Nutrients Response:', soilNutrientsResponse.data);
+            farmSoilNutrients.value = soilNutrientsResponse.data;
     }
 
     const updateYear = async (year) => {

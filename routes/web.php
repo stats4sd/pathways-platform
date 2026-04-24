@@ -55,6 +55,7 @@ Route::group([
     Route::get('farm/{farm}/FarmObservations/{year}', [App\Http\Controllers\FarmController::class,'getFarmObservations']);
     Route::get('farm/{farm}/FarmNeeds/{year}', [App\Http\Controllers\FarmController::class,'getFarmNeeds']);
     Route::get('farm/{farm}/FarmCharacteristics', [App\Http\Controllers\FarmController::class,'getFarmCharacteristics']);
+    Route::get('farm/{farm}/FarmSoilNutrients/{year}', [App\Http\Controllers\FarmController::class,'getFarmSoilNutrients']);
 });
 
 require __DIR__ . '/auth.php';

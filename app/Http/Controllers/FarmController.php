@@ -653,4 +653,9 @@ class FarmController extends Controller
             "year" => $details->year,
         ];
     }
+
+    public static function getFarmSoilNutrients(Farm $farm, $year)
+    {
+        // Get soil nutrient data for the specified year
+    }
 }
