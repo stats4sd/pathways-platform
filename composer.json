@@ -23,8 +23,11 @@
         "stats4sd/laravel-odk-link": "v1.0",
         "stats4sd/laravel-sql-views": "*",
         "stats4sd/laravel-team-management": "dev-main",
+        "symfony/css-selector": "7.0",
         "symfony/http-client": "^6.3",
-        "symfony/mailgun-mailer": "^6.3"
+        "symfony/mailgun-mailer": "^6.3",
+        "symfony/options-resolver": "7.0",
+        "symfony/stopwatch": "7.0"
     },
     "require-dev": {
         "backpack/generators": "^3.3",
