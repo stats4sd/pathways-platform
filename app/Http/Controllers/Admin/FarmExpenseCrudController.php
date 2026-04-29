@@ -11,14 +11,10 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
-/**
- * Class FarmExpenseCrudController
- * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class FarmExpenseCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use ExportOperation;
@@ -33,6 +29,7 @@ class FarmExpenseCrudController extends CrudController
 
     protected function setupListOperation()
     {
+        CRUD::column('id')->label('ID');
         CRUD::column('farm_id')->label('UPA');
         CRUD::column('year');
         CRUD::column('frais_condiment_jour');
@@ -99,6 +96,54 @@ class FarmExpenseCrudController extends CrudController
                 }
                 return null;
             }]);
+
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+        
+        CRUD::column('created_at')
+            ->type('datetime')
+            ->label('Créé le');
+
+        CRUD::column('updated_at')
+            ->type('datetime')
+            ->label('Mis à jour le');
+    }
+
+    protected function setupUpdateOperation()
+    {
+        CRUD::setValidation(FarmExpenseRequest::class);
+
+        $this->crud->getRequest()->request->set('id', $this->crud->getCurrentEntry()->id);
+        $this->crud->getRequest()->request->set('farm_id', $this->crud->getCurrentEntry()->farm_id);
+
+        CRUD::field('id')
+            ->type('number')
+            ->label('ID')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('farm_id')
+            ->label('UPA')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('year')->type('number');
+        CRUD::field('frais_condiment_jour')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('frais_condiment_annuel')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('nombre_personne_upa')->type('number');
+        CRUD::field('frais_sante_annuel')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('frais_education_annuel')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('nom_autre_frais');
+        CRUD::field('montant_autre_frais')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('invest_maison')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('invest_mariage')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('invest_equipment');
+        CRUD::field('autre_invest');
+        CRUD::field('montant_autre_invest')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('depenses_recurrentes')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('depenses_investissements')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('depenes_total')->type('number')->attributes(['step' => '0.01']);
 
     }
 

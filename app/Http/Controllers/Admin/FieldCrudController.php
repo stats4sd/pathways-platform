@@ -19,6 +19,7 @@ use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 class FieldCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use ExportOperation;
@@ -52,7 +53,7 @@ class FieldCrudController extends CrudController
         CRUD::column('type_sol');
         CRUD::column('pente');
         CRUD::column('superficie_total');
-        CRUD::column('observation_text');
+        CRUD::column('observation_texte');
         CRUD::column('observation_audio')->type('url')
             ->wrapper(['href'=>function($crud, $column, $entry) {
                 if (!empty($entry->observation_audio)) {
@@ -101,6 +102,42 @@ class FieldCrudController extends CrudController
                 }
                 return null;
             }]);
+    }
+
+    protected function setupUpdateOperation()
+    {
+        CRUD::setValidation(FieldRequest::class);
+
+        $this->crud->getRequest()->request->set('id', $this->crud->getCurrentEntry()->id);
+        $this->crud->getRequest()->request->set('farm_id', $this->crud->getCurrentEntry()->farm_id);
+
+        CRUD::field('id')
+            ->type('number')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('farm_id')
+            ->label('UPA')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('year')->type('number');
+        CRUD::field('nom');
+        CRUD::field('type_sol');
+        CRUD::field('pente');
+        CRUD::field('superficie_total')->type('number')->attributes(['step' => '0.01']);
+
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+        
+        CRUD::column('created_at')
+            ->type('datetime')
+            ->label('Créé le');
+
+        CRUD::column('updated_at')
+            ->type('datetime')
+            ->label('Mis à jour le');
     }
 
     public function export() 

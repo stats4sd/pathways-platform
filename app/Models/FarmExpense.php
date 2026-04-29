@@ -6,18 +6,24 @@ use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
 
-class FarmExpense extends Model implements HasMedia
+class FarmExpense extends Model implements HasMedia, Auditable
 {
     use CrudTrait;
     use HasFactory;
     use InteractsWithMedia;
+    use AuditableTrait;
 
     protected $table = 'farm_expenses';
     protected $guarded = [];
+
+    protected $auditInclude = ['*'];
+    protected $auditEvents = ['updated','deleted'];
+    protected $auditExclude = ['created_at'];
 
     /*
     |--------------------------------------------------------------------------

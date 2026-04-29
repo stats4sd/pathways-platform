@@ -2,34 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
-use App\Models\PostPlantingDetail;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\MonitoringWorkbookExport;
-use App\Http\Requests\PostPlantingDetailRequest;
-use Backpack\CRUD\app\Http\Controllers\CrudController;
-use App\Http\Controllers\Admin\Traits\ExportMediaOperation;
-use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use \Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
+use App\Exports\MonitoringWorkbookExport;
+use App\Http\Controllers\Admin\Traits\ExportMediaOperation;
+use App\Http\Requests\PostPlantingDetailRequest;
+use App\Models\Crop;
+use App\Models\PostPlantingDetail;
+use Backpack\CRUD\app\Http\Controllers\CrudController;
+use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
-/**
- * Class PostPlantingDetailCrudController
- * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class PostPlantingDetailCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use ExportOperation;
     use ExportMediaOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     * 
-     * @return void
-     */
     public function setup()
     {
         CRUD::setModel(\App\Models\PostPlantingDetail::class);
@@ -38,16 +30,11 @@ class PostPlantingDetailCrudController extends CrudController
         CRUD::set('export.exporter', MonitoringWorkbookExport::class);
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     * 
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     * @return void
-     */
     protected function setupListOperation()
     {
-        CRUD::column('postPlanting.farm.code')->label('UPA');
+        CRUD::column('id')->label('ID');
         CRUD::column('postPlanting.id')->label('Post-Semis ID');
+        CRUD::column('postPlanting.farm.code')->label('UPA');
         CRUD::column('crop_id')->label('Culture');
 
         CRUD::column('observation_image')
@@ -107,17 +94,63 @@ class PostPlantingDetailCrudController extends CrudController
         CRUD::column('quantite_insecticide');
         CRUD::column('cout_insecticide');
         CRUD::column('cout');
-
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
-         */
     }
 
     protected function setupShowOperation()
     {
         $this->setupListOperation();
+        
+        CRUD::column('created_at')
+            ->type('datetime')
+            ->label('Créé le');
+
+        CRUD::column('updated_at')
+            ->type('datetime')
+            ->label('Mis à jour le');
+    }
+
+    protected function setupUpdateOperation()
+    {
+        CRUD::setValidation(PostPlantingDetailRequest::class);
+
+        $this->crud->getRequest()->request->set('id', $this->crud->getCurrentEntry()->id);
+        $this->crud->getRequest()->request->set('post_planting_id', $this->crud->getCurrentEntry()->post_planting_id);
+
+        CRUD::field('id')
+            ->type('number')
+            ->label('ID')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('post_planting_id')
+            ->label('Post-Semis ID')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('postPlanting.farm.code')
+            ->label('UPA')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('crop_id')
+            ->label('Culture')
+            ->type('select_from_array')
+            ->options(
+                Crop::all()->pluck('label_fr', 'id')->toArray()
+            );
+        CRUD::field('superficie_sarclage')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('cout_sarclage')->type('number');
+        CRUD::field('superficie_desherbage')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('cout_desherbage')->type('number');
+        CRUD::field('quantite_npk')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('cout_npk')->type('number');
+        CRUD::field('quantite_uree')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('cout_uree')->type('number');
+        CRUD::field('quantite_herbicide')->type('number');
+        CRUD::field('cout_herbicide')->type('number');
+        CRUD::field('superficie_butee')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('cout_buttage')->type('number');
+        CRUD::field('quantite_insecticide')->type('number');
+        CRUD::field('cout_insecticide')->type('number');
+        CRUD::field('cout')->type('number');
+
     }
     
     public function export() 

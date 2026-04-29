@@ -28,12 +28,6 @@ class FarmCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use ExportOperation;
 
-
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     *
-     * @return void
-     */
     public function setup()
     {
         CRUD::setModel(\App\Models\Farm::class);
@@ -42,12 +36,6 @@ class FarmCrudController extends CrudController
         CRUD::set('export.exporter', EnrolmentWorkbookExport::class);
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     * @return void
-     */
     protected function setupListOperation()
     {
 
@@ -61,21 +49,34 @@ class FarmCrudController extends CrudController
         ->type('view')
         ->view('crud::buttons.map')
         ->after('update');
-
-    /**
-     * Columns can be defined using the fluent syntax or array syntax:
-     * - CRUD::column('price')->type('number');
-     * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
-     */
     }
 
     protected function setupUpdateOperation()
     {
         CRUD::setValidation(FarmRequest::class);
 
-        CRUD::field('code');
-        CRUD::field('phone_number');
+        $this->crud->getRequest()->request->set('code', $this->crud->getCurrentEntry()->code);
 
+        CRUD::field('code')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('type');
+        CRUD::field('phone_number');
+        CRUD::field('chef_upa');
+
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+        
+        CRUD::column('created_at')
+            ->type('datetime')
+            ->label('Créé le');
+
+        CRUD::column('updated_at')
+            ->type('datetime')
+            ->label('Mis à jour le');
     }
 
     public function export() 
