@@ -41,5 +41,6 @@ Route::group([
     Route::crud('human_cereal_need', 'HumanCerealNeedCrudController');
     Route::crud('animal_feed', 'AnimalFeedCrudController');
     Route::crud('animal_feed_category', 'AnimalFeedCategoryCrudController');
+    Route::crud('audit', 'AuditCrudController');
 
 }); // this should be the absolute last line of this file
