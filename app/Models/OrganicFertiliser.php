@@ -21,9 +21,20 @@ class OrganicFertiliser extends Model implements HasMedia, Auditable
     protected $table = 'organic_fertilisers';
     protected $guarded = [];
 
-    protected $auditInclude = ['*'];
     protected $auditEvents = ['updated','deleted'];
     protected $auditExclude = ['created_at'];
+    protected $auditInclude = [
+                                'year',
+                                'quantite_fumure_organique',
+                                'superficie_exploitation',
+                                'protion_fertilisable',
+                                'superficie_rotation',
+                                'superficie_cycle',
+                                'gap_annuel',
+                                'gap_cycle',
+                                'gap_cycle_pour100',
+                                'nb_annee',
+                            ];
 
     /*
     |--------------------------------------------------------------------------

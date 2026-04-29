@@ -22,9 +22,27 @@ class AnimalFeed extends Model implements HasMedia, Auditable
     protected $table = 'animal_feeds';
     protected $guarded = [];
 
-    protected $auditInclude = ['*'];
     protected $auditEvents = ['updated','deleted'];
     protected $auditExclude = ['created_at'];
+    protected $auditInclude = [
+                                'year',
+                                'total_concentre',
+                                'total_residu',
+                                'total_fane',
+                                'liste_cat_animales',
+                                'quantite_son',
+                                'quantite_tourteau',
+                                'concentre_produit',
+                                'achat_son_quantite',
+                                'prix_sac_son',
+                                'cal_depense_son',
+                                'prix_sac_tourteau',
+                                'cal_depense_tourteau',
+                                'cal_depense_tour',
+                                'cal_superficie',
+                                'cal_depense_total',
+                                'cal_depense_soins',
+                            ];
 
     /*
     |--------------------------------------------------------------------------

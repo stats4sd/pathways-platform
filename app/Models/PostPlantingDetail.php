@@ -21,9 +21,26 @@ class PostPlantingDetail extends Model implements HasMedia, Auditable
     protected $table = 'post_plantings_details';
     protected $guarded = [];
 
-    protected $auditInclude = ['*'];
     protected $auditEvents = ['updated','deleted'];
     protected $auditExclude = ['created_at'];
+    protected $auditInclude = [
+                                'crop_id',
+                                'superficie_sarclage',
+                                'cout_sarclage',
+                                'superficie_desherbage',
+                                'cout_desherbage',
+                                'quantite_npk',
+                                'cout_npk',
+                                'quantite_uree',
+                                'cout_uree',
+                                'quantite_herbicide',
+                                'cout_herbicide',
+                                'superficie_butee',
+                                'cout_buttage',
+                                'quantite_insecticide',
+                                'cout_insecticide',
+                                'cout',
+                            ];
 
     /*
     |--------------------------------------------------------------------------

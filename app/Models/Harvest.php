@@ -19,9 +19,9 @@ class Harvest extends Model implements Auditable
     protected $table = 'harvests';
     protected $guarded = [];
 
-    protected $auditInclude = ['*'];
     protected $auditEvents = ['updated','deleted'];
     protected $auditExclude = ['created_at'];
+    protected $auditInclude = ['year', 'cout_total'];
 
     /*
     |--------------------------------------------------------------------------

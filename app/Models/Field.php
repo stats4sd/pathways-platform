@@ -23,10 +23,15 @@ class Field extends Model implements HasMedia, Auditable
     protected $guarded = [];
     protected $appends = ['center'];
 
-    protected $auditInclude = ['*'];
     protected $auditEvents = ['updated','deleted'];
     protected $auditExclude = ['created_at'];
-
+    protected $auditInclude = [
+                                    'year',
+                                    'nom',
+                                    'type_sol',
+                                    'pente',
+                                    'superficie_total',
+                                ];
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

@@ -19,9 +19,13 @@ class Farm extends Model implements Auditable
     protected $table = 'farms';
     protected $guarded = [];
 
-    protected $auditInclude = ['*'];
     protected $auditEvents = ['updated','deleted'];
     protected $auditExclude = ['created_at'];
+    protected $auditInclude = [
+                                'type',
+                                'phone_number',
+                                'chef_upa'
+                            ];
 
     /*
     |--------------------------------------------------------------------------

@@ -89,15 +89,25 @@ class AuditCrudController extends CrudController
                     return ($modelLabels[$model] ?? $model) . ' ' . $entry->auditable_id;
                 });
 
-        CRUD::column('old_values')
-            ->label('Anciennes valeurs')
-            ->type('json')
-            ->limit(100);
+            CRUD::column('old_values')
+                ->label('Anciennes valeurs')
+                ->type('closure')
+                ->function(function ($entry) {
+                    return collect($entry->old_values)
+                        ->map(fn($value, $key) => "<strong>$key:</strong> $value")
+                        ->implode('<br>');
+                })
+                ->escaped(false);
 
-        CRUD::column('new_values')
-            ->label('Nouvelles valeurs')
-            ->type('json')
-            ->limit(100);
+            CRUD::column('new_values')
+                ->label('Nouvelles valeurs')
+                ->type('closure')
+                ->function(function ($entry) {
+                    return collect($entry->new_values)
+                        ->map(fn($value, $key) => "<strong>$key:</strong> $value")
+                        ->implode('<br>');
+                })
+                ->escaped(false);
 
     }
 

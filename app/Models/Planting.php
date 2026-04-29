@@ -19,9 +19,9 @@ class Planting extends Model implements Auditable
     protected $table = 'plantings';
     protected $guarded = [];
 
-    protected $auditInclude = ['*'];
     protected $auditEvents = ['updated','deleted'];
     protected $auditExclude = ['created_at'];
+    protected $auditInclude = ['year', 'cout_total'];
 
     /*
     |--------------------------------------------------------------------------

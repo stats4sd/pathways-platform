@@ -21,9 +21,18 @@ class HarvestDetail extends Model implements HasMedia, Auditable
     protected $table = 'harvests_details';
     protected $guarded = [];
 
-    protected $auditInclude = ['*'];
     protected $auditEvents = ['updated','deleted'];
     protected $auditExclude = ['created_at'];
+    protected $auditInclude = [
+                                'crop_id',
+                                'superficie_recolte_prestation',
+                                'cout_total_prestation_recolte',
+                                'production',
+                                'cout_total_battage',
+                                'production_residu_culture',
+                                'nombre_botte',
+                                'cout',
+                            ];
 
     /*
     |--------------------------------------------------------------------------

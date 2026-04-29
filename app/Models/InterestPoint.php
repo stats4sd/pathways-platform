@@ -21,9 +21,16 @@ class InterestPoint extends Model implements HasMedia, Auditable
     protected $table = 'interest_points';
     protected $guarded = [];
 
-    protected $auditInclude = ['*'];
     protected $auditEvents = ['updated','deleted'];
     protected $auditExclude = ['created_at'];
+    protected $auditInclude = [
+                                'year',
+                                'nom',
+                                'longitude',
+                                'latitude',
+                                'altitude',
+                                'accuracy',
+                            ];
 
     /*
     |--------------------------------------------------------------------------

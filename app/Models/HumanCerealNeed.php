@@ -21,9 +21,26 @@ class HumanCerealNeed extends Model implements HasMedia, Auditable
     protected $table = 'human_cereal_needs';
     protected $guarded = [];
 
-    protected $auditInclude = ['*'];
     protected $auditEvents = ['updated','deleted'];
     protected $auditExclude = ['created_at'];
+    protected $auditInclude = [
+                                'year',
+                                'type_menage',
+                                'personnes_nourrir',
+                                'besoin_cereale_exploitation',
+                                'sac_mais',
+                                'sac_mil',
+                                'sac_sorgho',
+                                'sac_cereales',
+                                'sac_cereales_diff',
+                                'rend_moyen_mais',
+                                'rend_moyen_mil',
+                                'rend_moyen_sorgho',
+                                'superficie_mais',
+                                'superficie_mil',
+                                'superficie_sorgho',
+                                'superficie_totale',
+                            ];
 
     /*
     |--------------------------------------------------------------------------
