@@ -114,7 +114,7 @@
                         <i class="la la-home"></i>
                     </button>
                 </a>
-                <button class="btn btn-info mr-2 my-2" type="button" @click="map_audio.play()">
+                <button class="btn btn-info mr-2 my-2" type="button" @click="characteristics_audio.play()">
                     <i class="la la-volume-up"></i>
                 </button>
                 <form method="POST" :action="logoutRoute" class="btn">
@@ -457,6 +457,7 @@
     let yield_audio = new Audio('/audio/yield_bm.mp3')
     let observations_audio = new Audio('/audio/observations_bm.mp3')
     let needs_audio = new Audio('/audio/planned_needs_bm.mp3')
+    let characteristics_audio = new Audio('/audio/characteristics_bm.mp3')
 
     onMounted(() => {
         getData();
