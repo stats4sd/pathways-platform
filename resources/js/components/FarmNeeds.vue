@@ -29,10 +29,10 @@
 
                 <div class="row">
                     <div class="col-7 text-left ml-3">
-                        Suman hakɛ ɲɛbilalen balo kama
+                        Suman hakɛ ɲɛbilalen balo kama (bɔrɛ)
                     </div>
                     <div class="col text-left pl-2">
-                        <b>{{ farmNeeds.besoin_cereale_exploitation ? farmNeeds.besoin_cereale_exploitation + ' kg' : '' }}</b>
+                        <b>{{ farmNeeds.besoin_cereale_exploitation }}</b>
                     </div>
                 </div>
             </div>
@@ -61,12 +61,12 @@
                 </div>
                 
                 <div class="row mt-4">
-                    <div class="col-7 text-left ml-3">Bu bɔrɛ hakɛ</div>
+                    <div class="col-7 text-left ml-3">Bu hakɛ (bɔrɛ)</div>
                     <div class="col text-left pl-2"><b>{{ farmNeeds.quantite_son }}</b></div>
                 </div>
 
                 <div class="row mt-4">
-                    <div class="col-7 text-left ml-3">Turuto bɔrɛ hakɛ</div>
+                    <div class="col-7 text-left ml-3">Turuto hakɛ (bɔrɛ)</div>
                     <div class="col text-left pl-2"><b>{{ farmNeeds.quantite_tourteau }}</b></div>
                 </div>
 

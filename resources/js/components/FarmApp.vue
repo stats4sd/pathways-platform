@@ -35,7 +35,7 @@
                     <div class="icon-tile bg-primary">
                     <img src="/images/planned_needs_icon.png" />
                     </div>
-                    <div class="icon-label">ƝƐBILALEN</div>
+                    <div class="icon-label">BALO ƝƐBILALENW</div>
                 </div>
 
                 <div class="icon-item" @click="showCosts=true; showDashboard=false">
@@ -202,7 +202,7 @@
                         <img :src="`/images/planned_needs_icon.png`" height="55"/>
                     </div>
                     <div class="col text-left text-light pt-3">
-                        <h3>ƝƐBILALEN</h3>
+                        <h3>BALO ƝƐBILALENW</h3>
                     </div>
                 </div>
             </div>

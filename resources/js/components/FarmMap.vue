@@ -112,7 +112,7 @@
                       Sɛnɛfen jɔnjɔn:
                       <br/><b> {{ plot.main_crop_bm }}</b> <img :src="`/images/${plot.main_crop_image}`" height="30"><br/>
                       <br/>Si tɔgɔ: <b>{{ plot.nom_variete_culture }}</b>
-                      <br/>Si sugu: <b>{{ plot.type_variete_culture  }}</b>
+                      <br/>Si sugu: <b>{{ plot.type_variete_culture_bm  }}</b>
                       
                       <div v-if="plot.cultures_associations">
                         Sɛnɛfen wɛrɛw:

@@ -128,6 +128,10 @@ class FarmController extends Controller
             $plot->superficie_measuree = round(floatval($plot->superficie_measuree), 1);
             $plot->field->superficie_total = round(floatval($plot->field->superficie_total), 1);
 
+            // Include variety type bm label
+            $varietyTypeLabels = ['traditionnelle' => 'Ladala si kɔrɔlen', 'amelioree' => 'Si sɛgɛsɛgɛlen', 'hybride' => 'Si wolosso'];
+            $plot->type_variete_culture_bm = $varietyTypeLabels[$plot->type_variete_culture] ?? $plot->type_variete_culture;
+
             return $plot;
         });
 

@@ -5,7 +5,7 @@
       <div class="card shadow rounded-1 mb-4 p-3" style="border-radius: 20px; width: 90%; margin:auto;">
 
         <div class="row text-left">
-          <div class="col-7 ml-3 text-left">Gatigi tɔgɔ n’a jamu sɛbɛn</div>
+          <div class="col-7 ml-3 text-left">Gatigi tɔgɔ n’a jamu</div>
           <div class="col pl-2 text-left"><b>{{ farmCharacteristics.chef_upa }}</b></div>
         </div>
 
@@ -18,7 +18,7 @@
           <div class="col-7 ml-3 text-left">Forokɛnɛ sɛnɛta hakɛ (taari)</div>
           <div class="col pl-2 text-left">
             <b v-if="farmCharacteristics.superficie_cultive_upa !== null">
-              {{ farmCharacteristics.superficie_cultive_upa ? farmCharacteristics.superficie_cultive_upa + ' ha' : '' }}
+              {{ farmCharacteristics.superficie_cultive_upa }}
             </b>
           </div>
         </div>
