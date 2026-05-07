@@ -591,14 +591,14 @@ class FarmController extends Controller
         $animalCategories = [];
 
         $bambaraLabels = [
-            'boeufs_labour' => 'Cikɛ turaw',
-            'embouche_bovine' => 'Anbusi misiw',
-            'vache_laitiere' => 'Nɔnɔ bɔ missiw',
-            'autres_bovins' => 'Misi tɔw',
-            'assins' => 'Faliw',
-            'embouche_ovine' => 'Anbusi sakaw',
-            'reste_ovins' => 'Saka tɔw',
-            'caprins' => 'Baw',
+            'boeufs_labour' => 'Cikɛ turaw hakɛ',
+            'embouche_bovine' => 'Anbusi misiw hakɛ',
+            'vache_laitiere' => 'Nɔnɔ bɔ missiw hakɛ',
+            'autres_bovins' => 'Misi tɔw hakɛ',
+            'assins' => 'Faliw hakɛ',
+            'embouche_ovine' => 'Anbusi sakaw hakɛ',
+            'reste_ovins' => 'Saka tɔw hakɛ',
+            'caprins' => 'Baw hakɛ',
         ];
 
         if ($animalFeed) {
