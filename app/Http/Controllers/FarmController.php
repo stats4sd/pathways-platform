@@ -620,11 +620,11 @@ class FarmController extends Controller
 
             "liste_cat_animales" => $animalCategories,
 
-            "total_concentre" => $animalFeed?->total_concentre,
-            "quantite_son" => $animalFeed?->quantite_son,
-            "quantite_tourteau" => $animalFeed?->quantite_tourteau,
-            "total_residu" => $animalFeed?->total_residu,
-            "total_fane" => $animalFeed?->total_fane,
+            "total_concentre" => round($animalFeed?->total_concentre, 0),
+            "quantite_son" => round($animalFeed?->quantite_son, 0),
+            "quantite_tourteau" => round($animalFeed?->quantite_tourteau, 0),
+            "total_residu" => round($animalFeed?->total_residu, 0),
+            "total_fane" => round($animalFeed?->total_fane, 0),
 
             "cal_depense_total" => $animalFeed?->cal_depense_total,
             "cal_depense_soins" => $animalFeed?->cal_depense_soins,
