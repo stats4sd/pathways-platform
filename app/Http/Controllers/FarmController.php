@@ -23,6 +23,7 @@ class FarmController extends Controller
         $plantingYears = $farm->plantings()->pluck('year')->unique()->toArray();
         $postPlantingYears = $farm->postPlantings()->pluck('year')->unique()->toArray();
         $harvestYears = $farm->harvests()->pluck('year')->unique()->toArray();
+        $characteristicsYears = $farm->farmDetails()->pluck('year')->unique()->toArray();
 
         $humanNeedsYears = $farm->humanCerealNeeds()
             ->pluck('year')
@@ -34,7 +35,7 @@ class FarmController extends Controller
             ->toArray();
         $needsYears = array_unique(array_merge($humanNeedsYears, $animalFeedYears));
 
-        $years = array_unique(array_merge($fieldYears, $interestPointYears, $plantingYears, $postPlantingYears, $harvestYears, $needsYears));
+        $years = array_unique(array_merge($fieldYears, $interestPointYears, $plantingYears, $postPlantingYears, $harvestYears, $characteristicsYears, $needsYears));
 
         rsort($years);
 
@@ -631,10 +632,10 @@ class FarmController extends Controller
         ];
     }
 
-    public static function getFarmCharacteristics(Farm $farm)
+    public static function getFarmCharacteristics(Farm $farm, $year)
     {
         $details = $farm->farmDetails()
-            ->latest('year')
+            ->where('year', $year)
             ->first();
 
         if (!$details) {
@@ -653,8 +654,6 @@ class FarmController extends Controller
             "ratio_membre_terre" => $details->ratio_membre_terre,
             "ratio_actif_terre" => $details->ratio_actif_terre,
             "ratio_boeuflabour_terre" => $details->ratio_boeuflabour_terre,
-
-            "year" => $details->year,
         ];
     }
 

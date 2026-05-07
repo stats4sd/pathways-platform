@@ -1,6 +1,18 @@
 <template>
   <div class="container">
-    <div class="row mb-5 pt-3">
+    
+    <div class="row mb-5">
+      <div class="col-12 d-flex justify-content-center align-items-center mt-4">
+          <button class="btn bg-primary text-light dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="la la-calendar"></i> {{ localSelectedYear }}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="yearDropdown">
+              <a class="dropdown-item" v-for="year in years" :key="year" @click="selectYear(year)">{{ year }}</a>
+          </div>
+      </div>
+    </div>
+
+    <div v-if="farmCharacteristics">
 
       <div class="card shadow rounded-1 mb-4 p-3" style="border-radius: 20px; width: 90%; margin:auto;">
 
@@ -73,18 +85,33 @@
       </div>
 
     </div>
+
   </div>
 </template>
 
 <script setup>
-import { defineProps, watch } from 'vue';
+  import { ref, defineProps, defineEmits, watch } from 'vue';
 
-const props = defineProps({
-    farmCharacteristics: Object,
+  const props = defineProps({
+      farmCharacteristics: Object,
+      selectedYear: String,
+      years: Array
 
-});
+  });
 
-watch(() => props.farmCharacteristics, (newData) => {
-    console.log('Updated farm characteristics data:', newData);
-});
+  const emit = defineEmits(['updateYear']);
+  const localSelectedYear = ref(props.selectedYear);
+
+  const selectYear = (year) => {
+      localSelectedYear.value = year;
+      emit('updateYear', year);
+  };
+
+  watch(() => props.selectedYear, (newYear) => {
+      localSelectedYear.value = newYear;
+  });
+
+  watch(() => props.farmCharacteristics, (newData) => {
+      console.log('Updated farm characteristics data:', newData);
+  });
 </script>

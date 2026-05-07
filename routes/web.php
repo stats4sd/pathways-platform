@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionFarmerController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\SubmissionController;
+use Illuminate\Support\Facades\Route;
 
 /**
  * No seperate Front-end
@@ -54,7 +55,7 @@ Route::group([
     Route::get('farm/{farm}/FarmYield/{year}', [App\Http\Controllers\FarmController::class,'getFarmYield']);
     Route::get('farm/{farm}/FarmObservations/{year}', [App\Http\Controllers\FarmController::class,'getFarmObservations']);
     Route::get('farm/{farm}/FarmNeeds/{year}', [App\Http\Controllers\FarmController::class,'getFarmNeeds']);
-    Route::get('farm/{farm}/FarmCharacteristics', [App\Http\Controllers\FarmController::class,'getFarmCharacteristics']);
+    Route::get('farm/{farm}/FarmCharacteristics/{year}', [App\Http\Controllers\FarmController::class,'getFarmCharacteristics']);
     Route::get('farm/{farm}/FarmSoilNutrients/{year}', [App\Http\Controllers\FarmController::class,'getFarmSoilNutrients']);
 });
 

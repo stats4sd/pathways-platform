@@ -106,7 +106,7 @@
                 </div>
             </div>
 
-            <FarmCharacteristics :farm-characteristics="farmCharacteristics"/>
+            <FarmCharacteristics :farm-characteristics="farmCharacteristics" :years="years" :selected-year="selectedYear" @updateYear="updateYear"/>
 
             <div class="card-footer fixed-bottom bg-secondary mt-5">
                 <a href="#dashboard">
@@ -514,7 +514,7 @@
             console.log('API Needs Response:', needsResponse.data);
             farmNeeds.value = needsResponse.data;
         
-        const characteristicsResponse = await axios.get(`/farm/${props.farm.id}/FarmCharacteristics`);
+        const characteristicsResponse = await axios.get(`/farm/${props.farm.id}/FarmCharacteristics/${year}`);
             console.log('API Characteristics Response:', characteristicsResponse.data);
             farmCharacteristics.value = characteristicsResponse.data;
 
