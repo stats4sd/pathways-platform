@@ -14,7 +14,7 @@
                     <div class="icon-tile bg-warning">
                     <img src="/images/characteristics_icon.png" />
                     </div>
-                    <div class="icon-label">CIKƐDA FƐNW</div>
+                    <div class="icon-label">CIKƐDA KƐ COGO KUNAFONIW</div>
                 </div>
 
                 <div class="icon-item" @click="showMap=true; showDashboard=false">
@@ -101,7 +101,7 @@
                         <img :src="`/images/characteristics_icon.png`" height="60"/>
                     </div>
                     <div class="col text-left pt-3">
-                        <h3>CIKƐDA FƐNW</h3>
+                        <h3>CIKƐDA KƐ COGO KUNAFONIW</h3>
                     </div>
                 </div>
             </div>
