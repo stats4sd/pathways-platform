@@ -642,6 +642,14 @@ class FarmController extends Controller
             return null;
         }
 
+        $typeMap = [
+            'Motorise' => 'M',
+            'HRE-LH'   => 'A',
+            'HRE'      => 'B',
+            'MRE'      => 'C',
+            'LRE'      => 'D',
+        ];
+
         return [
             "chef_upa" => $details->chef_upa,
             "village_id" => $details->village->nom,
@@ -649,7 +657,7 @@ class FarmController extends Controller
             "upa_membres" => $details->upa_membres,
             "nombre_charrues" => $details->nombre_charrues,
             "nombre_tracteur" => $details->nombre_tracteur,
-            "type" => $details->type,
+            "type" => $typeMap[$details->type] ?? $details->type,
 
             "ratio_membre_terre" => $details->ratio_membre_terre,
             "ratio_actif_terre" => $details->ratio_actif_terre,
