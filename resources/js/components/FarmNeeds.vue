@@ -83,13 +83,13 @@
                 <hr>
 
                 <div class="row mt-2">
-                    <div class="col-7 text-left ml-3">Waari ɲɛbila hakɛ bagan balo kama</div>
-                    <div class="col text-left pl-2"><b>{{ farmNeeds.cal_depense_total ? farmNeeds.cal_depense_total + ' drm' : '' }}</b></div>
+                    <div class="col-7 text-left ml-3">Waari ɲɛbila hakɛ bagan balo kama (drm)</div>
+                    <div class="col text-left pl-2"><b>{{ farmNeeds.cal_depense_total }}</b></div>
                 </div>
 
                 <div class="row mt-4">
-                    <div class="col-7 text-left ml-3">Waari ɲɛbila hakɛ bagan furakɛli</div>
-                    <div class="col text-left pl-2"><b>{{ farmNeeds.cal_depense_soins ? farmNeeds.cal_depense_soins + ' drm' : '' }}</b></div>
+                    <div class="col-7 text-left ml-3">Waari ɲɛbila hakɛ bagan furakɛli (drm)</div>
+                    <div class="col text-left pl-2"><b>{{ farmNeeds.cal_depense_soins }}</b></div>
                 </div>
             </div>
         </div>

@@ -627,8 +627,8 @@ class FarmController extends Controller
             "total_residu" => round($animalFeed?->total_residu, 0),
             "total_fane" => round($animalFeed?->total_fane, 0),
 
-            "cal_depense_total" => $animalFeed?->cal_depense_total,
-            "cal_depense_soins" => $animalFeed?->cal_depense_soins,
+            "cal_depense_total" => round($animalFeed?->cal_depense_total, 0),
+            "cal_depense_soins" => round($animalFeed?->cal_depense_soins, 0),
         ];
     }
 
