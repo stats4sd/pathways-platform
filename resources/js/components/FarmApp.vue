@@ -59,12 +59,12 @@
                     <div class="icon-label">SƆRƆ LAKIKA</div>
                 </div>
 
-                <div class="icon-item" @click="showSoilNutrients=true; showDashboard=false">
+                <!-- <div class="icon-item" @click="showSoilNutrients=true; showDashboard=false">
                     <div class="icon-tile" style="background:#6B8E23;">
                     <img src="/images/soil_nutrients_icon.png" />
                     </div>
                     <div class="icon-label">DƆGƆ</div>
-                </div>
+                </div> -->
 
                 <div class="icon-item" @click="showObservations=true; showDashboard=false">
                     <div class="icon-tile" style="background:#d5befa;">
@@ -327,7 +327,7 @@
 
         </div>
 
-        <div v-if="showSoilNutrients" class="d-flex flex-column flex-grow-1">
+        <!-- <div v-if="showSoilNutrients" class="d-flex flex-column flex-grow-1">
 
             <div class="card-header mb-4" style="background:#6B8E23;">
                 <div class="row">
@@ -358,7 +358,7 @@
                 </form>
             </div>
 
-        </div>
+        </div> -->
 
         <div v-if="showObservations" class="d-flex flex-column flex-grow-1">
 
