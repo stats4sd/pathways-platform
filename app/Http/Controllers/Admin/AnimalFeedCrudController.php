@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\AnimalFeed;
 use App\Exports\PlanningWorkbookExport;
 use App\Http\Requests\AnimalFeedRequest;
+use App\Models\AnimalFeed;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
-/**
- * Class AnimalFeedCrudController
- * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class AnimalFeedCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use ExportOperation;
@@ -99,6 +97,55 @@ class AnimalFeedCrudController extends CrudController
                 }
                 return null;
             }]);
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+        
+        CRUD::column('created_at')
+            ->type('datetime')
+            ->label('Créé le');
+
+        CRUD::column('updated_at')
+            ->type('datetime')
+            ->label('Mis à jour le');
+    }
+
+    protected function setupUpdateOperation()
+    {
+        CRUD::setValidation(AnimalFeedRequest::class);
+
+        $this->crud->getRequest()->request->set('id', $this->crud->getCurrentEntry()->id);
+        $this->crud->getRequest()->request->set('farm_id', $this->crud->getCurrentEntry()->farm_id);
+
+        CRUD::field('id')
+            ->type('number')
+            ->label('ID')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('farm_id')
+            ->label('UPA')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('year')->type('number');
+        CRUD::field('total_concentre')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('total_residu')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('total_fane')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('liste_cat_animales');
+        CRUD::field('quantite_son')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('quantite_tourteau')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('concentre_produit')->type('number');
+        CRUD::field('achat_son_quantite')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('prix_sac_son')->type('number');
+        CRUD::field('cal_depense_son')->type('number');
+        CRUD::field('prix_sac_tourteau')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('cal_depense_tourteau')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('cal_depense_tour')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('cal_superficie')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('cal_depense_total')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('cal_depense_soins')->type('number')->attributes(['step' => 'any']);
+
     }
 
     public function export() 

@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <div class="row mb-5 card-header shadow">
+        <div class="row mb-5"
+            :class="{ 'card-header shadow': hasPrimaryArea || hasSecondaryArea }">
             <div class="col-12 d-flex justify-content-center align-items-center mt-4">
                 <button class="btn bg-cyan text-light dropdown-toggle" type="button" id="yearDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="la la-calendar"></i> {{ localSelectedYear }}
@@ -41,8 +42,9 @@
             <b>Sɛnɛfen wɛrɛw kelen-kelen kɛnɛ</b>
         </div>
         <div>
-            <div class="row pb-5">
+
                 <div class="d-flex col mt-4" v-for="crop in farmSecondaryArea" :key="crop.id">
+                                <div class="row pb-5">
                     <div>
                         <img :src="`/images/${crop.nom_fichier_image}`" width="70" class="mb-4 pr-2 ml-2" />
                     </div>

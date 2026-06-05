@@ -11,14 +11,10 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
-/**
- * Class HumanCerealNeedCrudController
- * @package App\Http\Controllers\Admin
- * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
- */
 class HumanCerealNeedCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
     use ExportOperation;
@@ -33,6 +29,7 @@ class HumanCerealNeedCrudController extends CrudController
 
     protected function setupListOperation()
     {
+        CRUD::column('id')->label('ID');
         CRUD::column('farm_id')->label('UPA');
         CRUD::column('year');
         CRUD::column('type_menage');
@@ -99,6 +96,54 @@ class HumanCerealNeedCrudController extends CrudController
                 }
                 return null;
             }]);
+
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->setupListOperation();
+        
+        CRUD::column('created_at')
+            ->type('datetime')
+            ->label('Créé le');
+
+        CRUD::column('updated_at')
+            ->type('datetime')
+            ->label('Mis à jour le');
+    }
+
+    protected function setupUpdateOperation()
+    {
+        CRUD::setValidation(HumanCerealNeedRequest::class);
+
+        $this->crud->getRequest()->request->set('id', $this->crud->getCurrentEntry()->id);
+        $this->crud->getRequest()->request->set('farm_id', $this->crud->getCurrentEntry()->farm_id);
+
+        CRUD::field('id')
+            ->type('number')
+            ->label('ID')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('farm_id')
+            ->label('UPA')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('year')->type('number');
+        CRUD::field('type_menage');
+        CRUD::field('personnes_nourrir')->type('number');
+        CRUD::field('besoin_cereale_exploitation')->type('number');
+        CRUD::field('sac_mais')->type('number');
+        CRUD::field('sac_mil')->type('number');
+        CRUD::field('sac_sorgho')->type('number');
+        CRUD::field('sac_cereales')->type('number');
+        CRUD::field('sac_cereales_diff')->type('number');
+        CRUD::field('rend_moyen_mais')->type('number');
+        CRUD::field('rend_moyen_mil')->type('number');
+        CRUD::field('rend_moyen_sorgho')->type('number');
+        CRUD::field('superficie_mais')->type('number');
+        CRUD::field('superficie_mil')->type('number');
+        CRUD::field('superficie_sorgho')->type('number');
+        CRUD::field('superficie_totale')->type('number');
 
     }
 

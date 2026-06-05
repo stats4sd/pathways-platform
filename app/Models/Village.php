@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Commune;
+use App\Models\FarmDetail;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Village extends Model
@@ -27,8 +29,8 @@ class Village extends Model
         return $this->belongsTo(Commune::class);
     }
 
-    public function farms(): BelongsToMany
+    public function farmDetails(): BelongsToMany
     {
-        return $this->belongsToMany(Farm::class);
+        return $this->belongsToMany(FarmDetail::class);
     }
 }

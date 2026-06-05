@@ -1,6 +1,6 @@
 <x-guest-layout>
 
-    <h3>Chemins l'IAE</h3>
+    <h3>CEF-M</h3>
     <h5 class="mb-4">Connexion</h5>
 
     <form method="POST" action="{{ route('post-login-researcher') }}">

@@ -23,8 +23,19 @@ class FarmController extends Controller
         $plantingYears = $farm->plantings()->pluck('year')->unique()->toArray();
         $postPlantingYears = $farm->postPlantings()->pluck('year')->unique()->toArray();
         $harvestYears = $farm->harvests()->pluck('year')->unique()->toArray();
+        $characteristicsYears = $farm->farmDetails()->pluck('year')->unique()->toArray();
 
-        $years = array_unique(array_merge($fieldYears, $interestPointYears, $plantingYears, $postPlantingYears, $harvestYears));
+        $humanNeedsYears = $farm->humanCerealNeeds()
+            ->pluck('year')
+            ->unique()
+            ->toArray();
+        $animalFeedYears = $farm->animalFeeds()
+            ->pluck('year')
+            ->unique()
+            ->toArray();
+        $needsYears = array_unique(array_merge($humanNeedsYears, $animalFeedYears));
+
+        $years = array_unique(array_merge($fieldYears, $interestPointYears, $plantingYears, $postPlantingYears, $harvestYears, $characteristicsYears, $needsYears));
 
         rsort($years);
 
@@ -118,6 +129,10 @@ class FarmController extends Controller
             $plot->superficie_measuree = round(floatval($plot->superficie_measuree), 1);
             $plot->field->superficie_total = round(floatval($plot->field->superficie_total), 1);
 
+            // Include variety type bm label
+            $varietyTypeLabels = ['traditionnelle' => 'Ladala si kɔrɔlen', 'amelioree' => 'Si sɛgɛsɛgɛlen', 'hybride' => 'Si wolosso'];
+            $plot->type_variete_culture_bm = $varietyTypeLabels[$plot->type_variete_culture] ?? $plot->type_variete_culture;
+
             return $plot;
         });
 
@@ -169,6 +184,7 @@ class FarmController extends Controller
         # TOTAL AREA (SUPERFICIE) ALL CROPS
 
         $totalArea = $farm->fields->where('year', $year)->sum('superficie_total');
+        $totalArea = rtrim(rtrim(number_format($totalArea, 1, '.', ''), '0'), '.');
 
         # AREA PER PRIMARY CROP
 
@@ -553,5 +569,104 @@ class FarmController extends Controller
             "postPlantingObservations" => $postPlantingObs,
             "harvestObservations" => $harvestObs,
         ];
+    }
+
+    public static function getFarmNeeds(Farm $farm, $year)
+    {
+        // HUMAN CEREAL NEEDS
+        $humanNeeds = $farm->humanCerealNeeds()
+            ->where('year', $year)
+            ->first();
+        
+        // ANIMAL FEED NEEDS
+        $animalFeed = $farm->animalFeeds()
+            ->where('year', $year)
+            ->with('animalFeedCategories')
+            ->first();
+
+        if (!$humanNeeds && !$animalFeed) {
+            return null;
+        }
+
+        // ANIMAL CATEGORIES
+        $animalCategories = [];
+
+        $bambaraLabels = [
+            'boeufs_labour' => 'Cikɛ turaw hakɛ',
+            'embouche_bovine' => 'Anbusi misiw hakɛ',
+            'vache_laitiere' => 'Nɔnɔ bɔ missiw hakɛ',
+            'autres_bovins' => 'Misi tɔw hakɛ',
+            'assins' => 'Faliw hakɛ',
+            'embouche_ovine' => 'Anbusi sakaw hakɛ',
+            'reste_ovins' => 'Saka tɔw hakɛ',
+            'caprins' => 'Baw hakɛ',
+        ];
+
+        if ($animalFeed) {
+            $animalFeed->load('animalFeedCategories');
+
+            foreach ($animalFeed->animalFeedCategories ?? [] as $cat) {
+                $animalCategories[] = [
+                    'id' => $cat->id,
+                    'label' => $bambaraLabels[$cat->categorie] ?? $cat->categorie,
+                    'total' => $cat->nb_animaux ?? 0,
+                ];
+            }
+        }
+
+
+        return [
+            "personnes_nourrir" => $humanNeeds?->personnes_nourrir,
+            "besoin_cereale_exploitation" => $humanNeeds?->besoin_cereale_exploitation,
+
+            "liste_cat_animales" => $animalCategories,
+
+            "total_concentre" => round($animalFeed?->total_concentre, 0),
+            "quantite_son" => round($animalFeed?->quantite_son, 0),
+            "quantite_tourteau" => round($animalFeed?->quantite_tourteau, 0),
+            "total_residu" => round($animalFeed?->total_residu, 0),
+            "total_fane" => round($animalFeed?->total_fane, 0),
+
+            "cal_depense_total" => round($animalFeed?->cal_depense_total, 0),
+            "cal_depense_soins" => round($animalFeed?->cal_depense_soins, 0),
+        ];
+    }
+
+    public static function getFarmCharacteristics(Farm $farm, $year)
+    {
+        $details = $farm->farmDetails()
+            ->where('year', $year)
+            ->first();
+
+        if (!$details) {
+            return null;
+        }
+
+        $typeMap = [
+            'Motorise' => 'M',
+            'HRE-LH'   => 'A',
+            'HRE'      => 'B',
+            'MRE'      => 'C',
+            'LRE'      => 'D',
+        ];
+
+        return [
+            "chef_upa" => $details->chef_upa,
+            "village_id" => $details->village->nom,
+            "superficie_cultive_upa" => $details->superficie_cultive_upa,
+            "upa_membres" => $details->upa_membres,
+            "nombre_charrues" => $details->nombre_charrues,
+            "nombre_tracteur" => $details->nombre_tracteur,
+            "type" => $typeMap[$details->type] ?? $details->type,
+
+            "ratio_membre_terre" => $details->ratio_membre_terre,
+            "ratio_actif_terre" => $details->ratio_actif_terre,
+            "ratio_boeuflabour_terre" => $details->ratio_boeuflabour_terre,
+        ];
+    }
+
+    public static function getFarmSoilNutrients(Farm $farm, $year)
+    {
+        // Get soil nutrient data for the specified year
     }
 }

@@ -17,14 +17,10 @@ class InterestPointCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use ExportMediaOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     *
-     * @return void
-     */
     public function setup()
     {
         CRUD::setModel(\App\Models\InterestPoint::class);
@@ -32,17 +28,11 @@ class InterestPointCrudController extends CrudController
         CRUD::setEntityNameStrings('point d\'intérêt', 'points d\'intérêt');
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     *
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     * @return void
-     */
     protected function setupListOperation()
     {
 
         CRUD::column('id')->label('ID');
-        CRUD::column('farm_id')->label('UPA ID');
+        CRUD::column('farm_id')->label('UPA');
         CRUD::column('year');
         CRUD::column('nom');
         CRUD::column('longitude');
@@ -76,17 +66,44 @@ class InterestPointCrudController extends CrudController
                 return $mediaUrl;
             }
         }]);
+    }
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
+    protected function setupUpdateOperation()
+    {
+        CRUD::setValidation(InterestPointRequest::class);
+
+        $this->crud->getRequest()->request->set('id', $this->crud->getCurrentEntry()->id);
+        $this->crud->getRequest()->request->set('farm_id', $this->crud->getCurrentEntry()->farm_id);
+
+        CRUD::field('id')
+            ->type('number')
+            ->label('ID')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('farm_id')
+            ->label('UPA')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('year')->type('number');
+        CRUD::field('nom');
+        CRUD::field('longitude')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('latitude')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('altitude')->type('number')->attributes(['step' => 'any']);
+        CRUD::field('accuracy')->type('number')->attributes(['step' => 'any'])->label('Précision');
+
     }
 
     protected function setupShowOperation()
     {
         $this->setupListOperation();
+
+        CRUD::column('created_at')
+            ->type('datetime')
+            ->label('Créé le');
+
+        CRUD::column('updated_at')
+            ->type('datetime')
+            ->label('Mis à jour le');
     }
 
 }

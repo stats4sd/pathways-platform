@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Plot;
-use Illuminate\Support\Carbon;
-use App\Http\Requests\PlotRequest;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\EnrolmentWorkbookExport;
+use App\Http\Requests\PlotRequest;
+use App\Models\Crop;
+use App\Models\Plot;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 use Stats4sd\FileUtil\Http\Controllers\Operations\ExportOperation;
 
 /**
@@ -20,14 +21,10 @@ class PlotCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use ExportOperation;
 
-    /**
-     * Configure the CrudPanel object. Apply settings to all operations.
-     * 
-     * @return void
-     */
     public function setup()
     {
         CRUD::setModel(\App\Models\Plot::class);
@@ -36,18 +33,11 @@ class PlotCrudController extends CrudController
         CRUD::set('export.exporter', EnrolmentWorkbookExport::class);
     }
 
-    /**
-     * Define what happens when the List operation is loaded.
-     * 
-     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
-     * @return void
-     */
     protected function setupListOperation()
     {
-
-        CRUD::column('field.farm.code')->label('UPA');
         CRUD::column('id')->label('ID');
         CRUD::column('field.id')->label('Champ ID');
+        CRUD::column('field.farm.code')->label('UPA');
         CRUD::column('numero_parcelle');
         CRUD::column('fertilite');
         CRUD::column('prev_crop_id')->label('Culture Prev');
@@ -98,9 +88,76 @@ class PlotCrudController extends CrudController
                 }]);
     }
 
+    protected function setupUpdateOperation()
+    {
+        CRUD::setValidation(PlotRequest::class);
+
+        $this->crud->getRequest()->request->set('id', $this->crud->getCurrentEntry()->id);
+        $this->crud->getRequest()->request->set('field_id', $this->crud->getCurrentEntry()->field_id);
+        $this->crud->getRequest()->request->set('field.farm.code', $this->crud->getCurrentEntry()->field->farm->code);
+
+        CRUD::field('id')
+            ->type('number')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('field_id')
+            ->label('Champ ID')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('field.farm.code')
+            ->label('UPA')
+            ->attributes(['disabled' => 'disabled']);
+
+        CRUD::field('numero_parcelle')->type('number');
+
+        CRUD::field('fertilite');
+
+        CRUD::field('prev_crop_id')
+            ->label('Culture Prev')
+            ->type('select_from_array')
+            ->options(
+                Crop::all()->pluck('label_fr', 'id')->toArray()
+            );
+
+        CRUD::field('crop_id')
+            ->label('Culture')
+            ->type('select_from_array')
+            ->options(
+                Crop::all()->pluck('label_fr', 'id')->toArray()
+            );
+
+        CRUD::field('nom_variete_culture');
+        CRUD::field('type_variete_culture');
+        CRUD::field('date_semence');
+        CRUD::field('quantite_semence')->type('number');
+        CRUD::field('source_semence_culture');
+        CRUD::field('autre_source_semence_cutture');
+        CRUD::field('nombre_arbre')->type('number');
+        CRUD::field('nom_arbres');
+        CRUD::field('cultures_associations');
+        CRUD::field('quantite_fumure_organique')->type('number');
+        CRUD::field('type_fumure_organique');
+        CRUD::field('autre_type_fumure_organique');
+        CRUD::field('quantite_npk')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('quantite_uree')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('nom_autre_engrais');
+        CRUD::field('superficie_estimee')->type('number')->attributes(['step' => '0.01']);
+        CRUD::field('superficie_measuree')->type('number')->attributes(['step' => '0.01']);
+        // CRUD::field('trace_superficie');
+
+    }
+
     protected function setupShowOperation()
     {
         $this->setupListOperation();
+        
+        CRUD::column('created_at')
+            ->type('datetime')
+            ->label('Créé le');
+
+        CRUD::column('updated_at')
+            ->type('datetime')
+            ->label('Mis à jour le');
     }
 
     public function export() 

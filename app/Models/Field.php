@@ -2,24 +2,36 @@
 
 namespace App\Models;
 
-use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Field extends Model implements HasMedia
+class Field extends Model implements HasMedia, Auditable
 {
     use CrudTrait;
     use HasFactory;
     use InteractsWithMedia;
+    use AuditableTrait;
 
     protected $table = 'fields';
     protected $guarded = [];
     protected $appends = ['center'];
 
+    protected $auditEvents = ['updated','deleted'];
+    protected $auditExclude = ['created_at'];
+    protected $auditInclude = [
+                                    'year',
+                                    'nom',
+                                    'type_sol',
+                                    'pente',
+                                    'superficie_total',
+                                ];
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
