@@ -98,4 +98,29 @@ class FarmDetail extends Model implements HasMedia, Auditable
         return $this->belongsTo(Village::class);
     }
 
+    public function unionCereale(): BelongsTo
+    {
+        return $this->belongsTo(UnionCereale::class);
+    }
+
+    public function cooperativeCereale(): BelongsTo
+    {
+        return $this->belongsTo(CooperativeCereale::class);
+    }
+
+    public function federationScpc(): BelongsTo
+    {
+        return $this->belongsTo(FederationScpc::class);
+    }
+
+    public function unionScpc(): BelongsTo
+    {
+        return $this->belongsTo(UnionScpc::class);
+    }
+
+    public function baseScpc(): BelongsTo
+    {
+        return $this->belongsTo(BaseScpc::class);
+    }
+
 }

@@ -32,5 +32,10 @@ class Commune extends Model
     {
         return $this->hasMany(Village::class);
     }
-    
+
+    public function unionScpcs(): HasMany
+    {
+        return $this->hasMany(UnionScpc::class);
+    }
+
 }
