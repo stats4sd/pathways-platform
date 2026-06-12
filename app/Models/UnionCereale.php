@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Cercle extends Model
+class UnionCereale extends Model
 {
     use CrudTrait;
     use HasFactory;
 
-    protected $table = 'cercles';
+    protected $table = 'union_cereales';
     protected $guarded = [];
 
     /*
@@ -22,19 +22,14 @@ class Cercle extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function region(): BelongsTo
+    public function cercle(): BelongsTo
     {
-        return $this->belongsTo(Region::class);
-    }
-    
-    public function communes(): HasMany
-    {
-        return $this->hasMany(Commune::class);
+        return $this->belongsTo(Cercle::class);
     }
 
-    public function unionCereales(): HasMany
+    public function farmDetails(): HasMany
     {
-        return $this->hasMany(UnionCereale::class);
+        return $this->hasMany(FarmDetail::class);
     }
-    
+
 }
