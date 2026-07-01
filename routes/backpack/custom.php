@@ -33,6 +33,11 @@ Route::group([
     Route::crud('field', 'FieldCrudController');
     Route::crud('interest_point', 'InterestPointCrudController');
     Route::crud('region', 'RegionCrudController');
+    Route::crud('union_cereale', 'UnionCerealeCrudController');
+    Route::crud('cooperative_cereale', 'CooperativeCerealeCrudController');
+    Route::crud('federation_scpc', 'FederationScpcCrudController');
+    Route::crud('union_scpc', 'UnionScpcCrudController');
+    Route::crud('base_scpc', 'BaseScpcCrudController');
     Route::crud('cercle', 'CercleCrudController');
     Route::crud('commune', 'CommuneCrudController');
     Route::crud('village', 'VillageCrudController');

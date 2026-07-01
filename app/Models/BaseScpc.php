@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Cercle extends Model
+class BaseScpc extends Model
 {
     use CrudTrait;
     use HasFactory;
 
-    protected $table = 'cercles';
+    protected $table = 'base_scpcs';
     protected $guarded = [];
 
     /*
@@ -22,19 +22,14 @@ class Cercle extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function region(): BelongsTo
+    public function villages(): BelongsToMany
     {
-        return $this->belongsTo(Region::class);
-    }
-    
-    public function communes(): HasMany
-    {
-        return $this->hasMany(Commune::class);
+        return $this->belongsToMany(Village::class, 'base_scpc_village');
     }
 
-    public function unionCereales(): HasMany
+    public function farmDetails(): HasMany
     {
-        return $this->hasMany(UnionCereale::class);
+        return $this->hasMany(FarmDetail::class);
     }
-    
+
 }

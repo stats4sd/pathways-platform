@@ -42,6 +42,19 @@
     </ul>
 </li>
 
+<li class="mt-2 mb-1 nav-item nav-dropdown">
+    <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-users"></i>Organisations</a>
+    <ul class="nav-dropdown-items">
+        <li class="nav-title mt-2" style="padding-left: 1.5rem;">Céréales</li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('union_cereale') }}"><i class="las la-users nav-icon"></i>Unions</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('cooperative_cereale') }}"><i class="las la-users nav-icon"></i>Coopératives</a></li>
+        <li class="nav-title mt-2" style="padding-left: 1.5rem;">Coton</li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('federation_scpc') }}"><i class="las la-users nav-icon"></i>Fédérations SCPC</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('union_scpc') }}"><i class="las la-users nav-icon"></i>Unions SCPC</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('base_scpc') }}"><i class="las la-users nav-icon"></i>Bases SCPC</a></li>
+    </ul>
+</li>
+
 <li class="nav-item mt-2 mb-1"><a class="nav-link" href="{{ backpack_url("crop") }}"><i class="las la-leaf nav-icon"></i>Cultures</a></li>
 
 <li class="mt-4 nav-title">Admin</li>

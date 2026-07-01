@@ -64,6 +64,34 @@ class FarmDetailCrudController extends CrudController
         CRUD::column('nom_coop_coton_upa');
         CRUD::column('nom_coop_cereales_upa');
         CRUD::column('nom_union_cereales_upa');
+
+        CRUD::column('union_cereale_id')
+            ->type('select')
+            ->entity('unionCereale')
+            ->attribute('nom')
+            ->label('Union Céréale');
+        CRUD::column('cooperative_cereale_id')
+            ->type('select')
+            ->entity('cooperativeCereale')
+            ->attribute('nom')
+            ->label('Coopérative Céréale');
+
+        CRUD::column('federation_scpc_id')
+            ->type('select')
+            ->entity('federationScpc')
+            ->attribute('nom')
+            ->label('Fédération SCPC');
+        CRUD::column('union_scpc_id')
+            ->type('select')
+            ->entity('unionScpc')
+            ->attribute('nom')
+            ->label('Union SCPC');
+        CRUD::column('base_scpc_id')
+            ->type('select')
+            ->entity('baseScpc')
+            ->attribute('nom')
+            ->label('Base SCPC');
+
         CRUD::column('upa_membres')->type('number');
         CRUD::column('upa_actifs')->type('number');
         CRUD::column('nombre_enfants')->type('number');
@@ -200,6 +228,34 @@ class FarmDetailCrudController extends CrudController
         CRUD::field('nom_coop_coton_upa');
         CRUD::field('nom_coop_cereales_upa');
         CRUD::field('nom_union_cereales_upa');
+
+        CRUD::field('union_cereale_id')
+            ->type('select')
+            ->entity('unionCereale')
+            ->attribute('nom')
+            ->label('Union Céréale');
+        CRUD::field('cooperative_cereale_id')
+            ->type('select')
+            ->entity('cooperativeCereale')
+            ->attribute('nom')
+            ->label('Coopérative Céréale');
+
+        CRUD::field('federation_scpc_id')
+            ->type('select')
+            ->entity('federationScpc')
+            ->attribute('nom')
+            ->label('Fédération SCPC');
+        CRUD::field('union_scpc_id')
+            ->type('select')
+            ->entity('unionScpc')
+            ->attribute('nom')
+            ->label('Union SCPC');
+        CRUD::field('base_scpc_id')
+            ->type('select')
+            ->entity('baseScpc')
+            ->attribute('nom')
+            ->label('Base SCPC');
+
         CRUD::field('upa_membres')->type('number');
         CRUD::field('upa_actifs')->type('number');
         CRUD::field('nombre_enfants')->type('number');
