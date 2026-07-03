@@ -23,7 +23,7 @@ class UnionScpcCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\UnionScpc::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/union_scpc');
-        CRUD::setEntityNameStrings('union SCPC', 'unions SCPC');
+        CRUD::setEntityNameStrings('union communale des SCPC', 'unions communales des SCPC');
     }
 
     protected function setupListOperation()

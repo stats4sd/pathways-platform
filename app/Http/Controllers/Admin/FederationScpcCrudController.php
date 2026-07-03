@@ -23,7 +23,7 @@ class FederationScpcCrudController extends CrudController
     {
         CRUD::setModel(\App\Models\FederationScpc::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/federation_scpc');
-        CRUD::setEntityNameStrings('fédération SCPC', 'fédérations SCPC');
+        CRUD::setEntityNameStrings('fédération régionale des SCPC', 'fédérations régionales des SCPC');
     }
 
     protected function setupListOperation()
