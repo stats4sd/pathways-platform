@@ -49,8 +49,8 @@
         <li class="nav-item"><a class="nav-link" href="{{ backpack_url('union_cereale') }}"><i class="las la-users nav-icon"></i>Unions</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ backpack_url('cooperative_cereale') }}"><i class="las la-users nav-icon"></i>Coopératives</a></li>
         <li class="nav-title mt-2" style="padding-left: 1.5rem;">Coton</li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('federation_scpc') }}"><i class="las la-users nav-icon"></i>Fédérations SCPC</a></li>
-        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('union_scpc') }}"><i class="las la-users nav-icon"></i>Unions SCPC</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('federation_scpc') }}"><i class="las la-users nav-icon"></i>FR - SCPC</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('union_scpc') }}"><i class="las la-users nav-icon"></i>UC - SCPC</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ backpack_url('base_scpc') }}"><i class="las la-users nav-icon"></i>Bases SCPC</a></li>
     </ul>
 </li>
