@@ -652,7 +652,7 @@ class FarmController extends Controller
 
         return [
             "chef_upa" => $details->chef_upa,
-            "village_id" => $details->village->nom,
+            "village_id" => $details->village?->nom,
             "superficie_cultive_upa" => $details->superficie_cultive_upa,
             "upa_membres" => $details->upa_membres,
             "nombre_charrues" => $details->nombre_charrues,
