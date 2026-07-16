@@ -29,7 +29,7 @@ class CercleCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        CRUD::column('region_id');
+        CRUD::column('region_id')->label('Région');
         CRUD::column('nom');
 
     }
@@ -40,7 +40,7 @@ class CercleCrudController extends CrudController
         CRUD::setValidation(CercleRequest::class);
 
         CRUD::field('nom');
-        CRUD::field('region_id')->type('select');
+        CRUD::field('region_id')->type('select')->label('Région');
 
     }
 

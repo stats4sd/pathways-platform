@@ -28,22 +28,24 @@ class FederationScpcCrudController extends CrudController
 
     protected function setupListOperation()
     {
-        CRUD::column('nom');
         CRUD::column('regions')
             ->type('relationship')
             ->attribute('nom')
             ->label('Régions');
+        CRUD::column('nom');
     }
 
     protected function setupCreateOperation()
     {
         CRUD::setValidation(FederationScpcRequest::class);
+        CRUD::setValidation(['regions' => 'required|array']);
 
-        CRUD::field('nom');
         CRUD::field('regions')
             ->type('relationship')
             ->attribute('nom')
             ->label('Régions');
+
+        CRUD::field('nom');
     }
 
     protected function setupUpdateOperation()

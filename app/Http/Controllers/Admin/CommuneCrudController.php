@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\CommuneRequest;
-use App\Models\Commune;
+use App\Models\Cercle;
+use App\Models\Region;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -15,8 +16,8 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class CommuneCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation { store as traitStore; }
+    use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation { update as traitUpdate; }
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
 
     public function setup()
@@ -28,25 +29,77 @@ class CommuneCrudController extends CrudController
 
     protected function setupListOperation()
     {
+        CRUD::column('cercle.region.nom')->label('Région');
 
-        CRUD::column('cercle_id');
-        CRUD::column('nom');
-
+        CRUD::column('cercle_id')->label('Cercle');
+        CRUD::column('nom')->label('Commune');
     }
 
     protected function setupCreateOperation()
     {
-
         CRUD::setValidation(CommuneRequest::class);
 
-        CRUD::field('nom');
-        CRUD::field('cercle_id')->type('select');
+        CRUD::field('region_id')
+            ->type('select')
+            ->label('Région')
+            ->model(Region::class)
+            ->attribute('nom');
 
+        CRUD::field('cercle_id')
+            ->type('select2_from_ajax')
+            ->label('Cercle')
+            ->model(Cercle::class)
+            ->attribute('nom')
+            ->data_source(backpack_url('commune/fetch-cercles'))
+            ->placeholder('Sélectionnez d\'abord une région')
+            ->minimum_input_length(0)
+            ->dependencies(['region_id'])
+            ->include_all_form_fields(true);
+
+        CRUD::field('nom');
     }
 
     protected function setupUpdateOperation()
     {
         $this->setupCreateOperation();
+
+        $commune = $this->crud->getCurrentEntry();
+        if ($commune && $commune->cercle) {
+            CRUD::field('region_id')->value($commune->cercle->region_id);
+        }
+    }
+
+    public function store()
+    {
+        $this->crud->getRequest()->request->remove('region_id');
+        return $this->traitStore();
+    }
+
+    public function update()
+    {
+        $this->crud->getRequest()->request->remove('region_id');
+        return $this->traitUpdate();
+    }
+
+    public function fetchCercles()
+    {
+        // form data is sent as serializeArray(): [{name: 'region_id', value: '1'}, ...]
+        $regionId = null;
+        foreach (request()->input('form', []) as $field) {
+            if (($field['name'] ?? null) === 'region_id') {
+                $regionId = $field['value'] ?? null;
+                break;
+            }
+        }
+
+        $search = request()->input('q');
+
+        $cercles = Cercle::when($regionId, fn($q) => $q->where('region_id', $regionId))
+            ->when($search, fn($q) => $q->where('nom', 'like', "%{$search}%"))
+            ->orderBy('nom')
+            ->get(['id', 'nom']);
+
+        return response()->json($cercles);
     }
 
 }
