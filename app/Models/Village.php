@@ -35,11 +35,6 @@ class Village extends Model
         return $this->belongsToMany(FarmDetail::class);
     }
 
-    public function cooperativeCereales(): HasMany
-    {
-        return $this->hasMany(CooperativeCereale::class);
-    }
-
     public function baseScpcs(): BelongsToMany
     {
         return $this->belongsToMany(BaseScpc::class, 'base_scpc_village');

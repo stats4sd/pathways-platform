@@ -27,6 +27,11 @@ class UnionCereale extends Model
         return $this->belongsTo(Cercle::class);
     }
 
+    public function cooperativeCereales(): HasMany
+    {
+        return $this->hasMany(CooperativeCereale::class);
+    }
+
     public function farmDetails(): HasMany
     {
         return $this->hasMany(FarmDetail::class);

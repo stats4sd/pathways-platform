@@ -22,9 +22,9 @@ class CooperativeCereale extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function village(): BelongsTo
+    public function unionCereale(): BelongsTo
     {
-        return $this->belongsTo(Village::class);
+        return $this->belongsTo(UnionCereale::class);
     }
 
     public function farmDetails(): HasMany
