@@ -35,6 +35,7 @@ Route::group([
     Route::crud('union_cereale', 'UnionCerealeCrudController');
     Route::get('cooperative_cereale/fetch-cercles', 'CooperativeCerealeCrudController@fetchCercles');
     Route::get('cooperative_cereale/fetch-unions', 'CooperativeCerealeCrudController@fetchUnions');
+    Route::get('cooperative_cereale/fetch-villages', 'CooperativeCerealeCrudController@fetchVillages');
     Route::crud('cooperative_cereale', 'CooperativeCerealeCrudController');
     Route::crud('federation_scpc', 'FederationScpcCrudController');
     Route::get('union_scpc/fetch-cercles', 'UnionScpcCrudController@fetchCercles');
