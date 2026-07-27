@@ -3,10 +3,10 @@ SELECT
     ce.nom AS cercle_nom,
     uc.id AS union_id,
     uc.nom AS union_nom,
-    cc.id AS cooperative_id,
-    cc.nom AS cooperative_nom,
     v.id AS village_id,
-    v.nom AS village_nom
+    v.nom AS village_nom,
+    cc.id AS cooperative_id,
+    cc.nom AS cooperative_nom
 FROM
     cooperative_cereales cc
 JOIN
