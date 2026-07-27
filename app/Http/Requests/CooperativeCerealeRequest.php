@@ -17,6 +17,7 @@ class CooperativeCerealeRequest extends FormRequest
             'id' => 'nullable|integer',
             'nom' => 'required',
             'union_cereale_id' => 'nullable|integer|exists:union_cereales,id',
+            'village_id' => 'nullable|integer|exists:villages,id',
         ];
     }
 
