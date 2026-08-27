@@ -8,7 +8,9 @@
                 login-route="{{ route('post-login') }}"
                 :code-errors="{{json_encode($errors->get('code'))}}"
                 :phone-number-errors="{{json_encode($errors->get('phone_number'))}}"
-                old-phone-number="{{  old('phone_number_text') }}"
+                old-phone-number="{{  old('phone_number') }}"
+                :farm-step="{{ json_encode(session('farm_step', 1)) }}"
+                :scanned-code="{{ json_encode(session('scanned_code', null)) }}"
 
             />
         </Suspense>
