@@ -66,7 +66,8 @@ require __DIR__ . '/auth.php';
                 ->name('login');
 
     Route::post('login', [AuthenticatedSessionFarmerController::class, 'store'])
-    ->name('post-login');
+    ->name('post-login')
+    ->middleware('throttle:10,1');
 
 
 // farmer authentication
@@ -79,3 +80,7 @@ Route::post('login-researcher', [AuthenticatedSessionController::class, 'store']
     ->middleware('guest');
 
 Route::post('admin/submissions/process', [SubmissionController::class, 'process'])->name('submission.process');
+
+Route::post('/api/farm/check-code', [AuthenticatedSessionFarmerController::class, 'checkCode'])
+    ->name('farm.check-code')
+    ->middleware('throttle:20,1');

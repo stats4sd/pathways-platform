@@ -28,9 +28,7 @@ class CheckIfAdmin
      */
     private function checkIfUserIsAdmin(User $user)
     {
-        if(!$user->hasRole('Farmer')) {
-            return true;
-        }
+        return $user->hasRole('admin');
     }
 
     /**

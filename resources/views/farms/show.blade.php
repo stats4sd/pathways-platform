@@ -6,7 +6,7 @@
 
 @section('content')
 
-    @if(\Illuminate\Support\Facades\Auth::user()->hasRole('Research Team'))
+    @if(\Illuminate\Support\Facades\Auth::user()->hasRole('admin'))
         <a class="btn btn-link" href="{{ url('admin') }}">Retour au panneau d'administration</a>
     @endif
 

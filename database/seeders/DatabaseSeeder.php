@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        $user->assignRole('Research Team');
+        $user->assignRole('admin');
 
     }
 }
