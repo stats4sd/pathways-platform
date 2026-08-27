@@ -1,6 +1,7 @@
 SELECT
     f.id,
     f.nom,
+    f.year,
     f.farm_id,
     fa.code AS farm_code
 FROM
