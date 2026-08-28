@@ -1,5 +1,5 @@
 SELECT
-    p.id AS value,
+    p.id AS name,
     p.numero_parcelle AS label,
     p.field_id,
     fa.id AS farm_id,

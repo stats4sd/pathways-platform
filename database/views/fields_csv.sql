@@ -1,5 +1,5 @@
 SELECT
-    f.id AS value,
+    f.id AS name,
     f.nom AS label,
     f.year,
     f.farm_id,
