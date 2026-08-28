@@ -1,10 +1,10 @@
 SELECT
-    p.id,
-    p.numero_parcelle,
+    p.id AS value,
+    p.numero_parcelle AS label,
     p.field_id,
     fa.id AS farm_id,
     fa.code AS farm_code,
-    p.trace_superficie
+    p.trace_superficie AS geometry
 FROM
     plots p
 JOIN
