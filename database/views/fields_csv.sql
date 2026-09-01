@@ -1,6 +1,6 @@
 SELECT
-    f.id,
-    f.nom,
+    f.id AS name,
+    f.nom AS label,
     f.year,
     f.farm_id,
     fa.code AS farm_code

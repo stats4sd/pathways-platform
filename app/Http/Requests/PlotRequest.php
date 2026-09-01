@@ -35,6 +35,7 @@ class PlotRequest extends FormRequest
             'superficie_estimee' => 'nullable',
             'superficie_measuree' => 'nullable',
             'trace_superficie' => 'nullable',
+            'trace_superficie_odk' => 'nullable',
             'prev_crop_id' => 'nullable',
             'nom_variete_culture' => 'nullable',
             'type_variete_culture' => 'nullable',
