@@ -49,6 +49,26 @@ class Plot extends Model implements HasMedia, Auditable
                                 'superficie_measuree',
                             ];
 
+    /**
+     * Convert a closed loop of GeoJSON [lng, lat, alt?] coordinates
+     * into ODK geoshape format: "lat lng alt acc; lat lng alt acc; ...".
+     */
+    public static function toOdkGeoshape(?array $coordinates): ?string
+    {
+        if (empty($coordinates)) {
+            return null;
+        }
+
+        return collect($coordinates)
+            ->map(fn ($point) => implode(' ', [
+                $point[1],
+                $point[0],
+                $point[2] ?? '0.0',
+                '0.0',
+            ]))
+            ->implode('; ');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS

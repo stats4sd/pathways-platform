@@ -4,7 +4,7 @@ SELECT
     p.field_id,
     fa.id AS farm_id,
     fa.code AS farm_code,
-    p.trace_superficie AS geometry
+    p.trace_superficie_odk AS geometry
 FROM
     plots p
 JOIN

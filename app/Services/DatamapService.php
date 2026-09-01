@@ -525,6 +525,7 @@ class DatamapService
                     $plotData['superficie_estimee'] = $plotData['superficie'];
                     $plotData['superficie_measuree'] = $plotData['surface_h'];
                     $plotData['trace_superficie'] = $plotData['trace_superficie']['coordinates'][0];
+                    $plotData['trace_superficie_odk'] = Plot::toOdkGeoshape($plotData['trace_superficie']);
 
                     if(isset($plotData['autre_cult_associe_1'])) {
 
